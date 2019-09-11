@@ -1,0 +1,15 @@
+*{margin: 0; padding: 0;}
+.bg-color {
+    background: #000;
+}
+.navbar-nav {
+    flex-direction: row;
+}
+input.form-control {
+    flex: 0.75 1 auto !important;
+}
+@media (max-width: 768px) {
+    input.form-control {
+        flex: 1 1 auto !important;
+    }
+}
