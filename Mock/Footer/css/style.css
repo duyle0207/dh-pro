@@ -1,0 +1,59 @@
+.container-fluid
+{
+    background-color: #1F2024;
+}   
+#footer-top-list
+{
+    border: none;
+    color: #878792;
+    font-size: 17px;
+    letter-spacing: -0.6px; 
+    display: inline;
+    background-color: #1F2024; 
+    line-height: 18px;
+    padding-bottom: 30px;
+}
+#footer-list
+{
+    border: none;
+    color: aliceblue;
+    margin-top: -15px;
+    font-size: 15px;
+    letter-spacing: -0.6px; 
+    background-color: #1F2024; 
+}
+.footer
+{
+    background-color: #1F2024;
+    height: 450px;
+}
+.bottom-footer
+{
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+#top-footer-1
+{
+    background-color: #1F2024;
+    height: 60px;
+}
+.top-footer
+{
+    padding-top: 40px;
+    background-color: #1F2024;
+    height: 60px;
+}
+.info-footer ,h6
+{
+    color: aliceblue;
+    text-align: left;
+    font-size: 12px;
+}
+#footer-copyright
+{
+    color: aliceblue;
+    padding-bottom:30px;
+    font-size: 12px;
+    letter-spacing: 1px; 
+    background-color: #1F2024; 
+}
