@@ -1,3 +1,8 @@
+*{margin: 0; padding: 0}
+html, body {
+    height: 100%;
+    width: 100%;
+}
 .container-fluid
 {
     background-color: #1F2024;
@@ -35,7 +40,6 @@
 #top-footer-1
 {
     background-color: #1F2024;
-    height: 60px;
 }
 .top-footer
 {
@@ -56,6 +60,39 @@
     font-size: 12px;
     letter-spacing: 1px; 
     background-color: #1F2024; 
+}
+.main-title {
+    border-bottom: solid #DDDDDD 1px;
+    color: #333333;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.6px;
+    padding: 0px 0px 5px;
+    margin: 0px 0px 20px;
+    text-align: left;
+}
+span.title {
+    color: #333333;
+    font-size: 14px;
+    line-height: 21px;
+    margin-right: 10px;
+    text-transform: uppercase;
+    text-align: left;
+}
+a.option {
+    background: #E7EDF1;
+    border-radius: 3px;
+    color: #333333;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 21px;
+    padding: 7px 10px;
+    text-align: left;
+}
+a.option:hover {
+    background: #27bece;
+    color: #fff;
+    text-decoration: none;
 }
 /* Content */
 .card-product .img-wrap {
@@ -89,6 +126,7 @@
 .card-product .price-old {
     color: #999;
 }
+
 /*Detail*/
 .gallery-wrap .img-big-wrap img {
     height: 450px;
@@ -114,4 +152,14 @@
     object-fit: cover;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.module-title a{
+    display: inline;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: left;
+    text-transform: uppercase;
+    color: #27bece;
+    text-decoration: none;
 }
