@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 import DashBoard  from "../src/components/dashboard";
+// import ItemDetail from "../src/components/itemDetailPage"
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<DashBoard />, document.getElementById('root'));
