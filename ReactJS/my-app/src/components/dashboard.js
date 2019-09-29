@@ -7,9 +7,7 @@ class dashboard extends React.Component {
   render() {
     return (
 
-      <RouteURL>
-        <Header></Header>
-      </RouteURL>
+
 
     );
   }
