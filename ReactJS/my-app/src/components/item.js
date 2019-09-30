@@ -5,7 +5,7 @@ class item extends React.Component {
   render() {
     return (
       <div className="col-sm-3">
-        <a href="detail.html" style={{ textDecoration: "none", color: "black" }}>
+        <a href="/itemDetail" style={{ textDecoration: "none", color: "black" }}>
           <figure className="card card-product">
             <div className="img-wrap">
               <img src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/laptop-asus-ux433fn-a6124t-000.jpg" alt=""/>

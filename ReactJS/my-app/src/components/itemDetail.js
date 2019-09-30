@@ -1,7 +1,28 @@
 import React from 'react';
 import '../css/style.css';
+import '../js/cart.js';
+import ImageDetail from './imageDetail';
 
 class itemDetail extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = ({
+      MainImg: "https://cdn.vinpro.net/uploads/images/general/2019/09/16/laptop-asus-ux433fn-a6124t-000.jpg"
+    });
+
+    this.SetDetailImage = this.SetDetailImage.bind(this);
+    this.setMainImage = this.setMainImage.bind(this);
+  }
+  setMainImage(source)
+  {
+    this.setState({MainImg:source});
+  }
+  SetDetailImage()
+  {
+    var i = this.refs.mainIMG.src;
+    this.refs.ImgDetail.src = i;
+  }
   render() {
     return (
       <div className="row">
@@ -9,12 +30,13 @@ class itemDetail extends React.Component {
           <article className="gallery-wrap">
             <div className="img-big-wrap">
               <div>
-                <a data-toggle="modal" data-target=".bd-example-modal-xl" href="#">
+                <a data-toggle="modal" data-target=".bd-example-modal-xl" href="#aaa">
                   <img
                     id="main_img"
                     className="img-fluid"
-                    onclick="SetDetailImage(this)"
-                    src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/laptop-asus-ux433fn-a6124t-000.jpg"
+                    alt = 'abc'
+                    onClick={this.SetDetailImage} ref = "mainIMG"
+                    src={this.state.MainImg}
                   />
                 </a>
               </div>
@@ -25,50 +47,21 @@ class itemDetail extends React.Component {
                 role="dialog"
                 aria-labelledby="myExtraLargeModalLabel"
                 aria-hidden="true"
-                style={{ paddingTop: 50 }}
-              >
-                <div className="modal-dialog modal-xl">
+                >
+                <div className="modal-dialog modal-xl" style={{width:500}}>
                   <div className="modal-content">
-                    <img id="detail-img" className="img-fluid" src />
+                    <img id="detail-img" className="img-fluid" ref = "ImgDetail" src="" alt='abc' />
                   </div>
                 </div>
               </div>
-            </div>{" "}
+            </div>
             {/* slider-product.// */}
             <div className="img-small-wrap">
-              <div className="item-gallery">
-                {" "}
-                <img
-                  className="img-fluid"
-                  onclick="ChangeImage(this)"
-                  src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg"
-                />
-              </div>
-              <div className="item-gallery">
-                {" "}
-                <img
-                  className="img-fluid"
-                  onclick="ChangeImage(this)"
-                  src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg"
-                />
-              </div>
-              <div className="item-gallery">
-                {" "}
-                <img
-                  className="img-fluid"
-                  onclick="ChangeImage(this)"
-                  src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg"
-                />
-              </div>
-              <div className="item-gallery">
-                {" "}
-                <img
-                  className="img-fluid"
-                  onclick="ChangeImage(this)"
-                  src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg"
-                />
-              </div>
-            </div>{" "}
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p ={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p ={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p ={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p ={this.setMainImage}></ImageDetail>     
+            </div>
             {/* slider-nav.// */}
           </article>{" "}
           {/* gallery-wrap .end// */}
@@ -120,11 +113,11 @@ class itemDetail extends React.Component {
             </div>{" "}
             {/* row.// */}
             <hr />
-            <a href="#" className="btn btn-lg btn-primary text-uppercase">
+            <a href="#aaa" className="btn btn-lg btn-primary text-uppercase">
               {" "}
               Buy now{" "}
             </a>
-            <a href="#" className="btn btn-lg btn-outline-primary text-uppercase">
+            <a href="#aaa" className="btn btn-lg btn-outline-primary text-uppercase">
               {" "}
               <i className="fas fa-shopping-cart" /> Add to cart{" "}
             </a>

@@ -4,7 +4,7 @@ import '../css/style.css';
 class footer extends React.Component {
   render() {
     return (
-      <footer>
+      <footer style={{ paddingTop: 50 }}>
         <div className="container-fluid">
           <div className="container" style={{ paddingTop: 30 }}>
             <div className="row mb-4" id="top-footer-1">
@@ -81,16 +81,16 @@ class footer extends React.Component {
                 <ul className="list-group">
                   <li className="list-group-item" id="footer-top-list">
                     Hỗ trợ trực tuyến
-            </li>
+                  </li>
                   <li className="list-group-item" id="footer-list">
                     Kiểm tra thời hạn bảo hành
-            </li>
+                  </li>
                   <li className="list-group-item" id="footer-list">
                     Hỗ trợ trực tuyến
-            </li>
+                  </li>
                   <li className="list-group-item" id="footer-list">
                     Chính sách bảo hành
-            </li>
+                  </li>
                 </ul>
               </div>
               <div className="col-sm-3">

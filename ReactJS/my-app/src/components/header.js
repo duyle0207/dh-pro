@@ -8,7 +8,7 @@ class header extends React.Component {
       <div className="header">
         <nav className="navbar navbar-expand-md navbar-dark bg-color flex-column">
           <div className="container">
-            <a className="navbar-brand" href="#abc">
+            <a className="navbar-brand" href="/">
               <img src={Logo} alt="" style={{ width: 100 }} />
             </a>
             <form className="form-inline my-2 my-lg-0 input-group">
