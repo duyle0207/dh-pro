@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from "./dashboard";
 import ItemDetailPage from "./itemDetailPage";
 import Cart from "./cart";
+import AdminDashboard from "./admin/adminDashboard";
+
 class RouteURL extends Component {
     render() {
         return (
@@ -10,6 +12,7 @@ class RouteURL extends Component {
                 <Route exact path="/" component = {Dashboard} />
                 <Route path="/itemDetail" component = {ItemDetailPage} />
                 <Route path="/cart" component = {Cart} />
+                <Route path="/admin" component = {AdminDashboard}/>
             </Router>
         );
     }

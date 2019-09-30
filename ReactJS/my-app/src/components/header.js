@@ -31,9 +31,8 @@ class header extends React.Component {
                   id="dropdownId"
                   data-toggle="dropdown"
                   aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  Sản phẩm đã xem (2){" "}
+                  aria-expanded="false">
+                  Sản phẩm đã xem (2)
                 </a>
                 <div className="dropdown-menu" aria-labelledby="dropdownId">
                   <a className="dropdown-item" href="#abc">
@@ -48,9 +47,11 @@ class header extends React.Component {
                 <i className="fas fa-user fa-2x text-white" />
               </li>
               <li className="nav-item ml-4">
-                <i className="fas fa-shopping-cart fa-2x text-white">
-                  <small style={{ fontSize: 14 }}>(2)</small>
-                </i>
+                <a href = "/cart">
+                  <i className="fas fa-shopping-cart fa-2x text-white">
+                    <small style={{ fontSize: 14 }}>(2)</small>
+                  </i>
+                </a>
               </li>
             </ul>
           </div>

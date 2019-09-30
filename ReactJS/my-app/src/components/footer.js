@@ -1,11 +1,13 @@
 import React from 'react';
 import '../css/style.css';
+import logo from '../images/logo.png'
+
 
 class footer extends React.Component {
   render() {
     return (
       <footer style={{ paddingTop: 50 }}>
-        <div className="container-fluid">
+        <div className="container-fluid" style={{backgroundColor: '#1F2024'}}>
           <div className="container" style={{ paddingTop: 30 }}>
             <div className="row mb-4" id="top-footer-1">
               <div className="col-sm-3">
@@ -75,7 +77,7 @@ class footer extends React.Component {
             </div>
             <div className="row">
               <div className="col-sm-3">
-                <img className="img-fluid" src="images/logo.png" alt="" />
+                <img className="img-fluid" src={logo} alt="" />
               </div>
               <div className="col-sm-3">
                 <ul className="list-group">
