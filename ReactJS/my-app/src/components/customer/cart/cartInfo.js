@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import '../css/style.css';
-import InfoCartCustomer from '../components/infoCartCustomer';
+import '../../../css/style.css';
+import InfoCartCustomer from './infoCartCustomer';
 
 class cartInfo extends Component {
     constructor(props)

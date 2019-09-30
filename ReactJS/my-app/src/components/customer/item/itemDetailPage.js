@@ -1,9 +1,9 @@
 import React from 'react';
-import '../css/header.css';
-import '../css/style.css';
+import '../../../css/header.css';
+import '../../../css/style.css';
 import ItemDetail from "./itemDetail";
-import Header from './header';
-import Footer from './footer';
+import Header from '../dashboard/header';
+import Footer from '../dashboard/footer';
 
 class ItemDetailPage extends React.Component {
   render() {
@@ -20,5 +20,4 @@ class ItemDetailPage extends React.Component {
     );
   }
 }
-
 export default ItemDetailPage;

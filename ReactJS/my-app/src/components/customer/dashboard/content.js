@@ -1,8 +1,8 @@
 import React from 'react';
-import '../css/header.css';
-import '../css/style.css';
-import HeadContent from "../components/headContent";
-import Item from "../components/item";
+import '../../../css/header.css';
+import '../../../css/style.css';
+import HeadContent from "../dashboard/headContent";
+import Item from "../../customer/item/item";
 
 class content extends React.Component {
   render() {

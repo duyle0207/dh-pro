@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import '../css/style.css';
-import Header from './header';
-import Footer from './footer';
-import ItemCart from '../components/itemCart';
-import CartInfo from '../components/cartInfo';
+import '../../../css/style.css';
+import Header from '../../../components/customer/dashboard/header';
+import Footer from '../../../components/customer/dashboard/footer';
+import ItemCart from '../item/itemCart';
+import CartInfo from '../cart/cartInfo';
 
 class cart extends Component {
     render() {

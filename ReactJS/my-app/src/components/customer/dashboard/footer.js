@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/style.css';
-import logo from '../images/logo.png'
+import '../../../css/style.css';
+import Logo from "../../../images/logo.png";
 
 
 class footer extends React.Component {
@@ -77,7 +77,7 @@ class footer extends React.Component {
             </div>
             <div className="row">
               <div className="col-sm-3">
-                <img className="img-fluid" src={logo} alt="" />
+                <img className="img-fluid" src={Logo} alt="" />
               </div>
               <div className="col-sm-3">
                 <ul className="list-group">

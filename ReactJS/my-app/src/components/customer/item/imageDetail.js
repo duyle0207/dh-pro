@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/style.css';
-import '../js/cart.js';
+import '../../../css/style.css';
+import '../../../js/cart.js';
 
 class itemDetail extends React.Component {
   constructor(props) {

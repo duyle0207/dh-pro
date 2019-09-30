@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/header.css';
-import Logo from "../images/logo.png";
+import '../../../css/header.css';
+import Logo from "../../../images/logo.png";
 
 class header extends React.Component {
   render() {

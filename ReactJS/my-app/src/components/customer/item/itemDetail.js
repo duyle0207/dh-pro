@@ -1,7 +1,6 @@
 import React from 'react';
-import '../css/style.css';
-import '../js/cart.js';
-import ImageDetail from './imageDetail';
+import '../../../css/style.css';
+import ImageDetail from '../item/imageDetail';
 
 class itemDetail extends React.Component {
   constructor(props) {
