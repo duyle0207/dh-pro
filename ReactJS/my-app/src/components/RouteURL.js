@@ -5,6 +5,8 @@ import ItemDetailPage from "../components/customer/item/itemDetailPage";
 import Cart from "./customer/cart/cart";
 import AdminDashboard from "./admin/adminDashboard";
 import LoginPage from "./login";
+import UpLoadFile from "./uploadFile";
+import SearchDemo from "../searchDemo";
 
 class RouteURL extends Component {
     render() {
@@ -14,7 +16,9 @@ class RouteURL extends Component {
                 <Route path="/itemDetail" component = {ItemDetailPage} />
                 <Route path="/cart" component = {Cart} />
                 <Route path="/admin" component = {AdminDashboard}/>
-                <Route path="/login" component = {LoginPage}/>
+                <Route path="/login/:id" component = {LoginPage}/>
+                <Route path="/uploadFile" component = {UpLoadFile}/>
+                <Route path="/searchDemo" component = {SearchDemo}/>
             </Router>
         );
     }

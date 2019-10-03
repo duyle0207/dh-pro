@@ -13,12 +13,10 @@ class itemDetail extends React.Component {
     this.SetDetailImage = this.SetDetailImage.bind(this);
     this.setMainImage = this.setMainImage.bind(this);
   }
-  setMainImage(source)
-  {
-    this.setState({MainImg:source});
+  setMainImage(source) {
+    this.setState({ MainImg: source });
   }
-  SetDetailImage()
-  {
+  SetDetailImage() {
     var i = this.refs.mainIMG.src;
     this.refs.ImgDetail.src = i;
   }
@@ -33,8 +31,8 @@ class itemDetail extends React.Component {
                   <img
                     id="main_img"
                     className="img-fluid"
-                    alt = 'abc'
-                    onClick={this.SetDetailImage} ref = "mainIMG"
+                    alt='abc'
+                    onClick={this.SetDetailImage} ref="mainIMG"
                     src={this.state.MainImg}
                   />
                 </a>
@@ -46,24 +44,21 @@ class itemDetail extends React.Component {
                 role="dialog"
                 aria-labelledby="myExtraLargeModalLabel"
                 aria-hidden="true"
-                >
-                <div className="modal-dialog modal-xl" style={{width:500}}>
+              >
+                <div className="modal-dialog modal-xl" style={{ width: 500 }}>
                   <div className="modal-content">
-                    <img id="detail-img" className="img-fluid" ref = "ImgDetail" src="" alt='abc' />
+                    <img id="detail-img" className="img-fluid" ref="ImgDetail" src="" alt='abc' />
                   </div>
                 </div>
               </div>
             </div>
-            {/* slider-product.// */}
             <div className="img-small-wrap">
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p ={this.setMainImage}></ImageDetail>
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p ={this.setMainImage}></ImageDetail>
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p ={this.setMainImage}></ImageDetail>
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p ={this.setMainImage}></ImageDetail>     
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p={this.setMainImage}></ImageDetail>
             </div>
-            {/* slider-nav.// */}
-          </article>{" "}
-          {/* gallery-wrap .end// */}
+          </article>
         </aside>
         <aside className="col-sm-7">
           <article className="card-body p-5">
@@ -74,22 +69,19 @@ class itemDetail extends React.Component {
                 <span className="num">1299</span>
               </span>
               <span>/per kg</span>
-            </p>{" "}
+            </p>
             <dl className="param param-feature">
               <dt>Model#</dt>
               <dd>12345611</dd>
-            </dl>{" "}
-            {/* item-property-hor .// */}
+            </dl>
             <dl className="param param-feature">
               <dt>Color</dt>
               <dd>Black and white</dd>
-            </dl>{" "}
-            {/* item-property-hor .// */}
+            </dl>
             <dl className="param param-feature">
               <dt>Delivery</dt>
               <dd>Russia, USA, and Europe</dd>
             </dl>
-            {/* item-property-hor .// */}
             <hr />
             <div className="row">
               <div className="col-sm-5">
@@ -98,32 +90,26 @@ class itemDetail extends React.Component {
                   <dd>
                     <select
                       className="form-control form-control-sm"
-                      style={{ width: 70 }}
-                    >
+                      style={{ width: 70 }}>
                       <option> 1 </option>
                       <option> 2 </option>
                       <option> 3 </option>
                     </select>
                   </dd>
-                </dl>{" "}
-                {/* item-property .// */}
-              </div>{" "}
-              {/* col.// */}
-            </div>{" "}
-            {/* row.// */}
+                </dl>
+              </div>
+            </div>
             <hr />
-            <a href="#aaa" className="btn btn-lg btn-primary text-uppercase">
-              {" "}
-              Buy now{" "}
-            </a>
-            <a href="#aaa" className="btn btn-lg btn-outline-primary text-uppercase">
-              {" "}
-              <i className="fas fa-shopping-cart" /> Add to cart{" "}
-            </a>
-          </article>{" "}
-          {/* card-body.// */}
-        </aside>{" "}
-        {/* col.// */}
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a href="#aaa" className="btn btn-lg btn-info text-uppercase">
+                Buy now
+              </a>
+              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase">
+                <i className="fas fa-shopping-cart" /> Add to cart
+              </a>
+            </div>
+          </article>
+        </aside>
       </div>
     );
   }
