@@ -100,7 +100,7 @@ class itemDetail extends React.Component {
               </div>
             </div>
             <hr />
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div className="btn-group" role="group" aria-label="Basic example">
               <a href="#aaa" className="btn btn-lg btn-info text-uppercase">
                 Buy now
               </a>

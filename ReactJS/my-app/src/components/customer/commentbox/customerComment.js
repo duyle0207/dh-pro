@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import '../../../css/style.css';
 
 class customerComment extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <div className="my-4">
