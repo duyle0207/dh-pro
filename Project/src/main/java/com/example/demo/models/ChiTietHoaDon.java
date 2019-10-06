@@ -8,6 +8,9 @@ import javax.persistence.Table;
 @Table(name = "hoadon")
 public class ChiTietHoaDon {
 
+    final long serialVersionUID = 1L;
+
+    @Id
     @Column(name="idhd")
     private int ID_HD;
 
@@ -18,7 +21,7 @@ public class ChiTietHoaDon {
     private int SoLuong;
 
     @Column(name="dongia")
-    private double DonGia;
+    private int DonGia;
 
     public int getID_HD() {
         return ID_HD;
@@ -44,11 +47,11 @@ public class ChiTietHoaDon {
         SoLuong = soLuong;
     }
 
-    public double getDonGia() {
+    public int getDonGia() {
         return DonGia;
     }
 
-    public void setDonGia(double donGia) {
+    public void setDonGia(int donGia) {
         DonGia = donGia;
     }
 }
