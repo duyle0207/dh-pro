@@ -1,4 +1,4 @@
-package com.dhpro.models;
+package com.example.demo.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
