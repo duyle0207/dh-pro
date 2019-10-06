@@ -102,10 +102,16 @@ class itemDetail extends React.Component {
             <hr />
             <div className="btn-group" role="group" aria-label="Basic example">
               <a href="#aaa" className="btn btn-lg btn-info text-uppercase">
-                Buy now
+                Mua ngay
               </a>
               <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase">
-                <i className="fas fa-shopping-cart" /> Add to cart
+                <i className="fas fa-shopping-cart" /> 
+                 Thêm vào giỏ hàng
+              </a>
+            </div>
+            <div className="btn-group mt-4" role="group" aria-label="Basic example">
+              <a href="/compareItem" className="btn btn-lg btn-warning text-uppercase" style={{color:'white'}}>
+                So sánh chi tiết
               </a>
             </div>
           </article>

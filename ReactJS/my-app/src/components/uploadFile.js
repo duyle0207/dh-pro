@@ -33,7 +33,15 @@ class Upload extends Component {
     handleFile(event) {
         const data = new FormData();
         for (var i = 0; i < event.target.files.length; i++) {
-            data.append("file", event.target.files[i]);
+            var filename = event.target.files[i].name.toLowerCase();
+            if(!filename.endsWith('.png') && !filename.endsWith('.jpg'))
+            {
+                alert(filename + " is not an image");
+                event.target.value = '';
+            }
+            else{
+                data.append("file", event.target.files[i]);
+            }
         }
         this.setState({ dataFile: data });
     }
@@ -44,8 +52,8 @@ class Upload extends Component {
             body: this.state.dataFile
         }).then(res => {
             if (res.ok) {
-                console.log(res.data);
-                alert("File uploaded successfully.")
+                console.log(res);
+                alert("File uploaded successfully.");
             }
         });
     }
