@@ -6,14 +6,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="binhluan")
-public class BinhLuan {
+@Table(name = "motasanpham")
+public class MoTaSanPham {
     @Id
     @Column(name = "id")
-    private int Id;
+    private int id;
 
-    @Column(name = "idkh")
-    public int idKH;
+    @Column(name = "idsp")
+    private int idSP;
 
     @Column(name = "tieude")
     private String tieuDe;
@@ -21,23 +21,23 @@ public class BinhLuan {
     @Column(name = "noidung")
     private String noiDung;
 
-    @Column(name = "ngaydang")
-    private String ngayDang;
+    @Column(name = "idhinh")
+    private int idHinh;
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
-    public int getIdKH() {
-        return idKH;
+    public int getIdSP() {
+        return idSP;
     }
 
-    public void setIdKH(int idKH) {
-        this.idKH = idKH;
+    public void setIdSP(int idSP) {
+        this.idSP = idSP;
     }
 
     public String getTieuDe() {
@@ -56,11 +56,11 @@ public class BinhLuan {
         this.noiDung = noiDung;
     }
 
-    public String getNgayDang() {
-        return ngayDang;
+    public int getIdHinh() {
+        return idHinh;
     }
 
-    public void setNgayDang(String ngayDang) {
-        this.ngayDang = ngayDang;
+    public void setIdHinh(int idHinh) {
+        this.idHinh = idHinh;
     }
 }
