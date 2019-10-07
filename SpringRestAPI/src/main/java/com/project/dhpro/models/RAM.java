@@ -13,13 +13,13 @@ public class RAM {
     private int Id;
 
     @Column(name="bonhoram")
-    private int BoNhoRAM;
+    private int boNhoRAM;
 
     @Column(name="loairam")
-    private String LoaiRAM;
+    private String loaiRAM;
 
     @Column(name="tocdobus")
-    private int TocDoBus;
+    private int tocDoBus;
 
     public int getId() {
         return Id;
@@ -30,26 +30,26 @@ public class RAM {
     }
 
     public int getBoNhoRAM() {
-        return BoNhoRAM;
+        return boNhoRAM;
     }
 
     public void setBoNhoRAM(int boNhoRAM) {
-        BoNhoRAM = boNhoRAM;
+        boNhoRAM = boNhoRAM;
     }
 
     public String getLoaiRAM() {
-        return LoaiRAM;
+        return loaiRAM;
     }
 
     public void setLoaiRAM(String loaiRAM) {
-        LoaiRAM = loaiRAM;
+        loaiRAM = loaiRAM;
     }
 
     public int getTocDoBus() {
-        return TocDoBus;
+        return tocDoBus;
     }
 
     public void setTocDoBus(int tocDoBus) {
-        TocDoBus = tocDoBus;
+        tocDoBus = tocDoBus;
     }
 }

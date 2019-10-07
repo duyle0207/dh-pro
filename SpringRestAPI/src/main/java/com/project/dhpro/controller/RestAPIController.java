@@ -17,7 +17,11 @@ public class RestAPIController {
 
     @GetMapping(value = "/listRam")
     List<RAM> ListRAM() throws URISyntaxException {
-//        System.out.println(accountService.findById(1).getId());
         return ramService.findAll();
+    }
+
+    @GetMapping(value = "/getRAM")
+    RAM getRAM() throws URISyntaxException {
+        return ramService.findById(1);
     }
 }

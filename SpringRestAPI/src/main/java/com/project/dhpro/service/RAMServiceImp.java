@@ -18,4 +18,9 @@ public class RAMServiceImp implements RAMService{
     public List<RAM> findAll() {
         return ramRepository.findAll();
     }
+
+    @Override
+    public RAM findById(int id) {
+        return ramRepository.findById(id).get();
+    }
 }
