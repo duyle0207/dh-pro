@@ -1,18 +1,29 @@
 package com.example.demo.models;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "taikhoan")
-public class TaiKhoan {
+@Table(name = "account")
+public class Account {
+
+    @Id
+    @Column(name="id")
+    private int id;
+
+    @Column(name="username")
+    private String Username;
+
+    @Column(name="password")
+    private String Password;
+
+    @Column(name="role")
+    private int role;
+
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        id = id;
     }
 
     public String getUsername() {
@@ -38,17 +49,4 @@ public class TaiKhoan {
     public void setRole(int role) {
         this.role = role;
     }
-
-    @Id
-    @Column(name="id")
-    private int Id;
-
-    @Column(name="username")
-    private String Username;
-
-    @Column(name="password")
-    private String Password;
-
-    @Column(name="role")
-    private int role;
 }
