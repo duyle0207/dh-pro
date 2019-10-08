@@ -25,11 +25,13 @@ DROP TABLE IF EXISTS `motasanpham`;
 CREATE TABLE `motasanpham` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idsp` int(11) DEFAULT NULL,
-  `tieude` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `noidung` longtext COLLATE utf8_unicode_ci,
+  `tieude` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `noidung` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `idhinh` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `sp_motasp_idx` (`idsp`),
+  CONSTRAINT `sp_motasp` FOREIGN KEY (`idsp`) REFERENCES `sanpham` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:09
+-- Dump completed on 2019-10-08 10:55:24

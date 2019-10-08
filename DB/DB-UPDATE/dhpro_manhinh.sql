@@ -16,29 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pin`
+-- Table structure for table `manhinh`
 --
 
-DROP TABLE IF EXISTS `pin`;
+DROP TABLE IF EXISTS `manhinh`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `pin` (
+CREATE TABLE `manhinh` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `thongtinpin` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `thoigiansudung` int(11) DEFAULT NULL,
-  `bosac` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `kichthuoc` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dophangiai` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `congnghemanhinh` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `manhinhcamung` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pin`
+-- Dumping data for table `manhinh`
 --
 
-LOCK TABLES `pin` WRITE;
-/*!40000 ALTER TABLE `pin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pin` ENABLE KEYS */;
+LOCK TABLES `manhinh` WRITE;
+/*!40000 ALTER TABLE `manhinh` DISABLE KEYS */;
+INSERT INTO `manhinh` VALUES (1,'13.3','FHD','OLED',0),(2,'15','FHD','IPS',0),(3,'15','Ultra HD','IPS',1),(4,'15','2K','IPS',1),(5,NULL,'',NULL,NULL);
+/*!40000 ALTER TABLE `manhinh` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 10:55:23
+-- Dump completed on 2019-10-08 12:42:54

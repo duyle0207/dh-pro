@@ -24,12 +24,14 @@ DROP TABLE IF EXISTS `taikhoan`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `taikhoan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `password` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  KEY `id_idx` (`role`),
+  CONSTRAINT `id` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:08
+-- Dump completed on 2019-10-08 10:55:24

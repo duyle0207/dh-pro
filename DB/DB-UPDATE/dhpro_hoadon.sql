@@ -16,29 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pin`
+-- Table structure for table `hoadon`
 --
 
-DROP TABLE IF EXISTS `pin`;
+DROP TABLE IF EXISTS `hoadon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `pin` (
+CREATE TABLE `hoadon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `thongtinpin` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `thoigiansudung` int(11) DEFAULT NULL,
-  `bosac` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `idkh` int(11) DEFAULT NULL,
+  `tenkh` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `diachi` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sodt` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ngaymuahang` date DEFAULT NULL,
+  `tongtien` int(11) DEFAULT NULL,
+  `phuongthucthanhtoan` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `hd_kh_idx` (`idkh`),
+  KEY `thanhtoan_hd_idx` (`phuongthucthanhtoan`),
+  CONSTRAINT `hd_kh` FOREIGN KEY (`idkh`) REFERENCES `khachhang` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `thanhtoan_hd` FOREIGN KEY (`phuongthucthanhtoan`) REFERENCES `phuongthucthanhtoan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pin`
+-- Dumping data for table `hoadon`
 --
 
-LOCK TABLES `pin` WRITE;
-/*!40000 ALTER TABLE `pin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pin` ENABLE KEYS */;
+LOCK TABLES `hoadon` WRITE;
+/*!40000 ALTER TABLE `hoadon` DISABLE KEYS */;
+/*!40000 ALTER TABLE `hoadon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 10:55:23
+-- Dump completed on 2019-10-08 12:42:54

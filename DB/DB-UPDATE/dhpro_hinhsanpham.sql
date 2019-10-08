@@ -16,29 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pin`
+-- Table structure for table `hinhsanpham`
 --
 
-DROP TABLE IF EXISTS `pin`;
+DROP TABLE IF EXISTS `hinhsanpham`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `pin` (
+CREATE TABLE `hinhsanpham` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `thongtinpin` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `thoigiansudung` int(11) DEFAULT NULL,
-  `bosac` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `idsp` int(11) DEFAULT NULL,
+  `hinh` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `sp_hinhsp_idx` (`idsp`),
+  CONSTRAINT `sp_hinhsp` FOREIGN KEY (`idsp`) REFERENCES `sanpham` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pin`
+-- Dumping data for table `hinhsanpham`
 --
 
-LOCK TABLES `pin` WRITE;
-/*!40000 ALTER TABLE `pin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pin` ENABLE KEYS */;
+LOCK TABLES `hinhsanpham` WRITE;
+/*!40000 ALTER TABLE `hinhsanpham` DISABLE KEYS */;
+/*!40000 ALTER TABLE `hinhsanpham` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 10:55:23
+-- Dump completed on 2019-10-08 12:42:56

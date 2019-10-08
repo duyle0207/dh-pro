@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `cpu`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `cpu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tencpu` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tencpu` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `tocdocpu` float DEFAULT NULL,
-  `congnghecpu` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `bonhodemcpu` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `congnghecpu` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `bonhodemcpu` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `tocdoturbo` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:11
+-- Dump completed on 2019-10-08 10:55:26

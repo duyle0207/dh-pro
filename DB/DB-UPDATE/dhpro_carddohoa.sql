@@ -16,29 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pin`
+-- Table structure for table `carddohoa`
 --
 
-DROP TABLE IF EXISTS `pin`;
+DROP TABLE IF EXISTS `carddohoa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `pin` (
+CREATE TABLE `carddohoa` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `thongtinpin` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `thoigiansudung` int(11) DEFAULT NULL,
-  `bosac` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tencarddohoa` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `bonhocard` int(11) DEFAULT NULL,
+  `thietkecard` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `tencarddohoa_UNIQUE` (`tencarddohoa`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pin`
+-- Dumping data for table `carddohoa`
 --
 
-LOCK TABLES `pin` WRITE;
-/*!40000 ALTER TABLE `pin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pin` ENABLE KEYS */;
+LOCK TABLES `carddohoa` WRITE;
+/*!40000 ALTER TABLE `carddohoa` DISABLE KEYS */;
+INSERT INTO `carddohoa` VALUES (8,'AMD Radeon 520 2GB GDDR5Intel UHD 620 Graphics',4,'Rời'),(9,'Intel UHD 620 Graphics',2,'Liền'),(10,'NVIDIA GeForce MX130 with 2GB',4,'Rời'),(11,'Intel HD Graphics 620',4,'Liền'),(12,'Intel® UHD graphics 620',8,'Liền'),(13,'Intel UHD Graphics 620',4,'Liền'),(14,'Radeon RX Vega 10 Graphics',8,'Rời'),(15,'Radeon™ Vega 8 Graphics',8,'Rời');
+/*!40000 ALTER TABLE `carddohoa` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 10:55:23
+-- Dump completed on 2019-10-08 12:42:55

@@ -25,14 +25,16 @@ DROP TABLE IF EXISTS `khachhang`;
 CREATE TABLE `khachhang` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idtk` int(11) DEFAULT NULL,
-  `ten` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `diachi` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sodt` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ten` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `diachi` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sodt` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `ngaydinh` date DEFAULT NULL,
-  `gioitinh` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `gioitinh` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `tk_kh_idx` (`idtk`),
+  CONSTRAINT `tk_kh` FOREIGN KEY (`idtk`) REFERENCES `taikhoan` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:10
+-- Dump completed on 2019-10-08 10:55:25

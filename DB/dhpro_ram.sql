@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `ram`;
 CREATE TABLE `ram` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bonhoram` int(11) DEFAULT NULL,
-  `loairam` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `loairam` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `tocdobus` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:06
+-- Dump completed on 2019-10-08 10:55:22

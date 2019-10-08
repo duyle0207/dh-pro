@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `carddohoa`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `carddohoa` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tencarddohoa` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tencarddohoa` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `bonhocard` int(11) DEFAULT NULL,
-  `thietkecard` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `thietkecard` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `tencarddohoa_UNIQUE` (`tencarddohoa`)
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:08
+-- Dump completed on 2019-10-08 10:55:23

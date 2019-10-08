@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `manhinh`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `manhinh` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kichthuong` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dophangiai` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `congnghemanhinh` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `kichthuoc` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dophangiai` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `congnghemanhinh` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `manhinhcamung` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 20:02:06
+-- Dump completed on 2019-10-08 10:55:22

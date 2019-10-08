@@ -16,29 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pin`
+-- Table structure for table `nhucausudung`
 --
 
-DROP TABLE IF EXISTS `pin`;
+DROP TABLE IF EXISTS `nhucausudung`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `pin` (
+CREATE TABLE `nhucausudung` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `thongtinpin` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `thoigiansudung` int(11) DEFAULT NULL,
-  `bosac` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tennhucau` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pin`
+-- Dumping data for table `nhucausudung`
 --
 
-LOCK TABLES `pin` WRITE;
-/*!40000 ALTER TABLE `pin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pin` ENABLE KEYS */;
+LOCK TABLES `nhucausudung` WRITE;
+/*!40000 ALTER TABLE `nhucausudung` DISABLE KEYS */;
+INSERT INTO `nhucausudung` VALUES (1,'Văn phòng - Học tập cơ bản'),(2,'Học tập - Chơi game'),(3,'Doanh nhân - Lịch lãm'),(4,'Đồ họa - Kĩ thuật'),(5,'Gaming tầm trung'),(6,'Gaming cao cấp');
+/*!40000 ALTER TABLE `nhucausudung` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

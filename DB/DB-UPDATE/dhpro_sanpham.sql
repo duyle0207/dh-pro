@@ -30,7 +30,7 @@ CREATE TABLE `sanpham` (
   `trongluong` float DEFAULT NULL,
   `kichthuoc` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `amthanh` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `conggiaotiep` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `conggiaotiep` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `dophangiaiwc` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `cpu` int(11) DEFAULT NULL,
   `ocung` int(11) DEFAULT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `sanpham` (
   CONSTRAINT `sp_pin` FOREIGN KEY (`pin`) REFERENCES `pin` (`id`),
   CONSTRAINT `sp_ram` FOREIGN KEY (`ram`) REFERENCES `ram` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `sp_thuonghieu` FOREIGN KEY (`thuonghieu`) REFERENCES `thuonghieu` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,6 +74,7 @@ CREATE TABLE `sanpham` (
 
 LOCK TABLES `sanpham` WRITE;
 /*!40000 ALTER TABLE `sanpham` DISABLE KEYS */;
+INSERT INTO `sanpham` VALUES (2,'Laptop MSI GL63 8RC 436VN',25990000,'Đen',2.2,'383 x 260 x 29mm','Waves MaxxAudio® Pro','SD Card Reader (SD, SDHC, SDXC, supporting up to 64GB) 1 x Thunderbolt 3 2 x USB 3.0 with PowerShare 1 x Headphone and microphone combo jack 1 x HDMI 1 x battery life indicator','HD 720p',1,1,1,8,1,1,1,1,1,2,'https://cdn.vinpro.net/uploads/images/general/2019/07/24/laptop-msi-gl63-8rc-436vn-00.jpg','MÁY XỊN',1);
 /*!40000 ALTER TABLE `sanpham` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -86,4 +87,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-08 10:55:23
+-- Dump completed on 2019-10-08 12:42:54
