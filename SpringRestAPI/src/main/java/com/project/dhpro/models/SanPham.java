@@ -2,10 +2,9 @@ package com.project.dhpro.models;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "sanpham")
@@ -38,32 +37,41 @@ public class SanPham {
     @Column(name = "dophangiaiwc")
     private String doPhanGiaiWC;
 
-    @Column(name = "cpu")
-    private int cpu;
+    @ManyToOne
+    @JoinColumn(name = "cpu")
+    private CPU cpu;
 
-    @Column(name = "ocung")
-    private int oCung;
+    @ManyToOne
+    @JoinColumn(name = "ocung")
+    private OCung oCung;
 
-    @Column(name = "ram")
-    private int ram;
+    @ManyToOne
+    @JoinColumn(name = "ram")
+    private RAM ram;
 
-    @Column(name = "carddohoa")
-    private int cardDoHoa;
+    @ManyToOne
+    @JoinColumn(name = "carddohoa")
+    private CardDoHoa cardDoHoa;
 
-    @Column(name = "manhinh")
-    private int manHinh;
+    @ManyToOne
+    @JoinColumn(name = "manhinh")
+    private ManHinh manHinh;
 
-    @Column(name = "pin")
-    private int pin;
+    @ManyToOne
+    @JoinColumn(name = "pin")
+    private Pin pin;
 
-    @Column(name = "hedieuhanh")
-    private int heDieuHanh;
+    @ManyToOne
+    @JoinColumn(name = "hedieuhanh")
+    private HeDieuHanh heDieuHanh;
 
-    @Column(name = "thuonghieu")
-    private int thuongHieu;
+    @ManyToOne
+    @JoinColumn(name = "thuonghieu")
+    private ThuongHieu thuongHieu;
 
-    @Column(name = "nhucausudung")
-    private int nhuCauSuDung;
+    @ManyToOne
+    @JoinColumn(name = "nhucausudung")
+    private NhuCauSuDung nhuCauSuDung;
 
     @Column(name = "soluong")
     private int soLuong;
@@ -74,8 +82,11 @@ public class SanPham {
     @Column(name = "tomtat")
     private String tomTat;
 
-    @Column(name = "dophangiai")
-    private int doPhanGiai;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
+    private Set<ChiTietHoaDon> listChiTietHoaDon = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
+    private Set<BinhLuan> listBinhLuan = new HashSet<>();
 
     public int getId() {
         return id;
@@ -149,76 +160,84 @@ public class SanPham {
         this.doPhanGiaiWC = doPhanGiaiWC;
     }
 
-    public int getCpu() {
+    public CPU getCpu() {
         return cpu;
     }
 
-    public void setCpu(int cpu) {
+    public void setCpu(CPU cpu) {
         this.cpu = cpu;
     }
 
-    public int getoCung() {
+    public OCung getoCung() {
         return oCung;
     }
 
-    public void setoCung(int oCung) {
+    public void setoCung(OCung oCung) {
         this.oCung = oCung;
     }
 
-    public int getRam() {
+    public RAM getRam() {
         return ram;
     }
 
-    public void setRam(int ram) {
+    public void setRam(RAM ram) {
         this.ram = ram;
     }
 
-    public int getCardDoHoa() {
+    public CardDoHoa getCardDoHoa() {
         return cardDoHoa;
     }
 
-    public void setCardDoHoa(int cardDoHoa) {
+    public void setCardDoHoa(CardDoHoa cardDoHoa) {
         this.cardDoHoa = cardDoHoa;
     }
 
-    public int getManHinh() {
+    public ManHinh getManHinh() {
         return manHinh;
     }
 
-    public void setManHinh(int manHinh) {
+    public void setManHinh(ManHinh manHinh) {
         this.manHinh = manHinh;
     }
 
-    public int getPin() {
+    public Pin getPin() {
         return pin;
     }
 
-    public void setPin(int pin) {
+    public void setPin(Pin pin) {
         this.pin = pin;
     }
 
-    public int getHeDieuHanh() {
+    public HeDieuHanh getHeDieuHanh() {
         return heDieuHanh;
     }
 
-    public void setHeDieuHanh(int heDieuHanh) {
+    public void setHeDieuHanh(HeDieuHanh heDieuHanh) {
         this.heDieuHanh = heDieuHanh;
     }
 
-    public int getThuongHieu() {
+    public ThuongHieu getThuongHieu() {
         return thuongHieu;
     }
 
-    public void setThuongHieu(int thuongHieu) {
+    public void setThuongHieu(ThuongHieu thuongHieu) {
         this.thuongHieu = thuongHieu;
     }
 
-    public int getNhuCauSuDung() {
+    public NhuCauSuDung getNhuCauSuDung() {
         return nhuCauSuDung;
     }
 
-    public void setNhuCauSuDung(int nhuCauSuDung) {
+    public void setNhuCauSuDung(NhuCauSuDung nhuCauSuDung) {
         this.nhuCauSuDung = nhuCauSuDung;
+    }
+
+    public Set<BinhLuan> getListBinhLuan() {
+        return listBinhLuan;
+    }
+
+    public void setListBinhLuan(Set<BinhLuan> listBinhLuan) {
+        this.listBinhLuan = listBinhLuan;
     }
 
     public int getSoLuong() {
@@ -243,13 +262,5 @@ public class SanPham {
 
     public void setTomTat(String tomTat) {
         this.tomTat = tomTat;
-    }
-
-    public int getDoPhanGiai() {
-        return doPhanGiai;
-    }
-
-    public void setDoPhanGiai(int doPhanGiai) {
-        this.doPhanGiai = doPhanGiai;
     }
 }

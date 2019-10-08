@@ -1,9 +1,8 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "pin")
@@ -20,6 +19,9 @@ public class Pin {
 
     @Column(name = "bosac")
     private  String boSac;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pin")
+    private Set<SanPham> listSanPham = new HashSet<>();
 
     public int getId() {
         return id;

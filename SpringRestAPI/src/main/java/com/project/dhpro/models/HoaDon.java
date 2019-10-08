@@ -1,9 +1,9 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "hoadon")
@@ -12,8 +12,9 @@ public class HoaDon {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "idkh")
-    private int idTK;
+    @ManyToOne
+    @JoinColumn(name = "idkh")
+    private KhachHang khachHang;
 
     @Column(name = "tenkh")
     private String tenKH;
@@ -30,8 +31,12 @@ public class HoaDon {
     @Column(name = "tongtien")
     private int tongTien;
 
-    @Column(name = "phuongthucthanhtoan")
-    private int phuongThucThanhToan;
+    @ManyToOne
+    @JoinColumn(name = "phuongthucthanhtoan")
+    private PhuongThucThanhToan phuongThucThanhToan;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "hoaDon")
+    private Set<ChiTietHoaDon> listChiTietHoaDon = new HashSet<>();
 
     public int getId() {
         return id;
@@ -41,12 +46,20 @@ public class HoaDon {
         this.id = id;
     }
 
-    public int getIdTK() {
-        return idTK;
+    public KhachHang getKhachHang() {
+        return khachHang;
     }
 
-    public void setIdTK(int idTK) {
-        this.idTK = idTK;
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
+
+    public String getTenKH() {
+        return tenKH;
+    }
+
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
     }
 
     public String getTen() {
@@ -89,11 +102,11 @@ public class HoaDon {
         this.tongTien = tongTien;
     }
 
-    public int getPhuongThucThanhToan() {
+    public PhuongThucThanhToan getPhuongThucThanhToan() {
         return phuongThucThanhToan;
     }
 
-    public void setPhuongThucThanhToan(int phuongThucThanhToan) {
+    public void setPhuongThucThanhToan(PhuongThucThanhToan phuongThucThanhToan) {
         this.phuongThucThanhToan = phuongThucThanhToan;
     }
 }

@@ -1,9 +1,8 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="cpu")
@@ -27,6 +26,9 @@ public class CPU {
 
     @Column(name="tocdoturbo")
     private float tocDoTurbo;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cpu")
+    private Set<SanPham> listSanPham = new HashSet<>();
 
     public int getId() {
         return Id;

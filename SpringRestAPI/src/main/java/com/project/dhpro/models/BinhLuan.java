@@ -1,9 +1,6 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="binhluan")
@@ -12,8 +9,13 @@ public class BinhLuan {
     @Column(name = "id")
     private int Id;
 
-    @Column(name = "idkh")
-    public int idKH;
+    @OneToOne
+    @JoinColumn(name = "idkh")
+    private TaiKhoan taiKhoan;
+
+    @ManyToOne
+    @JoinColumn(name = "idsp")
+    private SanPham sanPham;
 
     @Column(name = "tieude")
     private String tieuDe;
@@ -32,12 +34,20 @@ public class BinhLuan {
         Id = id;
     }
 
-    public int getIdKH() {
-        return idKH;
+    public TaiKhoan getTaiKhoan() {
+        return taiKhoan;
     }
 
-    public void setIdKH(int idKH) {
-        this.idKH = idKH;
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan;
+    }
+
+    public SanPham getSanPham() {
+        return sanPham;
+    }
+
+    public void setSanPham(SanPham sanPham) {
+        this.sanPham = sanPham;
     }
 
     public String getTieuDe() {

@@ -1,9 +1,7 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "taikhoan")
@@ -18,8 +16,18 @@ public class TaiKhoan {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private int role;
+    @ManyToOne
+    @JoinColumn(name = "role", nullable = false)
+    private Role role;
+
+    @OneToOne(mappedBy = "taiKhoan")
+    private QuanTriVien quanTriVien;
+
+    @OneToOne(mappedBy = "taiKhoan")
+    private KhachHang khachHang;
+
+    @OneToOne(mappedBy = "taiKhoan")
+    private BinhLuan binhLuan;
 
     public int getId() {
         return id;
@@ -45,11 +53,11 @@ public class TaiKhoan {
         this.password = password;
     }
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

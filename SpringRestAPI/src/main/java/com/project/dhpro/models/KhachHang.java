@@ -1,9 +1,8 @@
 package com.project.dhpro.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "khachhang")
@@ -12,8 +11,9 @@ public class KhachHang {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "idtk")
-    private int idTK;
+    @OneToOne
+    @JoinColumn(name = "idtk")
+    private TaiKhoan taiKhoan;
 
     @Column(name = "ten")
     private String ten;
@@ -33,6 +33,9 @@ public class KhachHang {
     @Column(name = "gioitinh")
     private String gioiTinh;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "khachHang")
+    private Set<HoaDon> listHoaDon = new HashSet<>();
+
     public int getId() {
         return id;
     }
@@ -41,12 +44,12 @@ public class KhachHang {
         this.id = id;
     }
 
-    public int getIdTK() {
-        return idTK;
+    public TaiKhoan getTaiKhoan() {
+        return taiKhoan;
     }
 
-    public void setIdTK(int idTK) {
-        this.idTK = idTK;
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan;
     }
 
     public String getTen() {
