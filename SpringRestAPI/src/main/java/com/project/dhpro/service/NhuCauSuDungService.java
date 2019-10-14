@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface NhuCauSuDungService{
     List<NhuCauSuDung> findAll();
+
+    NhuCauSuDung findById(int id);
 }

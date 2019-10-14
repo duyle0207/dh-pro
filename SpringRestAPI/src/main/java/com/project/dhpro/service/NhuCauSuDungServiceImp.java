@@ -19,4 +19,9 @@ public class NhuCauSuDungServiceImp implements NhuCauSuDungService{
     public List<NhuCauSuDung> findAll() {
         return nhuCauSuDungRepository.findAll();
     }
+
+    @Override
+    public NhuCauSuDung findById(int id) {
+        return nhuCauSuDungRepository.findById(id).get();
+    }
 }

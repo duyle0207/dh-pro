@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ManHinhService {
     List<ManHinh> findAll();
+
+    ManHinh findById(int id);
 }

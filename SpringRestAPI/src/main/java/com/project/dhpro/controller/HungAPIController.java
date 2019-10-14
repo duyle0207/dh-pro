@@ -3,10 +3,11 @@ package com.project.dhpro.controller;
 import com.project.dhpro.models.*;
 import com.project.dhpro.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -16,26 +17,38 @@ public class HungAPIController {
     @Autowired
     ThuongHieuService thuongHieuService;
 
-    @GetMapping(value = "/thuongHieu")
+    @GetMapping(value = "/listThuongHieu")
     List<ThuongHieu> ListThuongHieu() {
         return thuongHieuService.getAll();
     }
 
+    @GetMapping(value = "/thuongHieu/{id}")
+    ThuongHieu getThuongHieuById(@PathVariable("id") int id){return thuongHieuService.findById(id);}
+
     @Autowired
     PinService pinService;
 
-    @GetMapping(value = "/pin")
+    @GetMapping(value = "/listPin")
     List<Pin> ListPin() {
         return pinService.getAll();
+    }
+
+    @GetMapping(value = "/pin/{id}")
+    Pin getPinById(@PathVariable("id") int id)
+    {
+        return pinService.findById(id);
     }
 
     @Autowired
     HeDieuHanhService heDieuHanhService;
 
-    @GetMapping(value = "/heDieuHanh")
+    @GetMapping(value = "/listHeDieuHanh")
     List<HeDieuHanh> ListHeDieuHanh() {
         return heDieuHanhService.getAll();
     }
+
+    @GetMapping(value = "/heDieuHanh/{id}")
+    HeDieuHanh findById(@PathVariable("id") int id){return heDieuHanhService.findById(id);}
 
     @Autowired
     PhuongThucThanhToanService phuongThucThanhToanService;
@@ -131,5 +144,13 @@ public class HungAPIController {
     @GetMapping(value = "/hoaDon")
     List<HoaDon> ListHoaDon() {
         return hoaDonService.getAll();
+    }
+
+    @PutMapping("/saveSanPham")
+    public ResponseEntity<SanPham> updateAccount(@Valid @RequestBody SanPham sanPham) throws URISyntaxException {
+        System.out.println(sanPham.getThuongHieu().getTenThuongHieu());
+        SanPham sp = sanPhamService.save(sanPham);
+        System.out.println("ID: "+sp.getThuongHieu().getTenThuongHieu());
+        return ResponseEntity.created(new URI("/api/post" + sp.getId())).body(sp);
     }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PinService {
     List<Pin> getAll();
+
+    Pin findById(int id);
 }

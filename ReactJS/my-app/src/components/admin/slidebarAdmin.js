@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/sb-admin.css';
-import Content from './contentAdmin';
+
 
 class slidebarAdmin extends Component {
     render() {
@@ -25,7 +25,7 @@ class slidebarAdmin extends Component {
                             <span> Sản phẩm</span></a>
                     </li>
                 </ul>
-                <Content></Content>
+                {this.props.children}
             </div>
         );
     }

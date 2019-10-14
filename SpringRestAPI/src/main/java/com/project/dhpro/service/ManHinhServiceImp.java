@@ -18,4 +18,9 @@ public class ManHinhServiceImp implements ManHinhService{
     public List<ManHinh> findAll() {
         return manHinhRepository.findAll();
     }
+
+    @Override
+    public ManHinh findById(int id) {
+        return manHinhRepository.findById(id).get();
+    }
 }

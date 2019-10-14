@@ -17,4 +17,15 @@ public class SanPhamServiceImp implements SanPhamService{
     public List<SanPham> getAll() {
         return sanPhamRepository.findAll();
     }
+
+    @Override
+    public SanPham findById(int id) {
+        return sanPhamRepository.findById(id).get();
+    }
+
+    @Override
+    public SanPham save(SanPham sanPham) {
+        sanPhamRepository.save(sanPham);
+        return sanPham;
+    }
 }

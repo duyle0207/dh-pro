@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OCungService {
     List<OCung> findAll();
+
+    OCung findOCungById(int id);
 }

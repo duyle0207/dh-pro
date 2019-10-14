@@ -18,4 +18,9 @@ public class CPUServiceImp implements CPUService{
     public List<CPU> findAll() {
         return cpuRepository.findAll();
     }
+
+    @Override
+    public CPU findCPUById(int id) {
+        return cpuRepository.findById(id).get();
+    }
 }

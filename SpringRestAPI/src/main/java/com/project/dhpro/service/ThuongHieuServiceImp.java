@@ -18,4 +18,9 @@ public class ThuongHieuServiceImp implements ThuongHieuService{
     public List<ThuongHieu> getAll() {
         return  thuongHieuRepository.findAll();
     }
+
+    @Override
+    public ThuongHieu findById(int id) {
+        return thuongHieuRepository.findById(id).get();
+    }
 }

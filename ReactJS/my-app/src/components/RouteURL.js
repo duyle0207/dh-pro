@@ -8,6 +8,8 @@ import LoginPage from "./login";
 import UpLoadFile from "./uploadFile";
 import SearchDemo from "../searchDemo";
 import CompareItemsPage from "./customer/compareItem/compareItemsPage";
+import ManageProductPage from "./admin/manageProductPage/manageProductPage";
+import ProductDetailPage from "./admin/productDetailPage/productDetailPage";
 
 class RouteURL extends Component {
     render() {
@@ -21,6 +23,8 @@ class RouteURL extends Component {
                 <Route path="/uploadFile" component = {UpLoadFile}/>
                 <Route path="/searchDemo" component = {SearchDemo}/>
                 <Route path="/compareItem" component = {CompareItemsPage}/>
+                <Route path="/manageProduct" component = {ManageProductPage}/>
+                <Route path="/productDetail/:id" component = {ProductDetailPage}/>
             </Router>
         );
     }

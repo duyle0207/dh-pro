@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface HeDieuHanhService {
     List<HeDieuHanh> getAll();
+
+    HeDieuHanh findById(int id);
 }

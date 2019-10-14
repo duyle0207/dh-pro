@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CardDoHoaService {
     List<CardDoHoa> getAll();
+
+    CardDoHoa findCardById(int id);
 }

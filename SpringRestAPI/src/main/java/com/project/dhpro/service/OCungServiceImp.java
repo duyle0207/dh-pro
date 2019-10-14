@@ -18,4 +18,9 @@ public class OCungServiceImp implements OCungService{
     public List<OCung> findAll() {
         return oCungRepository.findAll();
     }
+
+    @Override
+    public OCung findOCungById(int id) {
+        return oCungRepository.findById(id).get();
+    }
 }

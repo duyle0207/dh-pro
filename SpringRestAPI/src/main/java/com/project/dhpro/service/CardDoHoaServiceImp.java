@@ -18,4 +18,9 @@ public class CardDoHoaServiceImp implements CardDoHoaService {
     public List<CardDoHoa> getAll() {
         return cardDoHoaRepository.findAll();
     }
+
+    @Override
+    public CardDoHoa findCardById(int id) {
+        return cardDoHoaRepository.findById(id).get();
+    }
 }

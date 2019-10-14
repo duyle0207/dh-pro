@@ -13,8 +13,14 @@ import java.util.List;
 public class PinServiceImp implements PinService{
     @Autowired
     PinRepository pinRepository;
+
     @Override
     public List<Pin> getAll() {
         return pinRepository.findAll();
+    }
+
+    @Override
+    public Pin findById(int id) {
+        return pinRepository.findById(id).get();
     }
 }

@@ -17,4 +17,9 @@ public class HeDieuHanhServiceImp implements HeDieuHanhService{
     public List<HeDieuHanh> getAll() {
         return heDieuHanhRepository.findAll();
     }
+
+    @Override
+    public HeDieuHanh findById(int id) {
+        return heDieuHanhRepository.findById(id).get();
+    }
 }
