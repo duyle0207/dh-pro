@@ -14,6 +14,7 @@ class product extends Component {
                 <td>{this.props.lapName}</td>
                 <td>{this.props.quantity}</td>
                 <td><a href={`/productDetail/${this.props.idProduct}`} className="btn btn-dark">Xem chi tiết</a></td>
+                <td><button type="button" className="btn btn-danger" onClick={()=>this.props.deleteFunc(this.props.idProduct)}>Delete</button></td>
             </tr>
         );
     }

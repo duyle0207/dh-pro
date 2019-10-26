@@ -10,7 +10,7 @@ import SearchDemo from "../searchDemo";
 import CompareItemsPage from "./customer/compareItem/compareItemsPage";
 import ManageProductPage from "./admin/manageProductPage/manageProductPage";
 import ProductDetailPage from "./admin/productDetailPage/productDetailPage";
-
+import Validate from "./validate";
 class RouteURL extends Component {
     render() {
         return (
@@ -25,6 +25,7 @@ class RouteURL extends Component {
                 <Route path="/compareItem" component = {CompareItemsPage}/>
                 <Route path="/manageProduct" component = {ManageProductPage}/>
                 <Route path="/productDetail/:id" component = {ProductDetailPage}/>
+                <Route path="/validate" component = {Validate}/>
             </Router>
         );
     }

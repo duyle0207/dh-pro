@@ -28,4 +28,19 @@ public class SanPhamServiceImp implements SanPhamService{
         sanPhamRepository.save(sanPham);
         return sanPham;
     }
+
+    @Override
+    public List<SanPham> searchSanPhamAdmin(String keyword) {
+        return sanPhamRepository.search(keyword);
+    }
+
+    @Override
+    public SanPham findSanPhamByTenSP(String tensp) {
+        return sanPhamRepository.findSanPhamByTenSP(tensp);
+    }
+
+    @Override
+    public void deleteSanPham(int id) {
+        sanPhamRepository.deleteById(id);
+    }
 }

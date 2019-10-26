@@ -5,7 +5,7 @@ class headerAdmin extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
-                <a className="navbar-brand mr-1" href="index.html">DHPro Management</a>
+                <a className="navbar-brand mr-1" href="/manageProduct">DHPro Management</a>
                 {/* Navbar Search */}
                 <form className="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
                     <div className="input-group">
@@ -14,6 +14,7 @@ class headerAdmin extends Component {
                             <button className="btn btn-primary" type="button">
                                 <i className="fas fa-search" />
                             </button>
+                            <a href="/productDetail/new" className="btn btn-danger"><b>Thêm mới</b></a>
                         </div>
                     </div>
                 </form>

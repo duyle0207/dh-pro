@@ -6,7 +6,8 @@ class Upload extends Component {
         this.state = ({
             user: {},
             value: '',
-            dataFile: new FormData()
+            dataFile: new FormData(),
+            source: null
         });
         this.handleChange = this.handleChange.bind(this);
 
@@ -34,20 +35,21 @@ class Upload extends Component {
         const data = new FormData();
         for (var i = 0; i < event.target.files.length; i++) {
             var filename = event.target.files[i].name.toLowerCase();
-            if(!filename.endsWith('.png') && !filename.endsWith('.jpg'))
+            if(!filename.endsWith('.png') && !filename.endsWith('.jpg') && !filename.endsWith('.jpeg'))
             {
                 alert(filename + " is not an image");
                 event.target.value = '';
             }
             else{
+                this.setState({source:URL.createObjectURL(event.target.files[i])});
                 data.append("file", event.target.files[i]);
             }
         }
         this.setState({ dataFile: data });
     }
 
-    async handleClickUploadFile() {
-        fetch('/api/savefile', {
+    async handleClickUploadFile(event) {
+        fetch('/hung/savefile/AAAA', {
             method: 'post',
             body: this.state.dataFile
         }).then(res => {
@@ -62,6 +64,7 @@ class Upload extends Component {
             <div>
                 <div className="container">
                     <div className="row">
+                        <img src={this.state.source} width={100} alt="" />
                         <div className="col-md-6">
                             <div className="form-group files color">
                                 <label>Upload Your File </label>

@@ -67,9 +67,6 @@ class login extends Component {
                                 </div>
                                 <div className="form-group">
                                     <div className="form-label-group">
-
-
-
                                         <input type="text" name="role" id="inputRole" className="form-control" onChange={this.handleChange} placeholder="Password" required="required" ref="role"
                                         value={this.state.user.role || ''}/>
                                         <label htmlFor="inputRole">Role</label>

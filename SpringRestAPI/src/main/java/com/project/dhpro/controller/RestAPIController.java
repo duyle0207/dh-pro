@@ -4,10 +4,19 @@ import com.project.dhpro.models.*;
 import com.project.dhpro.repository.CardDoHoaRepository;
 import com.project.dhpro.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -79,7 +88,15 @@ public class RestAPIController {
     @GetMapping(value="/sanPham/{id}")
     SanPham getSanPhamById(@PathVariable("id") int id)
     {
-        return sanPhamService.findById(id);
+        SanPham sp = new SanPham();
+        try {
+            sp = sanPhamService.findById(id);
+        }
+        catch (Exception e)
+        {
+            return sp;
+        }
+        return sp;
     }
 
     @GetMapping(value="/cpu/{id}")
@@ -96,4 +113,11 @@ public class RestAPIController {
 
     @GetMapping(value = "/manHinh/{id}")
     ManHinh getManHinhById(@PathVariable("id") int id){ return  manHinhService.findById(id);};
+
+    @PostMapping(value = "/searchSPAdmin")
+    List<SanPham> searchSanPhamAdmin(@Valid @RequestBody String keyword)
+    {
+        System.out.println(keyword);
+        return sanPhamService.searchSanPhamAdmin(keyword);
+    }
 }

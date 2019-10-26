@@ -87,8 +87,9 @@ class productDetail extends Component {
     constructor(props) {
         super(props);
         this.state = ({
+            isUpdateFail: false,
             isUpdateSuccess: false,
-            productDetail: {},
+            productDetail: this.sp,
             value: '',
             cpu: {},
             listCPU: [],
@@ -107,7 +108,19 @@ class productDetail extends Component {
             thuongHieu: {},
             listThuongHieu: [],
             nhuCauSuDung: {},
-            listNhuCauSuDung: []
+            listNhuCauSuDung: [],
+            error: {
+                tenSpError: '',
+                giaError: '',
+                soLuongError: '',
+                mauSacError: '',
+                trongLuongError: '',
+                kichThuocError: '',
+                amThanhError: '',
+                congGiaoTiepError: '',
+                doPhanGiaiWCError: '',
+                motaSoLuoc: ''
+            }
         });
         this.updateSanPham = this.updateSanPham.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -120,12 +133,25 @@ class productDetail extends Component {
         this.handleChangeHeDieuHanh = this.handleChangeHeDieuHanh.bind(this);
         this.handleChangeNhuCauSuDung = this.handleChangeNhuCauSuDung.bind(this);
         this.handleChangeThuongHieu = this.handleChangeThuongHieu.bind(this);
+        this.checkNull = this.checkNull.bind(this);
     }
 
     async componentDidMount() {
-        const link = '/sanPham/' + this.props.idProduct;
-        const product = await (await fetch(link)).json();
-        this.sp = product;
+
+        var product;
+        if (this.props.idProduct !== 'new') {
+            const link = '/sanPham/' + this.props.idProduct;
+            product = await (await fetch(link)).json();
+            this.sp = product;
+            this.setState({ productDetail: this.sp });
+        }
+        else {
+            const link = '/sanPham/' + 0;
+            product = await (await fetch(link)).json();
+            this.sp = product;
+            this.setState({ productDetail: this.sp });
+        }
+
         const cpuList = await (await fetch(`/listCPU`)).json();
         const oCungList = await (await fetch(`/listOCung`)).json();
         const ramList = await (await fetch(`/listRam`)).json();
@@ -137,7 +163,6 @@ class productDetail extends Component {
         const thuongHieuList = await (await fetch(`/hung/listThuongHieu`)).json();
 
         this.setState({
-            productDetail: product,
             cpu: product.cpu,
             listCPU: cpuList,
             oCung: product.oCung,
@@ -166,89 +191,144 @@ class productDetail extends Component {
         this.setState({ product });
     }
 
-    async handleChangeCPU(even) {
-        var id = even.target.value;
-        if(even.target.value === 'true')
-        {
+    async handleChangeCPU(event) {
+        var id = event.target.value;
+        if (event.target.value === 'true') {
             id = this.state.cpu.id;
         }
         const cpu = await (await fetch(`/cpu/${id}`)).json();
         this.sp.cpu = cpu;
         this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.cpu);
+        console.log(this.state.productDetail);
     }
 
     async handleChangeOCung(event) {
-        const oCung = await (await fetch(`/oCung/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.oCung.id;
+        }
+        const oCung = await (await fetch(`/oCung/${id}`)).json();
         this.sp.oCung = oCung;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.oCung);
     }
 
     async handleChangeRAM(event) {
-        const ram = await (await fetch(`/ram/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.ram.id;
+        }
+        const ram = await (await fetch(`/ram/${id}`)).json();
         this.sp.ram = ram;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.ram);
     }
 
     async handleChangeCard(event) {
-        const cardDoHoa = await (await fetch(`/cardDoHoa/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.cardDoHoa.id;
+        }
+        const cardDoHoa = await (await fetch(`/cardDoHoa/${id}`)).json();
         this.sp.cardDoHoa = cardDoHoa;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.cardDoHoa);
     }
 
     async handleChangeCaManHinh(event) {
-        const manHinh = await (await fetch(`/manHinh/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.manHinh.id;
+        }
+        const manHinh = await (await fetch(`/manHinh/${id}`)).json();
         this.sp.manHinh = manHinh;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.manHinh);
     }
 
     async handleChangePin(event) {
-        const pin = await (await fetch(`/manHinh/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.pin.id;
+        }
+        const pin = await (await fetch(`/manHinh/${id}`)).json();
         this.sp.pin = pin;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.pin);
     }
 
     async handleChangeHeDieuHanh(event) {
-        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.heDieuHanh.id;
+        }
+        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${id}`)).json();
         this.sp.heDieuHanh = heDieuHanh;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
     }
 
     async handleChangeNhuCauSuDung(event) {
-        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.nhuCauSuDung.id;
+        }
+        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`)).json();
         this.sp.nhuCauSuDung = nhuCauSuDung;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
     }
 
     async handleChangeThuongHieu(event) {
-        const thuongHieu = await (await fetch(`/hung/thuongHieu/${event.target.value}`)).json();
+        var id = event.target.value;
+        if (event.target.value === 'true') {
+            id = this.state.thuongHieu.id;
+        }
+        const thuongHieu = await (await fetch(`/hung/thuongHieu/${id}`)).json();
         this.sp.thuongHieu = thuongHieu;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
     }
 
-    async updateSanPham() {
+    async updateSanPham(event) {
+        event.preventDefault();
+        console.log(this.state.productDetail);
         await fetch('/hung/saveSanPham', {
-            method: 'PUT',
+            method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.state.productDetail)
         }).then(res => {
-            this.setState({isUpdateSuccess:true});
-        })
+            // console.log(res);
+            // this.setState({ isUpdateSuccess: true });
+            if (!res.ok) {
+                this.setState({ isUpdateFail: true });
+            }
+            else {
+                this.setState({ isUpdateSuccess: true, isUpdateFail: false });
+                return res.json();
+            }
+        }).then(data => console.log(data));
+    }
+
+    // validate(event) {
+    //     event.preventDefault();
+    //     alert(event)
+    //     var s = Object.keys(this.state.productDetail);
+    //     s.map((value, index) => {
+    //         console.log();
+    //         // alert(this.state.productDetail[value])
+    //     });
+    // }
+
+    checkNull() {
+        this.setState({ allowUpdate: !this.state.allowUpdate });
+        console.log(this.state.allowUpdate);
     }
 
     render() {
-
         return (
             <div className="container-fluid mx-4" style={{ marginBottom: '100px' }}>
                 <div className="row mt-4">
@@ -270,56 +350,67 @@ class productDetail extends Component {
                 <div className="row mt-4">
                     <Span content="Thông số chi tiết"></Span>
                 </div>
-                <div className="row border">
-                    <TextBox title="Tên sản phẩm" col="tenSP" value={this.state.productDetail.tenSP} handleChange={this.handleChange}></TextBox>
+                <form onSubmit={this.updateSanPham}>
+                    <div className="row border">
 
-                    <DropDownBoxCPU title="CPU" col="cpu" list={this.state.listCPU} detail={this.state.cpu} onChange={this.handleChangeCPU}></DropDownBoxCPU>
+                        <TextBox title="Tên sản phẩm" col="tenSP" value={this.state.productDetail.tenSP} handleChange={this.handleChange}></TextBox>
 
-                    <NumberInput title="Giá" col="gia" value={this.state.productDetail.gia} handleChange={this.handleChange}></NumberInput>
+                        <DropDownBoxCPU title="CPU" col="cpu" list={this.state.listCPU} detail={this.state.cpu} onChange={this.handleChangeCPU}></DropDownBoxCPU>
 
-                    <DropDownBoxOCung title="Ổ cứng" col="oCung" list={this.state.listOCung} detail={this.state.oCung} onChange={this.handleChangeOCung}></DropDownBoxOCung>
+                        <NumberInput title="Giá" col="gia" value={this.state.productDetail.gia} handleChange={this.handleChange}></NumberInput>
 
-                    <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput>
+                        <DropDownBoxOCung title="Ổ cứng" col="oCung" list={this.state.listOCung} detail={this.state.oCung} onChange={this.handleChangeOCung}></DropDownBoxOCung>
 
-                    <DropDownBoxRAM title="RAM" col="ram" list={this.state.listRAM} detail={this.state.ram} onChange={this.handleChangeRAM}></DropDownBoxRAM>
+                        <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput>
 
-                    <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
+                        <DropDownBoxRAM title="RAM" col="ram" list={this.state.listRAM} detail={this.state.ram} onChange={this.handleChangeRAM}></DropDownBoxRAM>
 
-                    <DropDownBoxCard title="Card đồ họa" col="cardDoHoa" list={this.state.listCardDoHoa} detail={this.state.cardDoHoa} onChange={this.handleChangeCard}></DropDownBoxCard>
+                        <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
 
-                    <TextBox title="Trọng lượng (Kg)" col="trongLuong" value={this.state.productDetail.trongLuong} handleChange={this.handleChange}></TextBox>
+                        <DropDownBoxCard title="Card đồ họa" col="cardDoHoa" list={this.state.listCardDoHoa} detail={this.state.cardDoHoa} onChange={this.handleChangeCard}></DropDownBoxCard>
 
-                    <DropDownBoxManHinh title="Màn hình" col="manHinh" list={this.state.listManHinh} detail={this.state.manHinh} onChange={this.handleChangeCaManHinh}></DropDownBoxManHinh>
+                        <NumberInput title="Trọng lượng (Kg)" col="trongLuong" value={this.state.productDetail.trongLuong} handleChange={this.handleChange} step="0.1"></NumberInput>
 
-                    <TextBox title="Kích thước" col="kichThuoc" value={this.state.productDetail.kichThuoc} handleChange={this.handleChange}></TextBox>
+                        <DropDownBoxManHinh title="Màn hình" col="manHinh" list={this.state.listManHinh} detail={this.state.manHinh} onChange={this.handleChangeCaManHinh}></DropDownBoxManHinh>
 
-                    <DropDownBoxPin title="Pin" col="pin" list={this.state.listPin} detail={this.state.pin} onChange={this.handleChangePin}></DropDownBoxPin>
+                        <TextBox title="Kích thước" col="kichThuoc" value={this.state.productDetail.kichThuoc} handleChange={this.handleChange}></TextBox>
 
-                    <TextBox title="Âm thanh" col="amThanh" value={this.state.productDetail.amThanh} handleChange={this.handleChange}></TextBox>
+                        <DropDownBoxPin title="Pin" col="pin" list={this.state.listPin} detail={this.state.pin} onChange={this.handleChangePin}></DropDownBoxPin>
 
-                    <DropDownBoxHeDieuHanh title="Hệ điều hành" col="heDieuHanh" list={this.state.listHeDieuHanh} detail={this.state.heDieuHanh} onChange={this.handleChangeHeDieuHanh}></DropDownBoxHeDieuHanh>
+                        <TextBox title="Âm thanh" col="amThanh" value={this.state.productDetail.amThanh} handleChange={this.handleChange}></TextBox>
 
-                    <TextBox title="Cổng giao tiếp" col="congGiaoTiep" value={this.state.productDetail.congGiaoTiep} handleChange={this.handleChange}></TextBox>
+                        <DropDownBoxHeDieuHanh title="Hệ điều hành" col="heDieuHanh" list={this.state.listHeDieuHanh} detail={this.state.heDieuHanh} onChange={this.handleChangeHeDieuHanh}></DropDownBoxHeDieuHanh>
 
-                    <DropDownBoxNhuCauSuDung title="Nhu cầu sử dụng" col="nhuCauSuDung" list={this.state.listNhuCauSuDung} detail={this.state.nhuCauSuDung} onChange={this.handleChangeNhuCauSuDung}></DropDownBoxNhuCauSuDung>
+                        <TextBox title="Cổng giao tiếp" col="congGiaoTiep" value={this.state.productDetail.congGiaoTiep} handleChange={this.handleChange}></TextBox>
 
-                    <TextBox title="Độ phân giải Webcam" col="doPhanGiaiWC" value={this.state.productDetail.doPhanGiaiWC} handleChange={this.handleChange}></TextBox>
+                        <DropDownBoxNhuCauSuDung title="Nhu cầu sử dụng" col="nhuCauSuDung" list={this.state.listNhuCauSuDung} detail={this.state.nhuCauSuDung} onChange={this.handleChangeNhuCauSuDung}></DropDownBoxNhuCauSuDung>
 
-                    <DropDownBoxThuongHieu title="Thương hiệu" col="thuongHieu" list={this.state.listThuongHieu} detail={this.state.thuongHieu} onChange={this.handleChangeThuongHieu}></DropDownBoxThuongHieu>
+                        <TextBox title="Độ phân giải Webcam" col="doPhanGiaiWC" value={this.state.productDetail.doPhanGiaiWC} handleChange={this.handleChange}></TextBox>
 
-                    <Textarea title="Mô tả sơ lược" col="tomTat" value={this.state.productDetail.tomTat} handleChange={this.handleChange}></Textarea>
+                        <DropDownBoxThuongHieu title="Thương hiệu" col="thuongHieu" list={this.state.listThuongHieu} detail={this.state.thuongHieu} onChange={this.handleChangeThuongHieu}></DropDownBoxThuongHieu>
 
-                    <div className="form-group col-sm-12 my-2 text-right">
-                        <button type="button" className="btn btn-dark mx-2 my-2" onClick={this.updateSanPham}><h5>Lưu</h5></button>
-                    </div>
+                        <Textarea title="Mô tả sơ lược" col="tomTat" value={this.state.productDetail.tomTat} handleChange={this.handleChange}></Textarea>
 
-                    {(this.state.isUpdateSuccess === true)? 
-                    <div className="form-group col-sm-12 my-2">
-                        <div className="alert alert-success text-center" role="alert">
-                            Update Successfull
+                        <div className="form-group col-sm-12 my-2 text-right">
+                            <button type="submit" className="btn btn-dark mx-2 my-2" ><h5>Lưu</h5></button>
                         </div>
-                    </div>:''}
-                </div>
+                        {/* onClick={() => { this.checkNull(); this.updateSanPham(); }} */}
+
+
+                        {(this.state.isUpdateSuccess === true) ?
+                            <div className="form-group col-sm-12 my-2">
+                                <div className="alert alert-success text-center" role="alert">
+                                    Update Successfull
+                                </div>
+                            </div> : ''}
+                        {(this.state.isUpdateFail === true) ?
+                            <div className="form-group col-sm-12 my-2">
+                                <div className="alert alert-danger text-center" role="alert">
+                                    Update Failed
+                                </div>
+                            </div> : ''}
+                    </div>
+                </form>
             </div>
         );
     }

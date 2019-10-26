@@ -10,4 +10,10 @@ public interface SanPhamService {
     SanPham findById(int id);
 
     SanPham save(SanPham sanPham);
+
+    List<SanPham> searchSanPhamAdmin(String keyword);
+
+    SanPham findSanPhamByTenSP(String tensp);
+
+    void deleteSanPham(int id);
 }
