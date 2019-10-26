@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../../css/sb-admin.css';
+import { Link } from 'react-router-dom'
 
 
 class slidebarAdmin extends Component {
@@ -9,20 +10,22 @@ class slidebarAdmin extends Component {
                 {/* Sidebar */}
                 <ul className="sidebar navbar-nav">
                     <li className="nav-item active">
-                        <a className="nav-link" href="index.html">
+                        <Link className="nav-link" to="/admin">
                             <i className="fas fa-fw fa-tachometer-alt" />
                             <span> Doanh thu</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="charts.html">
+                        <Link className="nav-link" href="charts.html">
                             <i className="fas fa-fw fa-chart-area" />
-                            <span> Nhân viên</span></a>
+                            <span> Nhân viên</span>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="tables.html">
+                        <Link className="nav-link" to="/manageProduct">
                             <i className="fas fa-fw fa-table" />
-                            <span> Sản phẩm</span></a>
+                            <span> Sản phẩm</span>
+                        </Link>
                     </li>
                 </ul>
                 {this.props.children}
