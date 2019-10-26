@@ -5,7 +5,7 @@ class mainImage extends Component {
         return (
             <div style={{ textAlign: 'center' }}>
                 <img src={this.props.imgSrc} width={500} height={500} alt="MainImage"/>
-                <button type="button" className="btn btn-dark">Chỉnh sữa</button>
+                <button type="button" className="btn btn-dark mx-4" onClick={this.props.onClick}>Upload</button>
             </div>
         );
     }

@@ -14,7 +14,7 @@ import DropDownBoxNhuCauSuDung from "./input/dropDownBoxNhuCauSuDung";
 import DropDownBoxThuongHieu from "./input/dropDownBoxThuong";
 import NumberInput from "./input/numberInput";
 import Textarea from "./input/textarea";
-
+// import a from "../../../SpringRestAPI/src/main/webapp/images/earth_orbit_2-wallpaper-1920x1080(2).jpg";
 
 
 class productDetail extends Component {
@@ -109,6 +109,7 @@ class productDetail extends Component {
             listThuongHieu: [],
             nhuCauSuDung: {},
             listNhuCauSuDung: [],
+            listHinhSP: [],
             error: {
                 tenSpError: '',
                 giaError: '',
@@ -120,7 +121,21 @@ class productDetail extends Component {
                 congGiaoTiepError: '',
                 doPhanGiaiWCError: '',
                 motaSoLuoc: ''
-            }
+            },
+            dataFile: new FormData(),
+            multipleFile: new FormData(),
+            // sourceMultipleFile: {
+            //     source1: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            //     source2: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            //     source3: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            //     source4: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg"
+            // },
+            source1: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            source2: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            source3: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            source4: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+            source: null,
+            isUpdateMainImage: false
         });
         this.updateSanPham = this.updateSanPham.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -134,6 +149,10 @@ class productDetail extends Component {
         this.handleChangeNhuCauSuDung = this.handleChangeNhuCauSuDung.bind(this);
         this.handleChangeThuongHieu = this.handleChangeThuongHieu.bind(this);
         this.checkNull = this.checkNull.bind(this);
+        this.handleClickUploadFile = this.handleClickUploadFile.bind(this);
+        this.handleFile = this.handleFile.bind(this);
+        this.enableUpdateMainImage = this.enableUpdateMainImage.bind(this);
+        this.handleFile2 = this.handleFile2.bind(this);
     }
 
     async componentDidMount() {
@@ -142,8 +161,34 @@ class productDetail extends Component {
         if (this.props.idProduct !== 'new') {
             const link = '/sanPham/' + this.props.idProduct;
             product = await (await fetch(link)).json();
+            var a = await (await fetch(`/hung/getHinhSP/${this.props.idProduct}`)).json();
+
             this.sp = product;
-            this.setState({ productDetail: this.sp });
+
+            a.map((value, i) => {
+                if (i === 0) {
+                    this.setState({
+                        source1: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                    });
+                }
+                if (i === 1) {
+                    this.setState({
+                        source2: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                    });
+                }
+                if (i === 2) {
+                    this.setState({
+                        source3: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                    });
+                }
+                if (i === 3) {
+                    this.setState({
+                        source4: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                    });
+                }
+            });
+
+            this.setState({ productDetail: this.sp, listHinhSP: a });
         }
         else {
             const link = '/sanPham/' + 0;
@@ -151,6 +196,8 @@ class productDetail extends Component {
             this.sp = product;
             this.setState({ productDetail: this.sp });
         }
+
+        this.setState({ source: this.state.productDetail.hinh });
 
         const cpuList = await (await fetch(`/listCPU`)).json();
         const oCungList = await (await fetch(`/listOCung`)).json();
@@ -180,10 +227,19 @@ class productDetail extends Component {
             nhuCauSuDung: product.nhuCauSuDung,
             listNhuCauSuDung: nhuCauSuDungList,
             thuongHieu: product.thuongHieu,
-            listThuongHieu: thuongHieuList
+            listThuongHieu: thuongHieuList,
         });
+
+        try {
+            require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`);
+            this.setState({ source: require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`) });
+        }
+        catch (e) {
+            this.setState({ source: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+        }
     }
 
+    //#region Handle Change
     handleChange(event) {
         let name = event.target.name;
         let product = this.state.productDetail;
@@ -289,28 +345,44 @@ class productDetail extends Component {
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
     }
+    //#endregion
 
     async updateSanPham(event) {
         event.preventDefault();
-        console.log(this.state.productDetail);
-        await fetch('/hung/saveSanPham', {
-            method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.productDetail)
-        }).then(res => {
-            // console.log(res);
-            // this.setState({ isUpdateSuccess: true });
-            if (!res.ok) {
-                this.setState({ isUpdateFail: true });
-            }
-            else {
-                this.setState({ isUpdateSuccess: true, isUpdateFail: false });
-                return res.json();
-            }
-        }).then(data => console.log(data));
+        if (!this.state.source) {
+            alert("Xin hãy upload hình cho sản phẩm");
+        }
+        else {
+            await fetch('/hung/saveSanPham', {
+                method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state.productDetail)
+            }).then(res => {
+                // console.log(res);
+                // this.setState({ isUpdateSuccess: true });
+                if (!res.ok) {
+                    this.setState({ isUpdateFail: true });
+                }
+                else {
+                    this.setState({ isUpdateSuccess: true, isUpdateFail: false });
+                    return res.json();
+                }
+            }).then(data => console.log(data));
+
+            fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
+                method: 'post',
+                body: this.state.dataFile
+            }).then(res => {
+                if (res.ok) {
+                    console.log(res);
+                    alert("File uploaded successfully.");
+                }
+            });
+        }
+        // console.log(this.state.productDetail);
     }
 
     // validate(event) {
@@ -328,29 +400,131 @@ class productDetail extends Component {
         console.log(this.state.allowUpdate);
     }
 
+    //Upload file
+    handleFile(event) {
+        const data = new FormData();
+        for (var i = 0; i < event.target.files.length; i++) {
+            var filename = event.target.files[i].name.toLowerCase();
+            if (!filename.endsWith('.png') && !filename.endsWith('.jpg') && !filename.endsWith('.jpeg')) {
+                alert(filename + " is not an image");
+                event.target.value = '';
+            }
+            else {
+                console.log(URL.createObjectURL(event.target.files[i]));
+                this.setState({ source: URL.createObjectURL(event.target.files[i]) });
+                data.append("file", event.target.files[i]);
+            }
+        }
+        this.setState({ dataFile: data });
+    }
+
+    handleFile2(event) {
+        const data = new FormData();
+        if (event.target.files.length !== 4) {
+            alert("Xin hãy chọn 4 ảnh!");
+            event.target.value = "";
+        }
+        else {
+            for (var i = 0; i < event.target.files.length; i++) {
+                var filename = event.target.files[i].name.toLowerCase();
+                if (!filename.endsWith('.png') && !filename.endsWith('.jpg') && !filename.endsWith('.jpeg')) {
+                    alert(filename + " is not an image");
+                    event.target.value = '';
+                }
+                else {
+                    if (i === 0) {
+                        console.log("1");
+                        this.setState({
+                            source1: URL.createObjectURL(event.target.files[i])
+                        });
+                    }
+                    if (i === 1) {
+                        console.log("2");
+                        this.setState({
+                            source2: URL.createObjectURL(event.target.files[i])
+                        });
+                    }
+                    if (i === 2) {
+                        console.log("3");
+                        this.setState({
+                            source3: URL.createObjectURL(event.target.files[i])
+                        });
+                    }
+                    if (i === 3) {
+                        console.log("4");
+                        this.setState({
+                            source4: URL.createObjectURL(event.target.files[i])
+                        });
+                    }
+                    data.append("file", event.target.files[i]);
+                }
+            }
+            this.setState({ multipleFile: data });
+        }
+    }
+
+    async handleClickUploadFile(event) {
+        fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
+            method: 'post',
+            body: this.state.dataFile
+        }).then(res => {
+            if (res.ok) {
+                console.log(res);
+                alert("File uploaded successfully.");
+            }
+        });
+    }
+
+    enableUpdateMainImage() {
+        this.setState({ isUpdateMainImage: !this.state.isUpdateMainImage });
+    }
+
     render() {
         return (
-            <div className="container-fluid mx-4" style={{ marginBottom: '100px' }}>
-                <div className="row mt-4">
-                    <Span content="Hình ảnh sản phẩm"></Span>
-                </div>
-                <div className="row my-2">
-                    <div className="col-sm-8 border">
-                        <MainImg imgSrc={this.state.productDetail.hinh}></MainImg>
+            <form onSubmit={this.updateSanPham}>
+                <div className="container-fluid mx-4" style={{ marginBottom: '100px' }}>
+                    <div className="row mt-4">
+                        <Span content="Hình ảnh sản phẩm"></Span>
                     </div>
-                    <div className="col-sm-4 border">
-                        <ul className="list-group">
-                            <DecriptedImg imgSrc="https://www.thinkpro.vn/uploads/images/2019/09/20/thumb_550x550_156897550912901.jpg"></DecriptedImg>
-                            <DecriptedImg imgSrc="https://www.thinkpro.vn/uploads/images/2019/09/20/thumb_550x550_156897550912901.jpg"></DecriptedImg>
-                            <DecriptedImg imgSrc="https://www.thinkpro.vn/uploads/images/2019/09/20/thumb_550x550_156897550912901.jpg"></DecriptedImg>
-                            <DecriptedImg imgSrc="https://www.thinkpro.vn/uploads/images/2019/09/20/thumb_550x550_156897550912901.jpg"></DecriptedImg>
-                        </ul>
+                    <div className="row my-2">
+                        <div className="col-sm-8 border">
+                            <MainImg imgSrc={this.state.source} onClick={this.enableUpdateMainImage} />
+                            {this.state.isUpdateMainImage ?
+                                <div>
+                                    <div className="col-md-6">
+                                        <div className="form-group files color">
+                                            <label>Upload Your File </label>
+                                            <input type="file" className="form-control my-4" name="file" onChange={this.handleFile} required />
+                                        </div>
+                                    </div>
+                                </div> : ''
+                            }
+                        </div>
+                        <div className="col-sm-4 border">
+                            <ul className="list-group">
+                                {/* {Object.keys(this.state.listHinhSP).length !== 0  ?
+                                    this.state.listHinhSP.map((value, index) => { return <DecriptedImg 
+                                        imgSrc={ require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)}
+                                        onChange={this.handleFile2}></DecriptedImg> })
+                                    :
+                                    <div>
+                                        <DecriptedImg imgSrc={this.state.source1}></DecriptedImg>
+                                        <DecriptedImg imgSrc={this.state.source2}></DecriptedImg>
+                                        <DecriptedImg imgSrc={this.state.source3}></DecriptedImg>
+                                        <DecriptedImg imgSrc={this.state.source4}></DecriptedImg>
+                                    </div>
+                                } */}
+                                <DecriptedImg imgSrc={this.state.source1}></DecriptedImg>
+                                <DecriptedImg imgSrc={this.state.source2}></DecriptedImg>
+                                <DecriptedImg imgSrc={this.state.source3}></DecriptedImg>
+                                <DecriptedImg imgSrc={this.state.source4}></DecriptedImg>
+                                <input type="file" className="form-control my-4" multiple name="file" onChange={this.handleFile2} required />
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div className="row mt-4">
-                    <Span content="Thông số chi tiết"></Span>
-                </div>
-                <form onSubmit={this.updateSanPham}>
+                    <div className="row mt-4">
+                        <Span content="Thông số chi tiết"></Span>
+                    </div>
                     <div className="row border">
 
                         <TextBox title="Tên sản phẩm" col="tenSP" value={this.state.productDetail.tenSP} handleChange={this.handleChange}></TextBox>
@@ -410,8 +584,8 @@ class productDetail extends Component {
                                 </div>
                             </div> : ''}
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         );
     }
 }

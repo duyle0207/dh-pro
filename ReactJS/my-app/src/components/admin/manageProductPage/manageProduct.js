@@ -15,6 +15,7 @@ class contentAdmin extends Component {
     async componentDidMount() {
         const list = await (await fetch(`/hung/sanPham`)).json();
         this.setState({ productList: list })
+        console.log(this.state.productList);
     }
 
     async searchOnChange(event) {

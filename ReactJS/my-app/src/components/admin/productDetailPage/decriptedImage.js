@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 
 class decriptedImage extends Component {
+
+    constructor(props)
+    {
+        super(props);
+        this.state = ({source:this.props.imgSrc})
+    }
+
+    componentDidMount()
+    {
+        // console.log(this.props.imgSrc);
+    }
+
     render() {
         return (
-            <div className="row">
-                <div className="col-sm-6">
+            <div className="row my-4 text-center">
+                <div className="col-sm-12">
                     <li className="list-group-item" style={{ border: 'none' }}>
-                        <img src={this.props.imgSrc} width={100} alt="" />
+                        <img src={this.props.imgSrc} width={120} alt="" />
                     </li>
-                </div>
-                <div className="col-sm-6">
-                    <button type="button" className="btn btn-dark mx-4" style={{ marginTop: '40px' }}>Chỉnh sữa</button>
                 </div>
             </div>
         );

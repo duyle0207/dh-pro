@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
 
 class product extends Component {
+
+    constructor(props)
+    {
+        super(props);
+        this.state = ({source:""});
+    }
+
+    componentDidMount()
+    {
+        try {
+            this.setState({source: require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imageSrc}`)});
+        } catch (error) {
+            this.setState({source:""});
+        }
+    }
+
     render() {
         return (
             <tr>
                 <th scope="row">{this.props.idProduct}</th>
                 <td>
-                    <img src={this.props.imageSrc} width="100" height="50"
+                    <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imageSrc}`)} width="100" height="50"
                         alt='asda' className="img-fluid">
                     </img>
                 </td>

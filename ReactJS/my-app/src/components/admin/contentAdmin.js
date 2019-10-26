@@ -206,7 +206,7 @@ class contentAdmin extends Component {
     render() {
         return (
             <div id="content-wrapper" style={{ background: '#f5f5f5' }}>
-                <div className="container">
+                <div className="container-fluid">
                     <div className="row ml-3">
                         <h2>Dashboard</h2>
                     </div>
@@ -302,7 +302,7 @@ class contentAdmin extends Component {
                                             <td>Otto</td>
                                             <td>@mdo</td>
                                             <td>Mark</td>
-                                            <td><btn className="btn btn-success" >Xem chi tiết</btn></td>
+                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">2</th>

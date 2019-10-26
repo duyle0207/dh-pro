@@ -241,7 +241,9 @@ public class HungAPIController {
                 }
                 else
                 {
-
+                    SanPham sanPham = sanPhamService.findSanPhamByTenSP(lapName);
+                    sanPham.setHinh(filename);
+                    sanPhamService.save(sanPham);
                     stream.write(bytes);
                     stream.flush();
                     stream.close();
