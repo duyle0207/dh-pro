@@ -27,4 +27,9 @@ public class HinhSanPhamServiceImp implements HinhSanPhamService{
     public HinhSanPham save(HinhSanPham hinhSanPham) {
         return hinhSanPhamRepository.save(hinhSanPham);
     }
+
+    @Override
+    public void deleteByIdSP(int idsp) {
+        hinhSanPhamRepository.deleteByIdSP(idsp);
+    }
 }

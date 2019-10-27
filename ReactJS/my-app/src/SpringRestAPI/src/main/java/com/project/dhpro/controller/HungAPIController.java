@@ -259,14 +259,16 @@ public class HungAPIController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/saveMulFile/{lapName}/",consumes = {"multipart/form-data"})
+    @PostMapping(value = "/saveMulFile/{lapName}",consumes = {"multipart/form-data"})
     public ResponseEntity uploadMultipleFile(@RequestParam MultipartFile[] file, HttpSession session,@PathVariable("lapName") String lapName) throws IOException {
         ServletContext context = session.getServletContext();
         String path = context.getRealPath(UPLOAD_DIRECTORY);
 
         SanPham s = sanPhamService.findSanPhamByTenSP(lapName);
 
-        System.out.println("IDSP: " + s.getId());
+        hinhSanPhamService.deleteByIdSP(s.getId());
+
+
 
         for (MultipartFile a : file) {
             System.out.println(a.getOriginalFilename());
@@ -287,7 +289,10 @@ public class HungAPIController {
                 if (bytes.length > 92160060) {
                     return ResponseEntity.ok().build();
                 } else {
-
+                    HinhSanPham hinhSP = new HinhSanPham();
+                    hinhSP.setIdSP(s.getId());
+                    hinhSP.setHinh(filename);
+                    hinhSanPhamService.save(hinhSP);
                     stream.write(bytes);
                     stream.flush();
                     stream.close();
@@ -312,4 +317,5 @@ public class HungAPIController {
         HinhSanPham s = hinhSanPhamService.save(hinhSanPham);
         return ResponseEntity.created(new URI("/api/post" + s.getId())).body(s);
     }
+
 }

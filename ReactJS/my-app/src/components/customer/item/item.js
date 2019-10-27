@@ -8,17 +8,17 @@ class item extends React.Component {
         <a href="/itemDetail" style={{ textDecoration: "none", color: "black" }}>
           <figure className="card card-product">
             <div className="img-wrap">
-              <img src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/laptop-asus-ux433fn-a6124t-000.jpg" alt=""/>
+              <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt=""/>
             </div>
             <figcaption className="info-wrap">
-              <h4 className="title">ASUS</h4>
-              <p className="desc">Laptop ASUS UX433FA-A6106T</p>
+              <h4 className="title">{this.props.brand}</h4>
+              <p className="desc">{this.props.lapName}</p>
             </figcaption>
             <div className="bottom-wrap">
               {/* <a href="" class="btn btn-sm btn-primary float-right">Order Now</a> */}
               <div className="price-wrap h5">
-                <span className="price-new">$1280</span>{" "}
-                <del className="price-old">$1980</del>
+                <span className="price-new">{this.props.price}</span>{" "}
+                {/* <del className="price-old">$1980</del> */}
               </div>
             </div>
           </figure>

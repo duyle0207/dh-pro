@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface HinhSanPhamRepository extends JpaRepository<HinhSanPham, Integer> {
     List<HinhSanPham> getHinhSanPhamsByIdSP(int id);
+
+    void deleteByIdSP(int idsp);
 }

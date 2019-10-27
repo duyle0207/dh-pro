@@ -18,7 +18,7 @@ class decriptedImage extends Component {
             <div className="row my-4 text-center">
                 <div className="col-sm-12">
                     <li className="list-group-item" style={{ border: 'none' }}>
-                        <img src={this.props.imgSrc} width={120} alt="" />
+                        <img src={this.props.imgSrc} width={100} alt="" />
                     </li>
                 </div>
             </div>

@@ -10,4 +10,6 @@ public interface HinhSanPhamService {
     List<HinhSanPham> getHinhSanPhamsByIdSP(int id);
 
     HinhSanPham save(HinhSanPham hinhSanPham);
+
+    void deleteByIdSP(int idsp);
 }
