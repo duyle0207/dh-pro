@@ -1,11 +1,12 @@
 import React from 'react';
 import '../../../css/style.css';
+import { Link } from 'react-router-dom';
 
 class item extends React.Component {
   render() {
     return (
       <div className="col-sm-3">
-        <a href="/itemDetail" style={{ textDecoration: "none", color: "black" }}>
+        <Link to={"/itemDetail/"+this.props.id} style={{ textDecoration: "none", color: "black" }}>
           <figure className="card card-product">
             <div className="img-wrap">
               <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt=""/>
@@ -17,12 +18,12 @@ class item extends React.Component {
             <div className="bottom-wrap">
               {/* <a href="" class="btn btn-sm btn-primary float-right">Order Now</a> */}
               <div className="price-wrap h5">
-                <span className="price-new">{this.props.price}</span>{" "}
+                <span className="price-new">{this.props.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</span>{" "}
                 {/* <del className="price-old">$1980</del> */}
               </div>
             </div>
           </figure>
-        </a>
+        </Link>
       </div>
     );
   }

@@ -15,12 +15,22 @@ class ItemDetailPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({
+      product: {},
+      imgList: [],
+      mainImg: "",
       visibleCommentBox: false,
       visibleDescription: false,
       visibleSum: true
     });
     this.handleCommentBox = this.handleCommentBox.bind(this);
     this.handleReadMore = this.handleReadMore.bind(this);
+  }
+
+  async componentDidMount()
+  {
+    const product = await(await fetch(`/hung/sanPham/${this.props.match.params.id}`)).json();
+    const imgList = await(await fetch(`/hung/getHinhSP/${this.props.match.params.id}`)).json();
+    this.setState({product:product,imgList:imgList});
   }
 
   handleReadMore() {
@@ -33,13 +43,19 @@ class ItemDetailPage extends React.Component {
   handleCommentBox() {
     this.setState({ visibleCommentBox: !this.state.visibleCommentBox });
   }
+
   render() {
     return (
       <div>
         <Header></Header>
         <div className="container my-4" style={{ marginTop: 50, marginBottom: 50 }}>
           <div className="card">
-            <ItemDetail></ItemDetail>
+            {this.state.product.hinh?
+            <ItemDetail 
+            product={this.state.product} 
+            imgList={this.state.imgList}
+            ></ItemDetail>
+            :""}
           </div>
         </div>
         <div className="container my-4">
@@ -69,14 +85,14 @@ class ItemDetailPage extends React.Component {
               :
               <div className="col-sm-8">
                 <h1><span className="badge badge-info mb-2">Tóm tắt mô tả sản phẩm</span></h1>
-                <Sum sum={'Apple Macbook Air 2017 MQD32 được trang bị bộ vi xử lý Intel Core i5 dual-core 1.8GHz, đạt tối đa 2.9GHz, Cache 3MB, RAM 8GB 1600MHz, card đồ họa Intel HD Graphics 6000 giúp máy có thể xử lý nhanh chóng và mượt mà các tác vụ của người dùng như soạn thảo văn bản, chơi game, lướt web, nghe nhạc, Autocad, Photoshop… Ngoài ra, máy còn được trang bị ổ cứng 128GB SSD cung cấp cho người dùng không gian rộng rãi để lưu trữ dữ liệu hay những bộ phim yêu thích.'}></Sum>
+                <Sum sum={this.state.product.tomTat}></Sum>
                 <div className="my-4" style={{ textAlign: 'center' }}>
                   <button type="button" className="btn btn-outline-info" onClick={this.handleReadMore}>Xem mổ tả đầy đủ</button>
                 </div>
               </div>
             }
             <div className="col-sm-4">
-              <Specification></Specification>
+            {Object.keys(this.state.product).length!==0?<Specification product={this.state.product}></Specification>:""}
             </div>
           </div>
           <div className="card">

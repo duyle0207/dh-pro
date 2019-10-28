@@ -16,7 +16,7 @@ class RouteURL extends Component {
         return (
             <Router>
                 <Route exact path="/" component = {Dashboard} />
-                <Route path="/itemDetail" component = {ItemDetailPage} />
+                <Route path="/itemDetail/:id" component = {ItemDetailPage} />
                 <Route path="/cart" component = {Cart} />
                 <Route path="/admin" component = {AdminDashboard}/>
                 <Route path="/login/:id" component = {LoginPage}/>

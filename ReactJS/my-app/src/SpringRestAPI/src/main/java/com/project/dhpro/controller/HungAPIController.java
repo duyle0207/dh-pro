@@ -318,4 +318,10 @@ public class HungAPIController {
         return ResponseEntity.created(new URI("/api/post" + s.getId())).body(s);
     }
 
+    @GetMapping(value = "/sanPham/{id}")
+    SanPham getSPByID(@PathVariable("id") int id)
+    {
+        return sanPhamService.findById(id);
+    }
+
 }
