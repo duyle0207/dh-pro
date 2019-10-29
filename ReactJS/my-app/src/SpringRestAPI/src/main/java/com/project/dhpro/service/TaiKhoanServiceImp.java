@@ -18,4 +18,9 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
     public List<TaiKhoan> getAll() {
         return taiKhoanRepository.findAll();
     }
+
+    @Override
+    public TaiKhoan findTaiKhoanByUserName(String username) {
+        return taiKhoanRepository.findTaiKhoanByUserName(username);
+    }
 }

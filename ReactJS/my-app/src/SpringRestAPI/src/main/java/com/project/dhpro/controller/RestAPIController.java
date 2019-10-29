@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.BufferedOutputStream;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -119,5 +123,29 @@ public class RestAPIController {
     {
         System.out.println(keyword);
         return sanPhamService.searchSanPhamAdmin(keyword);
+    }
+
+    @GetMapping(value = "/LoginSuccess")
+    LoginInfo loginSuccess(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+
+
+        Authentication authentication = (Authentication) session.getAttribute("accountInfo");
+        LoginInfo loginInfo = new LoginInfo();
+        if(authentication!=null)
+        {
+            Collection<? extends GrantedAuthority> authorities
+                    = authentication.getAuthorities();
+            for (GrantedAuthority grantedAuthority : authorities) {
+                if (grantedAuthority.getAuthority().equals("Employee")) {
+                    loginInfo.setRole(grantedAuthority.getAuthority());
+                } else if (grantedAuthority.getAuthority().equals("Admin")) {
+                    loginInfo.setRole(grantedAuthority.getAuthority());
+                }
+            }
+            loginInfo.setUserName(authentication.getName());
+        }
+        return loginInfo;
     }
 }

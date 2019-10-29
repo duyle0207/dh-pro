@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface TaiKhoanService {
     List<TaiKhoan> getAll();
+
+    TaiKhoan findTaiKhoanByUserName(String username);
 }
