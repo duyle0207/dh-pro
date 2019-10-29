@@ -47,7 +47,7 @@ class header extends React.Component {
                 <i className="fas fa-user fa-2x text-white" />
               </li>
               <li className="nav-item ml-4">
-                <a href = "/cart">
+                <a href="/cart">
                   <i className="fas fa-shopping-cart fa-2x text-white">
                     <small style={{ fontSize: 14 }}>(2)</small>
                   </i>

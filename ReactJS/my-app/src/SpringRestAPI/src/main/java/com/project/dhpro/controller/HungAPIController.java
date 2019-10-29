@@ -268,8 +268,6 @@ public class HungAPIController {
 
         hinhSanPhamService.deleteByIdSP(s.getId());
 
-
-
         for (MultipartFile a : file) {
             System.out.println(a.getOriginalFilename());
             String filename = a.getOriginalFilename();

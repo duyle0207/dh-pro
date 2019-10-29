@@ -20,7 +20,7 @@ class content extends React.Component {
 
 
   render() {
-    var list = this.state.productList.map((value,index)=>{return <Item id={value.id} imgSrc={value.hinh} lapName={value.tensp} brand={value.thuongHieu.tenThuongHieu} price={value.gia}></Item>})
+    var list = this.state.productList.map((value,index)=>{return <Item id={value.id} imgSrc={value.hinh} lapName={value.tenSP} brand={value.thuongHieu.tenThuongHieu} price={value.gia}></Item>})
     return (
       <div className="content">
         <HeadContent></HeadContent>
