@@ -25,7 +25,7 @@ class RouteURL extends Component {
                 <Route path="/login/:id" component = {LoginPage}/>
                 <Route path="/uploadFile" component = {UpLoadFile}/>
                 <Route path="/searchDemo" component = {SearchDemo}/>
-                <Route path="/compareItem" component = {CompareItemsPage}/>
+                <Route path="/compareItem/:id" component = {CompareItemsPage}/>
                 <Route path="/manageProduct" component = {ManageProductPage}/>
                 <Route path="/productDetail/:id" component = {ProductDetailPage}/>
                 <Route path="/validate" component = {Validate}/>

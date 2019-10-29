@@ -1,6 +1,35 @@
 import React, { Component } from 'react';
+import Item from './item';
 
 class searchItem extends Component {
+    constructor(props) {
+        super(props);
+        this.state = ({
+            productList: []
+        });
+        this.handleOnChange = this.handleOnChange.bind(this);
+    }
+
+    async componentDidMount()
+    {
+        const product = await(await fetch(`/hung/sanPham/`)).json();
+        this.setState({productList:product});
+    }
+
+    handleOnChange(event)
+    {
+        fetch('/searchSPAdmin/', {
+            method: 'POST',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: (!event.target.value? "%":event.target.value)
+        }).then(res => res.json()).then(result=>{
+            this.setState({ productList: result });
+        });
+    }
+
     render() {
         return (
             <th>
@@ -16,12 +45,11 @@ class searchItem extends Component {
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
-                            <div className="modal-body">
-                                <input type="text" className="form-control" id="text" placeholder="Nhập sản phẩm mà bạn muốn so sánh"></input>
-                                <div className="card">
-                                    <div className="card-body">
-                                        <button type="button" className="btn btn-warning" data-dismiss="modal" aria-label="Close" onClick={this.props.handleClick}>Sản phẩm</button>
-                                    </div>
+                            <div className="modal-body" style={{ overflow: 'auto', height: "800px" }}>
+                                <input type="text" className="form-control" id="text" placeholder="Nhập sản phẩm mà bạn muốn so sánh" onChange={this.handleOnChange}></input>
+                                <div className="row">
+                                    {this.state.productList.map((value,index)=>{return <Item i={index} id={value.id} imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} 
+                                    lapName={value.tenSP} handleClick={this.props.handleClick}></Item>})}
                                 </div>
                             </div>
                         </div>
