@@ -20,7 +20,11 @@ class ItemDetailPage extends React.Component {
       mainImg: "",
       visibleCommentBox: false,
       visibleDescription: false,
-      visibleSum: true
+      visibleSum: true,
+      productDetail: {
+        hinh: 'https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
+      },
+      isLoading: true,
     });
     this.handleCommentBox = this.handleCommentBox.bind(this);
     this.handleReadMore = this.handleReadMore.bind(this);
@@ -45,6 +49,7 @@ class ItemDetailPage extends React.Component {
   }
 
   render() {
+    console.log(this.state.productDetail.hinh);
     return (
       <div>
         <Header></Header>
