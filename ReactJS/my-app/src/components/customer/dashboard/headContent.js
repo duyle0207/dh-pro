@@ -17,7 +17,7 @@ class headContent extends React.Component {
               <div className="carousel-inner" role="listbox" style={{ height: "70%" }}>
                 <div className="carousel-item active">
                   <img
-                    src="https://www.globalpcsolutions.co.uk/image/cache/catalog/main-banner2-1903x600.jpg"
+                    src="https://promocje.msi.com/wp-content/uploads/2019/10/msi-prestige-wacom-1900x600.png"
                     alt="First slide"
                     className="img-fluid"
                   />

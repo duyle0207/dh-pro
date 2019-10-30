@@ -17,7 +17,11 @@ class ItemDetailPage extends React.Component {
     this.state = ({
       visibleCommentBox: false,
       visibleDescription: false,
-      visibleSum: true
+      visibleSum: true,
+      productDetail: {
+        hinh: 'https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
+      },
+      isLoading: true,
     });
     this.handleCommentBox = this.handleCommentBox.bind(this);
     this.handleReadMore = this.handleReadMore.bind(this);
@@ -33,13 +37,24 @@ class ItemDetailPage extends React.Component {
   handleCommentBox() {
     this.setState({ visibleCommentBox: !this.state.visibleCommentBox });
   }
+
+  async componentDidMount() {
+    const response = await fetch(`/sanPham/${this.props.match.params.id}`);
+    const body = await response.json();
+    this.setState({productDetail: body})
+    console.log(this.state.productDetail);
+    await this.setState({isLoading: false});
+  }
+
   render() {
+    console.log(this.state.productDetail.hinh);
     return (
       <div>
         <Header></Header>
         <div className="container my-4" style={{ marginTop: 50, marginBottom: 50 }}>
           <div className="card">
-            <ItemDetail></ItemDetail>
+            {/* {!this.state.isLoading && <ItemDetail img={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`)}/>} */}
+            <ItemDetail/>
           </div>
         </div>
         <div className="container my-4">

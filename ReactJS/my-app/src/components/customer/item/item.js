@@ -1,14 +1,18 @@
 import React from 'react';
 import '../../../css/style.css';
+import { Link } from 'react-router-dom';
 
 class item extends React.Component {
   render() {
     return (
       <div className="col-sm-3">
-        <a href="/itemDetail" style={{ textDecoration: "none", color: "black" }}>
+        <Link
+          to={`/itemDetail/${this.props.id}`}
+          style={{ textDecoration: "none", color: "black" }}
+        >
           <figure className="card card-product">
             <div className="img-wrap">
-              <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt=""/>
+              <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt="" />
             </div>
             <figcaption className="info-wrap">
               <h4 className="title">{this.props.brand}</h4>
@@ -22,7 +26,7 @@ class item extends React.Component {
               </div>
             </div>
           </figure>
-        </a>
+        </Link>
       </div>
     );
   }

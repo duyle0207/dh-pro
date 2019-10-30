@@ -53,7 +53,7 @@ class itemDetail extends React.Component {
               </div>
             </div>
             <div className="img-small-wrap">
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p={this.setMainImage}></ImageDetail>
               <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p={this.setMainImage}></ImageDetail>
               <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
               <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p={this.setMainImage}></ImageDetail>

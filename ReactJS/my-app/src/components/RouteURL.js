@@ -11,12 +11,13 @@ import CompareItemsPage from "./customer/compareItem/compareItemsPage";
 import ManageProductPage from "./admin/manageProductPage/manageProductPage";
 import ProductDetailPage from "./admin/productDetailPage/productDetailPage";
 import Validate from "./validate";
+import ProductFilter from "./customer/product/product";
 class RouteURL extends Component {
     render() {
         return (
             <Router>
                 <Route exact path="/" component = {Dashboard} />
-                <Route path="/itemDetail" component = {ItemDetailPage} />
+                <Route path="/itemDetail/:id" component = {ItemDetailPage} />
                 <Route path="/cart" component = {Cart} />
                 <Route path="/admin" component = {AdminDashboard}/>
                 <Route path="/login/:id" component = {LoginPage}/>
@@ -26,6 +27,7 @@ class RouteURL extends Component {
                 <Route path="/manageProduct" component = {ManageProductPage}/>
                 <Route path="/productDetail/:id" component = {ProductDetailPage}/>
                 <Route path="/validate" component = {Validate}/>
+                <Route path="/products" component = {ProductFilter}/>
             </Router>
         );
     }
