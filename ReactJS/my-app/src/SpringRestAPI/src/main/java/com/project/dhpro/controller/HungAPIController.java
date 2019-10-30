@@ -268,8 +268,6 @@ public class HungAPIController {
 
         hinhSanPhamService.deleteByIdSP(s.getId());
 
-
-
         for (MultipartFile a : file) {
             System.out.println(a.getOriginalFilename());
             String filename = a.getOriginalFilename();
@@ -316,6 +314,12 @@ public class HungAPIController {
     ResponseEntity<HinhSanPham> saveHinhSP(@Valid @RequestBody HinhSanPham hinhSanPham) throws URISyntaxException {
         HinhSanPham s = hinhSanPhamService.save(hinhSanPham);
         return ResponseEntity.created(new URI("/api/post" + s.getId())).body(s);
+    }
+
+    @GetMapping(value = "/sanPham/{id}")
+    SanPham getSPByID(@PathVariable("id") int id)
+    {
+        return sanPhamService.findById(id);
     }
 
 }

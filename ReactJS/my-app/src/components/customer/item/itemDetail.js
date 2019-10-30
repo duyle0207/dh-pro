@@ -6,12 +6,17 @@ class itemDetail extends React.Component {
   constructor(props) {
     super(props);
 
+
     this.state = ({
-      MainImg: "https://cdn.vinpro.net/uploads/images/general/2019/09/16/laptop-asus-ux433fn-a6124t-000.jpg"
+      MainImg: require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.product.hinh}`),
+      imgList: this.props.imgList
     });
 
     this.SetDetailImage = this.SetDetailImage.bind(this);
     this.setMainImage = this.setMainImage.bind(this);
+  }
+
+  componentDidMount() {
   }
   setMainImage(source) {
     this.setState({ MainImg: source });
@@ -53,64 +58,77 @@ class itemDetail extends React.Component {
               </div>
             </div>
             <div className="img-small-wrap">
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p={this.setMainImage}></ImageDetail>
+              {this.state.imgList.map((value, index) => {
+                return <ImageDetail key={index} src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} p={this.setMainImage}></ImageDetail>
+              })}
+              {/* <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
               <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/0c2e2bc7e9d0cea2cf7e39c4b8c5d2ed.jpg" p={this.setMainImage}></ImageDetail>
               <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/1b66a8be390fc278c0c4b1bec30097dc.jpg" p={this.setMainImage}></ImageDetail>
-              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p={this.setMainImage}></ImageDetail>
+              <ImageDetail src="https://cdn.vinpro.net/uploads/images/general/2019/09/16/bc02f99be44aea029a0db44c5ba1aed2.jpg" p={this.setMainImage}></ImageDetail> */}
             </div>
           </article>
         </aside>
         <aside className="col-sm-7">
           <article className="card-body p-5">
-            <h3 className="title mb-3">Original Version of Some product name</h3>
+            <h3 className="title mb-3">{this.props.product.tenSP}</h3>
             <p className="price-detail-wrap">
               <span className="price h3 text-warning">
-                <span className="currency">US $</span>
-                <span className="num">1299</span>
+                <span className="num">{this.props.product.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</span>
               </span>
-              <span>/per kg</span>
             </p>
-            <dl className="param param-feature">
-              <dt>Model#</dt>
-              <dd>12345611</dd>
-            </dl>
-            <dl className="param param-feature">
-              <dt>Color</dt>
-              <dd>Black and white</dd>
-            </dl>
-            <dl className="param param-feature">
-              <dt>Delivery</dt>
-              <dd>Russia, USA, and Europe</dd>
-            </dl>
-            <hr />
             <div className="row">
-              <div className="col-sm-5">
-                <dl className="param param-inline">
-                  <dt>Quantity: </dt>
+              <div className="col-sm-6">
+                <dl className="param param-feature">
+                  <dt>Màu sắc</dt>
+                  <dd>{this.props.product.mauSac}</dd>
+                </dl>
+                <dl className="param param-feature">
+                  <dt>Hệ điều hành</dt>
+                  <dd>{this.props.product.heDieuHanh.tenHeDieuHanh}</dd>
+                </dl>
+                <dl className="param param-feature">
+                  <dt>CPU</dt>
+                  <dd>{this.props.product.cpu.tenCPU}</dd>
+                </dl>
+                <dl className="param param-feature">
+                  <dt>RAM</dt>
+                  <dd>{this.props.product.ram.loaiRAM} {this.props.product.ram.boNhoRAM}GB {this.props.product.ram.tocDoBus}Hz</dd>
+                </dl>
+                <dl className="param param-feature">
+                  <dt>Card đồ họa</dt>
+                  <dd>{this.props.product.cardDoHoa.tenCardDoHoa} {this.props.product.cardDoHoa.boNhoCard}GB</dd>
+                </dl>
+              </div>
+              <div className="col-sm-6">
+                <dl className="param param-feature">
+                  <dt>Cân nặng</dt>
+                  <dd>{this.props.product.trongLuong}kg</dd>
+                </dl>
+                <dl className="param param-feature">
+                  <dt>Màn hình</dt>
                   <dd>
-                    <select
-                      className="form-control form-control-sm"
-                      style={{ width: 70 }}>
-                      <option> 1 </option>
-                      <option> 2 </option>
-                      <option> 3 </option>
-                    </select>
+                    {this.props.product.manHinh.kichThuoc} inches {this.props.product.manHinh.doPhanGiai} {this.props.product.manHinh.congNgheManHinh}
+                    {this.props.product.manHinh.manHinhCamUng ? " Cảm ứng": ""}
                   </dd>
                 </dl>
               </div>
             </div>
             <hr />
+            <div className="row">
+              <div className="col-sm-5">
+              </div>
+            </div>
             <div className="btn-group" role="group" aria-label="Basic example">
               <a href="#aaa" className="btn btn-lg btn-info text-uppercase">
                 Mua ngay
               </a>
               <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase">
-                <i className="fas fa-shopping-cart" /> 
-                 Thêm vào giỏ hàng
+                <i className="fas fa-shopping-cart" />
+                Thêm vào giỏ hàng
               </a>
             </div>
             <div className="btn-group mt-4" role="group" aria-label="Basic example">
-              <a href="/compareItem" className="btn btn-lg btn-warning text-uppercase" style={{color:'white'}}>
+              <a href="/compareItem" className="btn btn-lg btn-warning text-uppercase" style={{ color: 'white' }}>
                 So sánh chi tiết
               </a>
             </div>

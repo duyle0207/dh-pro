@@ -7,9 +7,11 @@ class itemDetail extends React.Component {
     super(props);
     this.ChangeImage = this.ChangeImage.bind(this);
   }
+
   ChangeImage(a) {
     this.props.p(a);
   }
+
   render() {
     return (
       <div className="item-gallery">
