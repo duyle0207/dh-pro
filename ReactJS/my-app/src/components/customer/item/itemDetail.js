@@ -128,7 +128,7 @@ class itemDetail extends React.Component {
               </a>
             </div>
             <div className="btn-group mt-4" role="group" aria-label="Basic example">
-              <a href={"/compareItem/"+this.props.product.id} className="btn btn-lg btn-warning text-uppercase" style={{ color: 'white' }}>
+              <a href="/compareItem" className="btn btn-lg btn-warning text-uppercase" style={{ color: 'white' }}>
                 So sánh chi tiết
               </a>
             </div>
