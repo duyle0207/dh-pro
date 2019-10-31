@@ -5,6 +5,7 @@ import FilterDetail from '../filter/filterDetail';
 import Item from '../item/item';
 import Header from "../dashboard/header";
 import Footer from "../dashboard/footer";
+import Pagination from "../../Pagination";
 
 var filter = {
     thuongHieus: [],
@@ -25,6 +26,7 @@ class Product extends Component {
         super(props);
         this.state = {
             products: [],
+            currentProducts: [],
             thuongHieus: [],
             heDieuHanhs: [],
             rams: [],
@@ -60,6 +62,16 @@ class Product extends Component {
         const listNhuCau = await (await fetch("/listNhuCauSuDung")).json();
         this.setState({ nhuCaus: listNhuCau });
     }
+
+    onPageChanged = data => {
+        const offset = (data.currentPage - 1) * data.pageLimit;
+        const currentProducts = this.state.products.slice(offset, offset + data.pageLimit);
+        this.setState({
+            currentProducts: currentProducts,
+        });
+        console.log(data);
+    }
+
     onPriceUpdate(childState) {
         this.setState({ price: childState });
         console.log(this.state.price);
@@ -137,21 +149,21 @@ class Product extends Component {
 
     filter() {
         return this.filterMau(
-                    this.filterThuongHieu(
-                        this.filterPrice(
-                            this.filterHeDieuHanh(
-                                this.filterRAM(
-                                    this.filterCPU(
-                                        this.filterOCung(
-                                            this.filterVGA(
-                                                this.filterNhuCau(holder)
-                                            )
-                                        )
+            this.filterThuongHieu(
+                this.filterPrice(
+                    this.filterHeDieuHanh(
+                        this.filterRAM(
+                            this.filterCPU(
+                                this.filterOCung(
+                                    this.filterVGA(
+                                        this.filterNhuCau(holder)
                                     )
                                 )
                             )
                         )
                     )
+                )
+            )
         );
     }
 
@@ -284,8 +296,10 @@ class Product extends Component {
         return result;
     }
 
-
     render() {
+        const myRecords = this.state.products.length;
+        console.log(myRecords);
+        if (myRecords === 0) return null;
         return (
             <div>
                 <Header />
@@ -407,27 +421,7 @@ class Product extends Component {
                                         Không tìm thấy sản phẩm nào phù hợp
                                     </div>
                                 }
-                                {this.state.products.map((item, index) => {
-                                    return <Item
-                                        id={item.id}
-                                        imgSrc={item.hinh}
-                                        brand={item.thuongHieu.tenThuongHieu}
-                                        lapName={item.tenSP}
-                                        price={item.gia}
-                                        key={index}
-                                    />
-                                })}
-                                {this.state.products.map((item, index) => {
-                                    return <Item
-                                        id={item.id}
-                                        imgSrc={item.hinh}
-                                        brand={item.thuongHieu.tenThuongHieu}
-                                        lapName={item.tenSP}
-                                        price={item.gia}
-                                        key={index}
-                                    />
-                                })}
-                                {this.state.products.map((item, index) => {
+                                {this.state.currentProducts.map((item, index) => {
                                     return <Item
                                         id={item.id}
                                         imgSrc={item.hinh}
@@ -438,6 +432,7 @@ class Product extends Component {
                                     />
                                 })}
                             </div>
+                            <Pagination totalRecords={myRecords} pageLimit={2} pageNeighbours={1} onPageChanged={this.onPageChanged} />
                         </div>
                     </div>
                 </div>
