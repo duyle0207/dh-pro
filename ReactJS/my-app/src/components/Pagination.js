@@ -43,6 +43,13 @@ class Pagination extends Component {
     this.gotoPage(1);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.totalRecords != this.props.totalRecords) {
+      this.totalPages = Math.ceil(nextProps.totalRecords / this.pageLimit);
+      this.setState({ currentPage: 1 });
+    }
+  }
+
   gotoPage = page => {
     const { onPageChanged = f => f } = this.props;
 
@@ -155,7 +162,7 @@ class Pagination extends Component {
       <Fragment>
         <nav aria-label="Countries Pagination">
           <ul className="pagination">
-            { pages.map((page, index) => {
+            {pages.map((page, index) => {
 
               if (page === LEFT_PAGE) return (
                 <li key={index} className="page-item">
@@ -176,12 +183,12 @@ class Pagination extends Component {
               );
 
               return (
-                <li key={index} className={`page-item${ currentPage === page ? ' active' : ''}`}>
-                  <a className="page-link" href="#" onClick={ this.handleClick(page) }>{ page }</a>
+                <li key={index} className={`page-item${currentPage === page ? ' active' : ''}`}>
+                  <a className="page-link" href="#" onClick={this.handleClick(page)}>{page}</a>
                 </li>
               );
 
-            }) }
+            })}
 
           </ul>
         </nav>

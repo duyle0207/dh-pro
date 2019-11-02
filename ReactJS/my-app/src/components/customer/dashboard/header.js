@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../../css/header.css';
 import Logo from "../../../images/logo.png";
+import {Link} from 'react-router-dom';
 
 class header extends React.Component {
 
@@ -60,9 +61,9 @@ class header extends React.Component {
       <div className="header">
         <nav className="navbar navbar-expand-md navbar-dark bg-color flex-column">
           <div className="container">
-            <a className="navbar-brand" href="/">
+            <Link className="navbar-brand" to="/">
               <img src={Logo} alt="" style={{ width: 100 }} />
-            </a>
+            </Link>
             <form className="form-inline my-2 my-lg-0 input-group">
               <input
                 className="form-control"

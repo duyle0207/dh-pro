@@ -12,25 +12,28 @@ import ManageProductPage from "./admin/manageProductPage/manageProductPage";
 import ProductDetailPage from "./admin/productDetailPage/productDetailPage";
 import Validate from "./validate";
 import ProtectedRoute from "./router/PrivateRoute";
+import ScrollToTop from "./scrollToTop";
 
 import ProductFilter from "./customer/product/product";
 class RouteURL extends Component {
     render() {
         return (
             <Router>
-                <Route exact path="/" component = {Dashboard} />
-                <Route path="/itemDetail/:id" component = {ItemDetailPage} />
-                <Route path="/cart" component = {Cart} />
-                <Route path="/admin" component = {AdminDashboard}/>
-                <Route path="/login/:id" component = {LoginPage}/>
-                <Route path="/uploadFile" component = {UpLoadFile}/>
-                <Route path="/searchDemo" component = {SearchDemo}/>
-                <Route path="/compareItem/:id" component = {CompareItemsPage}/>
-                <Route path="/manageProduct" component = {ManageProductPage}/>
-                <Route path="/productDetail/:id" component = {ProductDetailPage}/>
-                <Route path="/validate" component = {Validate}/>
-                <ProtectedRoute path="/example" loggedIn={false} component={AdminDashboard} />
-                <Route path="/products" component = {ProductFilter}/>
+                <ScrollToTop>
+                    <Route exact path="/" component={Dashboard} />
+                    <Route path="/itemDetail/:id" component={ItemDetailPage} />
+                    <Route path="/cart" component={Cart} />
+                    <Route path="/admin" component={AdminDashboard} />
+                    <Route path="/login/:id" component={LoginPage} />
+                    <Route path="/uploadFile" component={UpLoadFile} />
+                    <Route path="/searchDemo" component={SearchDemo} />
+                    <Route path="/compareItem/:id" component={CompareItemsPage} />
+                    <Route path="/manageProduct" component={ManageProductPage} />
+                    <Route path="/productDetail/:id" component={ProductDetailPage} />
+                    <Route path="/validate" component={Validate} />
+                    <ProtectedRoute path="/example" loggedIn={false} component={AdminDashboard} />
+                    <Route path="/products" component={ProductFilter} />
+                </ScrollToTop>
             </Router>
         );
     }

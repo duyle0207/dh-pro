@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../../css/header.css';
 import '../../../css/style.css';
+import {Link} from 'react-router-dom';
 
 class headContent extends React.Component {
   render() {
@@ -211,7 +212,7 @@ class headContent extends React.Component {
         <div className="module-title my-4">
           <div className="container">
             <div className="col-sm-12" style={{ borderLeft: "5px solid #27bece" }}>
-              <a href="#abc">Laptop</a>
+              <Link to="/products">Laptop</Link>
             </div>
           </div>
         </div>
