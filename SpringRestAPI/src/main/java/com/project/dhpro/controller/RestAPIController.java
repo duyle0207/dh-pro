@@ -120,4 +120,13 @@ public class RestAPIController {
         System.out.println(keyword);
         return sanPhamService.searchSanPhamAdmin(keyword);
     }
+
+    @Autowired
+    ChiTietHoaDonService chiTietHoaDonService;
+
+    @GetMapping(value = "/chiTietHoaDon")
+    List<ChiTietHoaDon> getAllChiTietHoaDon()
+    {
+        return chiTietHoaDonService.getAll();
+    }
 }

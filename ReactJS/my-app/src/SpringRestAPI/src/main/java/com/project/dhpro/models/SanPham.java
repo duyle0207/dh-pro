@@ -11,6 +11,7 @@ import java.util.Set;
 public class SanPham {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "tensp")
@@ -30,6 +31,17 @@ public class SanPham {
 
     @Column(name = "amthanh")
     private String amThanh;
+
+    @Column(name="status")
+    private Boolean status;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     @Column(name = "conggiaotiep")
     private String congGiaoTiep;

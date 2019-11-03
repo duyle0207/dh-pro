@@ -12,6 +12,7 @@ import ManageProductPage from "./admin/manageProductPage/manageProductPage";
 import ProductDetailPage from "./admin/productDetailPage/productDetailPage";
 import Validate from "./validate";
 import ProtectedRoute from "./router/PrivateRoute";
+import ManageSpecificationPage from "./admin/manageProductPage/manageSpecifications/manageSpecificationPage";
 
 import ProductFilter from "./customer/product/product";
 class RouteURL extends Component {
@@ -31,6 +32,7 @@ class RouteURL extends Component {
                 <Route path="/validate" component = {Validate}/>
                 <ProtectedRoute path="/example" loggedIn={false} component={AdminDashboard} />
                 <Route path="/products" component = {ProductFilter}/>
+                <Route path="/manageSpecification" component = {ManageSpecificationPage}/>
             </Router>
         );
     }

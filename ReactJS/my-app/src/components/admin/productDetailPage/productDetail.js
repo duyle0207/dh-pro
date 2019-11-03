@@ -534,36 +534,35 @@ class productDetail extends Component {
 
                             <DropDownBoxOCung title="Ổ cứng" col="oCung" list={this.state.listOCung} detail={this.state.oCung} onChange={this.handleChangeOCung}></DropDownBoxOCung>
 
-                            <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput>
+                            {/* <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput> */}
+                            <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
 
                             <DropDownBoxRAM title="RAM" col="ram" list={this.state.listRAM} detail={this.state.ram} onChange={this.handleChangeRAM}></DropDownBoxRAM>
 
-                            <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
+                            <NumberInput title="Trọng lượng (Kg)" col="trongLuong" value={this.state.productDetail.trongLuong} handleChange={this.handleChange} step="0.1"></NumberInput>
 
                             <DropDownBoxCard title="Card đồ họa" col="cardDoHoa" list={this.state.listCardDoHoa} detail={this.state.cardDoHoa} onChange={this.handleChangeCard}></DropDownBoxCard>
 
-                            <NumberInput title="Trọng lượng (Kg)" col="trongLuong" value={this.state.productDetail.trongLuong} handleChange={this.handleChange} step="0.1"></NumberInput>
+                            <TextBox title="Kích thước" col="kichThuoc" value={this.state.productDetail.kichThuoc} handleChange={this.handleChange}></TextBox>
 
                             <DropDownBoxManHinh title="Màn hình" col="manHinh" list={this.state.listManHinh} detail={this.state.manHinh} onChange={this.handleChangeCaManHinh}></DropDownBoxManHinh>
 
-                            <TextBox title="Kích thước" col="kichThuoc" value={this.state.productDetail.kichThuoc} handleChange={this.handleChange}></TextBox>
-
+                            <TextBox title="Âm thanh" col="amThanh" value={this.state.productDetail.amThanh} handleChange={this.handleChange}></TextBox>
+                            
                             <DropDownBoxPin title="Pin" col="pin" list={this.state.listPin} detail={this.state.pin} onChange={this.handleChangePin}></DropDownBoxPin>
 
-                            <TextBox title="Âm thanh" col="amThanh" value={this.state.productDetail.amThanh} handleChange={this.handleChange}></TextBox>
-
+                            <TextBox title="Cổng giao tiếp" col="congGiaoTiep" value={this.state.productDetail.congGiaoTiep} handleChange={this.handleChange}></TextBox>
+                            
                             <DropDownBoxHeDieuHanh title="Hệ điều hành" col="heDieuHanh" list={this.state.listHeDieuHanh} detail={this.state.heDieuHanh} onChange={this.handleChangeHeDieuHanh}></DropDownBoxHeDieuHanh>
 
-                            <TextBox title="Cổng giao tiếp" col="congGiaoTiep" value={this.state.productDetail.congGiaoTiep} handleChange={this.handleChange}></TextBox>
+                            <TextBox title="Độ phân giải Webcam" col="doPhanGiaiWC" value={this.state.productDetail.doPhanGiaiWC} handleChange={this.handleChange}></TextBox>
 
                             <DropDownBoxNhuCauSuDung title="Nhu cầu sử dụng" col="nhuCauSuDung" list={this.state.listNhuCauSuDung} detail={this.state.nhuCauSuDung} onChange={this.handleChangeNhuCauSuDung}></DropDownBoxNhuCauSuDung>
-
-                            <TextBox title="Độ phân giải Webcam" col="doPhanGiaiWC" value={this.state.productDetail.doPhanGiaiWC} handleChange={this.handleChange}></TextBox>
 
                             <DropDownBoxThuongHieu title="Thương hiệu" col="thuongHieu" list={this.state.listThuongHieu} detail={this.state.thuongHieu} onChange={this.handleChangeThuongHieu}></DropDownBoxThuongHieu>
 
                             <Textarea title="Mô tả sơ lược" col="tomTat" value={this.state.productDetail.tomTat} handleChange={this.handleChange}></Textarea>
-
+                            
                             <div className="form-group col-sm-12 my-2 text-right">
                                 <button type="submit" className="btn btn-dark mx-2 my-2" ><h5>Lưu</h5></button>
                             </div>

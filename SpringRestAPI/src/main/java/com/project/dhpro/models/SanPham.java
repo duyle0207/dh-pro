@@ -37,6 +37,9 @@ public class SanPham {
     @Column(name = "dophangiaiwc")
     private String doPhanGiaiWC;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne
     @JoinColumn(name = "cpu")
     private CPU cpu;
@@ -87,6 +90,14 @@ public class SanPham {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
     private Set<BinhLuan> listBinhLuan = new HashSet<>();
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;

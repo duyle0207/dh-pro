@@ -18,9 +18,13 @@ class content extends React.Component {
     this.setState({ productList: list })
   }
 
-
   render() {
-    var list = this.state.productList.map((value,index)=>{return <Item imgSrc={value.hinh} lapName={value.tenSP} brand={value.thuongHieu.tenThuongHieu} price={value.gia} id={value.id} key={index}></Item>})
+    var list = this.state.productList.map((value,index)=>{
+      if(value.status===true)
+      {
+        return <Item imgSrc={value.hinh} lapName={value.tenSP} brand={value.thuongHieu.tenThuongHieu} price={value.gia} id={value.id} key={index}></Item>
+      }
+      })
     return (
       <div className="content">
         <HeadContent></HeadContent>

@@ -16,6 +16,7 @@ class product extends Component {
         } catch (error) {
             this.setState({source:""});
         }
+        // console.log("Tình trạng: "+this.props.status)
     }
 
     render() {
@@ -29,9 +30,9 @@ class product extends Component {
                 </td>
                 <td><b>{this.props.lapBrand}</b></td>
                 <td>{this.props.lapName}</td>
-                <td>{this.props.quantity}</td>
+                <td>{this.props.status===true?<img src="https://img.icons8.com/color/48/000000/ok--v2.png" alt='aa'></img>:<img src="https://img.icons8.com/office/40/000000/cancel-2.png"></img>}</td>
+                <td><button type="button" className="btn btn-success" onClick={()=>this.props.updateFunc(this.props.idProduct)}>Update status</button></td>
                 <td><Link to={`/productDetail/${this.props.idProduct}`} className="btn btn-dark">Xem chi tiết</Link></td>
-                <td><button type="button" className="btn btn-danger" onClick={()=>this.props.deleteFunc(this.props.idProduct)}>Delete</button></td>
             </tr>
         );
     }

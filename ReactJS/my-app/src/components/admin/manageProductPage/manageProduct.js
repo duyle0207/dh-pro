@@ -15,7 +15,6 @@ class contentAdmin extends Component {
     async componentDidMount() {
         const list = await (await fetch(`/hung/sanPham`)).json();
         this.setState({ productList: list })
-        console.log(this.state.productList);
     }
 
     async searchOnChange(event) {
@@ -30,20 +29,20 @@ class contentAdmin extends Component {
         }).then(res => res.json()).then(result=>{
             this.setState({ productList: result });
         });
-        console.log(this.state.productList);
     }
 
     async deleteSanPham(id)
     {
-        fetch(`/hung/deleteSanPham/${id}`, {
-            method: 'DELETE',
+        fetch(`/updateStatusSanPham/${id}`, {
+            method: 'POST',
             headers: { 
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }).then(()=>{
-            const newList = this.state.productList.filter(i => i.id!==id);
-            this.setState({ productList: newList });
+            this.componentDidMount();
+            // const newList = this.state.productList.filter(i => i.id!==id);
+            // this.setState({ productList: newList });
         });
     }
 
@@ -55,9 +54,9 @@ class contentAdmin extends Component {
                 idProduct={p.id}
                 imageSrc={p.hinh}
                 lapName={p.tenSP}
-                quantity={p.soLuong}
+                status={p.status}
                 lapBrand={p.thuongHieu.tenThuongHieu}
-                deleteFunc={this.deleteSanPham}
+                updateFunc={this.deleteSanPham}
                 ></Product>
         });
         return (
@@ -85,7 +84,7 @@ class contentAdmin extends Component {
                                 <th scope="col">Ảnh minh họa</th>
                                 <th scope="col">Thương hiệu</th>
                                 <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tình trạng</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
