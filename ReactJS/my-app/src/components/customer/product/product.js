@@ -20,6 +20,11 @@ var filter = {
 
 var holder = [];
 
+const pageLimit = 4;
+
+const comparePrice = (a, b) => b.gia - a.gia;
+const compareId = (a, b) => b.id - a.id;
+
 const listMau = ['Đen', 'Bạc', 'Xám', 'Vàng'];
 class Product extends Component {
     constructor(props) {
@@ -35,16 +40,19 @@ class Product extends Component {
             vgas: [],
             nhuCaus: [],
             price: [0, 100],
-            active: false
+            active: false,
+            selectValue: ""
         }
         this.onPriceUpdate = this.onPriceUpdate.bind(this);
         this.onChildUpdate = this.onChildUpdate.bind(this);
         this.filterThuongHieu = this.filterThuongHieu.bind(this);
         this.filterPrice = this.filterPrice.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     async componentDidMount() {
         const list = await (await fetch(`/hung/sanPham`)).json();
+        list.reverse();
         this.setState({ products: list });
         holder = list;
         const listThuongHieu = await (await fetch("/hung/listThuongHieu")).json();
@@ -63,19 +71,42 @@ class Product extends Component {
         this.setState({ nhuCaus: listNhuCau });
     }
 
+    handleChange(e) {
+        console.log(e.target.value);
+        this.setState({ selectValue: e.target.value });
+        switch (e.target.value) {
+            case "giam":
+                this.setState({ products: this.state.products.sort(comparePrice) }, () => {
+                    this.setState({ currentProducts: this.state.products.slice(0, pageLimit) })
+                })
+                holder.sort(comparePrice);
+                break;
+            case "tang":
+                this.setState({ products: this.state.products.sort(comparePrice).reverse() }, () => {
+                    this.setState({ currentProducts: this.state.products.slice(0, pageLimit) })
+                })
+                holder.sort(comparePrice).reverse();
+                break;
+            default:
+                this.setState({ products: this.state.products.sort(compareId)}, () => {
+                    this.setState({ currentProducts: this.state.products.slice(0, pageLimit) })
+                })
+                holder.sort(compareId);
+        }
+    }
+
     onPageChanged = data => {
         const offset = (data.currentPage - 1) * data.pageLimit;
         const currentProducts = this.state.products.slice(offset, offset + data.pageLimit);
         this.setState({
             currentProducts: currentProducts,
         });
-        console.log(data);
     }
 
     onPriceUpdate(childState) {
-        this.setState({ price: childState });
-        console.log(this.state.price);
-        this.setState({ products: this.filter() });
+        this.setState({ price: childState }, () => {
+            this.setState({ products: this.filter(), currentProducts: this.filter().slice(0, pageLimit) });
+        });
     }
 
     onChildUpdate(childState) {
@@ -142,9 +173,7 @@ class Product extends Component {
                     break;
             }
         }
-        console.log(filter.thuongHieus);
-        console.log(holder);
-        this.setState({ products: this.filter() });
+        this.setState({ products: this.filter(), currentProducts: this.filter().slice(0, pageLimit) });
     }
 
     filter() {
@@ -297,9 +326,6 @@ class Product extends Component {
     }
 
     render() {
-        const myRecords = this.state.products.length;
-        console.log(myRecords);
-        if (myRecords === 0) return null;
         return (
             <div>
                 <Header />
@@ -408,10 +434,10 @@ class Product extends Component {
                         <div className="col-sm-10">
                             <div className="col-sm-2  ml-auto pr-0">
                                 <div className="form-group">
-                                    <select className="form-control form-control-sm" id="exampleFormControlSelect1">
-                                        <option>Mới nhất</option>
-                                        <option>Giá giảm dần</option>
-                                        <option>Giá tăng dần</option>
+                                    <select className="form-control form-control-sm" value={this.state.selectValue} onChange={this.handleChange}>
+                                        <option value="moi">Mới nhất</option>
+                                        <option value="giam">Giá giảm dần</option>
+                                        <option value="tang">Giá tăng dần</option>
                                     </select>
                                 </div>
                             </div>
@@ -432,7 +458,12 @@ class Product extends Component {
                                     />
                                 })}
                             </div>
-                            <Pagination totalRecords={myRecords} pageLimit={2} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                            <div className="d-flex justify-content-center">
+                                {
+                                    (this.state.products.length > 0) &&
+                                    <Pagination totalRecords={this.state.products.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

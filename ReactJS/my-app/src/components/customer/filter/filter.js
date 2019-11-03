@@ -13,8 +13,9 @@ class Filter extends Component {
     }
 
     handleChange(priceRange) {
-        this.setState({ priceRange });
-        this.props.onUpdate(this.state.priceRange);
+        this.setState({ priceRange }, () => {
+            this.props.onUpdate(this.state.priceRange);
+        });
     }
 
     render() {
