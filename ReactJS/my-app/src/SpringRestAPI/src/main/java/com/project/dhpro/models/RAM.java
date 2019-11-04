@@ -36,7 +36,7 @@ public class RAM {
     }
 
     public void setBoNhoRAM(int boNhoRAM) {
-        boNhoRAM = boNhoRAM;
+        this.boNhoRAM = boNhoRAM;
     }
 
     public String getLoaiRAM() {
@@ -44,7 +44,7 @@ public class RAM {
     }
 
     public void setLoaiRAM(String loaiRAM) {
-        loaiRAM = loaiRAM;
+        this.loaiRAM = loaiRAM;
     }
 
     public int getTocDoBus() {
@@ -52,6 +52,6 @@ public class RAM {
     }
 
     public void setTocDoBus(int tocDoBus) {
-        tocDoBus = tocDoBus;
+        this.tocDoBus = tocDoBus;
     }
 }

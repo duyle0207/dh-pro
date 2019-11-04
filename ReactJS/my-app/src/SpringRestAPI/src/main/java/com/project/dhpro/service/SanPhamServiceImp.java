@@ -35,6 +35,11 @@ public class SanPhamServiceImp implements SanPhamService{
     }
 
     @Override
+    public List<SanPham> searchSanPhamKH(String keyword) {
+        return sanPhamRepository.searchLimit(keyword);
+    }
+
+    @Override
     public SanPham findSanPhamByTenSP(String tensp) {
         return sanPhamRepository.findSanPhamByTenSP(tensp);
     }

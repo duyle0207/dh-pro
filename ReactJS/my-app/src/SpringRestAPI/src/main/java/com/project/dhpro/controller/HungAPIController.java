@@ -322,4 +322,17 @@ public class HungAPIController {
         return sanPhamService.findById(id);
     }
 
+    @PostMapping(value="/insertRAM")
+    public ResponseEntity insertRAM(@Valid @RequestBody CPU cpu)
+    {
+        System.out.println(cpu.getCongNgheCPU());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value="/test")
+    public ResponseEntity test(@Valid @RequestBody CPU cpu)
+    {
+        System.out.println(cpu.getCongNgheCPU());
+        return ResponseEntity.ok().build();
+    }
 }

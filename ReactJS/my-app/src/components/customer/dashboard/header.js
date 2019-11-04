@@ -1,18 +1,19 @@
 import React from 'react';
 import '../../../css/header.css';
+import '../../../css/searchBox.css'
 import Logo from "../../../images/logo.png";
-import {Link} from 'react-router-dom';
+import { Link, Redirect} from 'react-router-dom';
 
 class header extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = ({
-      username: "duy",
-      password: "duy"
+      listSP: []
     });
     this.onHandleChange = this.onHandleChange.bind(this);
     this.onSubmitLogin = this.onSubmitLogin.bind(this);
+    this.handleOnChange = this.handleOnChange.bind(this);
   }
 
   async onHandleChange(event) {
@@ -26,8 +27,26 @@ class header extends React.Component {
   }
 
   async componentDidMount() {
-    const loginInfo = await (await fetch(`/LoginSuccess`)).json();
-    console.log(loginInfo);
+
+  }
+
+  handleRedirect(id)
+  {
+    alert(id);
+    return <Redirect to={'/itemDetail/'+id}  />
+  }
+
+  handleOnChange(event) {
+    fetch('/searchSPKH', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: (!event.target.value ? "%" : event.target.value)
+    }).then(res => res.json()).then(result => {
+      this.setState({ listSP: result });
+    });
   }
 
   async onSubmitLogin(event) {
@@ -64,18 +83,29 @@ class header extends React.Component {
             <Link className="navbar-brand" to="/">
               <img src={Logo} alt="" style={{ width: 100 }} />
             </Link>
-            <form className="form-inline my-2 my-lg-0 input-group">
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Bạn muốn tìm gì?"
-              />
-              <div className="input-group-prepend">
-                <a className="input-group-text text-decoration-none" href="#abc">
-                  <i className="fas fa-search fa-1x" />
-                </a>
-              </div>
-            </form>
+            <div class="search">
+              <input type="text" onChange={this.handleOnChange} placeholder="Tìm kiếm" />
+              <ul class="results my-2" >
+                {this.state.listSP.map((value) => {
+                  return  <Link className="navbar-brand" to={"/itemDetail/"+value.id}><li>
+                    <div className="row my-2">
+                      <div className="col-sm-4">
+                        <img width="100" height="100" src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} alt="" />
+                      </div>
+                      <div className="col-sm-8">
+                        <div className="row">
+                          {value.tenSP}
+                        </div>
+                        <div className="row">
+                          <span style={{ color: "red" }}><b>{value.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></span>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  </Link>
+                })}
+              </ul>
+            </div>
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
               <li className="nav-item dropdown ml-4">
                 <a

@@ -13,6 +13,8 @@ public interface SanPhamService {
 
     List<SanPham> searchSanPhamAdmin(String keyword);
 
+    List<SanPham> searchSanPhamKH(String keyword);
+
     SanPham findSanPhamByTenSP(String tensp);
 
     void deleteSanPham(int id);

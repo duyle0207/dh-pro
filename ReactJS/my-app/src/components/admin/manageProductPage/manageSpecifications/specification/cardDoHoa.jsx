@@ -147,7 +147,7 @@ class cardDoHoa extends Component {
                                 <b>Card đồ họa</b>
                             </div>
                             <div className="col-sm-6">
-                                <button type="button" class="btn btn-success" onClick={this.handleClick} style={{ float: "right" }}><i class="fas fa-sort-down"></i></button>
+                                <button type="button" className="btn btn-success" onClick={this.handleClick} style={{ float: "right" }}><i class="fas fa-sort-down"></i></button>
                             </div>
                         </div>
                     </div>
@@ -156,8 +156,8 @@ class cardDoHoa extends Component {
                             <div className="row">
                                 <div className="col-sm-8">
                                     <div class="card-body bg-default">
-                                        <table class="table table-hover">
-                                            <thead class="thead-dark">
+                                        <table className="table table-hover">
+                                            <thead className="thead-dark">
                                                 <tr>
                                                     <th scope="col">#</th>
                                                     <th scope="col">Tên Card đồ họa</th>
