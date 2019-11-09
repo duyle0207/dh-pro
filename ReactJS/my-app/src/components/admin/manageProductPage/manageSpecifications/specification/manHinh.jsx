@@ -6,6 +6,7 @@ class manHinh extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             manHinh: {
                 kichThuoc: "",
                 doPhanGiai: "",
@@ -29,9 +30,26 @@ class manHinh extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPages`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPages`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getManHinh/page=${this.state.currentPage}`)).json();
+        const cardList = await (await fetch(`/getManHinh/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: cardList });
     }
 
@@ -51,7 +69,8 @@ class manHinh extends Component {
             method: (this.state.manHinh.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.manHinh),
         }).then((res) => {
@@ -79,7 +98,11 @@ class manHinh extends Component {
     }
 
     async handleOnClickTable(id) {
-        const manHinh = await (await fetch(`/manHinh/${id}`)).json();
+        const manHinh = await (await fetch(`/manHinh/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ manHinh: manHinh });
         console.log(manHinh);
     }
@@ -98,7 +121,11 @@ class manHinh extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const manHinhList = await (await fetch(`/getManHinh/page=${nextState.currentPage}`)).json();
+            const manHinhList = await (await fetch(`/getManHinh/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(manHinhList);
             this.setState({ list: manHinhList });
         }
@@ -166,7 +193,7 @@ class manHinh extends Component {
                                                     <th scope="col">Độ phân giải</th>
                                                     <th scope="col">Kích thước</th>
                                                     <th scope="col">Cảm ứng</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -181,9 +208,9 @@ class manHinh extends Component {
                                                         <td style={{ width: "12%" }}>
                                                             {value.manHinhCamUng ? <h3><span class="badge badge-success">Cảm ứng</span></h3> : <h3><span class="badge badge-info">Không Cảm ứng</span></h3>}
                                                         </td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

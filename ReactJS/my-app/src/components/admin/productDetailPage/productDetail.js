@@ -87,6 +87,7 @@ class productDetail extends Component {
     constructor(props) {
         super(props);
         this.state = ({
+            adminInfo: {},
             isUpdateFail: false,
             isUpdateSuccess: false,
             isUpdateDecriptedImage: false,
@@ -159,56 +160,112 @@ class productDetail extends Component {
     async componentDidMount() {
 
         var product;
-        if (this.props.idProduct !== 'new') {
-            const link = '/sanPham/' + this.props.idProduct;
-            product = await (await fetch(link)).json();
-            var a = await (await fetch(`/hung/getHinhSP/${this.props.idProduct}`)).json();
 
-            this.sp = product;
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
-            a.map((value, i) => {
-                if (i === 0) {
-                    this.setState({
-                        source1: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                    });
-                }
-                if (i === 1) {
-                    this.setState({
-                        source2: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                    });
-                }
-                if (i === 2) {
-                    this.setState({
-                        source3: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                    });
-                }
-                if (i === 3) {
-                    this.setState({
-                        source4: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                    });
-                }
-            });
+        if (adInfo.accessToken) {
+            this.setState({ adminInfo: adInfo });
+            //
+            if (this.props.idProduct !== 'new') {
+                const link = '/sanPham/' + this.props.idProduct;
+                product = await (await fetch(link, {
+                    headers: {
+                        'Authorization': `Bearer ${adInfo.accessToken}`
+                    }
+                })).json();
 
-            this.setState({ productDetail: this.sp, listHinhSP: a });
-        }
-        else {
-            const link = '/sanPham/' + 0;
-            product = await (await fetch(link)).json();
-            this.sp = product;
-            this.setState({ productDetail: this.sp });
+                var a = await (await fetch(`/hung/getHinhSP/${this.props.idProduct}`, {
+                    headers: {
+                        'Authorization': `Bearer ${adInfo.accessToken}`
+                    }
+                })).json();
+
+                this.sp = product;
+
+                a.map((value, i) => {
+                    if (i === 0) {
+                        this.setState({
+                            source1: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                        });
+                    }
+                    if (i === 1) {
+                        this.setState({
+                            source2: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                        });
+                    }
+                    if (i === 2) {
+                        this.setState({
+                            source3: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                        });
+                    }
+                    if (i === 3) {
+                        this.setState({
+                            source4: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                        });
+                    }
+                });
+
+                this.setState({ productDetail: this.sp, listHinhSP: a });
+            }
+            else {
+                const link = '/sanPham/' + 0;
+                product = await (await fetch(link,{
+                    headers:{
+                        'Authorization' : `Bearer ${adInfo.accessToken}`
+                    }
+                })).json();
+                this.sp = product;
+                this.setState({ productDetail: this.sp });
+            }
         }
 
         this.setState({ source: this.state.productDetail.hinh });
 
-        const cpuList = await (await fetch(`/listCPU`)).json();
-        const oCungList = await (await fetch(`/listOCung`)).json();
-        const ramList = await (await fetch(`/listRam`)).json();
-        const cardList = await (await fetch(`/hung/cardDoHoa`)).json();
-        const manHinhList = await (await fetch(`/listManHinh`)).json();
-        const pinList = await (await fetch(`/hung/listPin`)).json();
-        const heDieuHanhList = await (await fetch(`/hung/listHeDieuHanh`)).json();
-        const nhuCauSuDungList = await (await fetch(`/listNhuCauSuDung`)).json();
-        const thuongHieuList = await (await fetch(`/hung/listThuongHieu`)).json();
+        const cpuList = await (await fetch(`/listCPU`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const oCungList = await (await fetch(`/listOCung`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const ramList = await (await fetch(`/listRam`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const cardList = await (await fetch(`/hung/cardDoHoa`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const manHinhList = await (await fetch(`/listManHinh`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const pinList = await (await fetch(`/hung/listPin`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const heDieuHanhList = await (await fetch(`/hung/listHeDieuHanh`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const nhuCauSuDungList = await (await fetch(`/listNhuCauSuDung`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
+        const thuongHieuList = await (await fetch(`/hung/listThuongHieu`,{
+                headers:{
+                    'Authorization' : `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
 
         this.setState({
             cpu: product.cpu,
@@ -253,7 +310,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.cpu.id;
         }
-        const cpu = await (await fetch(`/cpu/${id}`)).json();
+        const cpu = await (await fetch(`/cpu/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.cpu = cpu;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
@@ -264,7 +325,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.oCung.id;
         }
-        const oCung = await (await fetch(`/oCung/${id}`)).json();
+        const oCung = await (await fetch(`/oCung/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.oCung = oCung;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.oCung);
@@ -275,7 +340,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.ram.id;
         }
-        const ram = await (await fetch(`/ram/${id}`)).json();
+        const ram = await (await fetch(`/ram/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.ram = ram;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.ram);
@@ -286,7 +355,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.cardDoHoa.id;
         }
-        const cardDoHoa = await (await fetch(`/cardDoHoa/${id}`)).json();
+        const cardDoHoa = await (await fetch(`/cardDoHoa/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.cardDoHoa = cardDoHoa;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.cardDoHoa);
@@ -297,7 +370,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.manHinh.id;
         }
-        const manHinh = await (await fetch(`/manHinh/${id}`)).json();
+        const manHinh = await (await fetch(`/manHinh/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.manHinh = manHinh;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.manHinh);
@@ -308,7 +385,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.pin.id;
         }
-        const pin = await (await fetch(`/manHinh/${id}`)).json();
+        const pin = await (await fetch(`/hung/pin/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.pin = pin;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail.pin);
@@ -319,7 +400,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.heDieuHanh.id;
         }
-        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${id}`)).json();
+        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.heDieuHanh = heDieuHanh;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
@@ -330,7 +415,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.nhuCauSuDung.id;
         }
-        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`)).json();
+        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.nhuCauSuDung = nhuCauSuDung;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
@@ -341,7 +430,11 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.thuongHieu.id;
         }
-        const thuongHieu = await (await fetch(`/hung/thuongHieu/${id}`)).json();
+        const thuongHieu = await (await fetch(`/hung/thuongHieu/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.sp.thuongHieu = thuongHieu;
         this.setState({ productDetail: this.sp });
         console.log(this.state.productDetail);
@@ -354,9 +447,9 @@ class productDetail extends Component {
             alert("Xin hãy upload hình cho sản phẩm");
         }
         else {
-            await fetch('/hung/saveSanPham', {
+            await fetch('/customerUnauthenticated/saveSanPham', {
                 method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
-                headers: {
+                headers:{
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
@@ -371,10 +464,12 @@ class productDetail extends Component {
                 }
             }).then(data => console.log(data));
 
-            if(this.state.isUpdateMainImage)
-            {
+            if (this.state.isUpdateMainImage) {
                 fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
                     method: 'post',
+                    headers: {
+                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                    },
                     body: this.state.dataFile
                 }).then(res => {
                     if (res.ok) {
@@ -387,6 +482,9 @@ class productDetail extends Component {
             if (this.state.isUpdateDecriptedImage) {
                 fetch(`/hung/saveMulFile/${this.state.productDetail.tenSP}`, {
                     method: 'post',
+                    headers: {
+                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                    },
                     body: this.state.multipleFile
                 }).then(res => {
                     if (res.ok) {
@@ -465,6 +563,9 @@ class productDetail extends Component {
     async handleClickUploadFile(event) {
         fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
             method: 'post',
+            headers: {
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            },
             body: this.state.dataFile
         }).then(res => {
             if (res.ok) {
@@ -478,14 +579,13 @@ class productDetail extends Component {
         this.setState({ isUpdateMainImage: !this.state.isUpdateMainImage });
     }
 
-    enableUpdateDecriptedImage()
-    {
+    enableUpdateDecriptedImage() {
         this.setState({ isUpdateDecriptedImage: !this.state.isUpdateDecriptedImage });
     }
 
     render() {
         return (
-            <div className="container-fluid" style={{overflowX: 'hidden'}}>
+            <div className="container-fluid" style={{ overflowX: 'hidden' }}>
                 <form onSubmit={this.updateSanPham} >
                     <div className="container-fluid mx-4" style={{ marginBottom: '100px' }}>
                         <div className="row mt-4">
@@ -548,11 +648,11 @@ class productDetail extends Component {
                             <DropDownBoxManHinh title="Màn hình" col="manHinh" list={this.state.listManHinh} detail={this.state.manHinh} onChange={this.handleChangeCaManHinh}></DropDownBoxManHinh>
 
                             <TextBox title="Âm thanh" col="amThanh" value={this.state.productDetail.amThanh} handleChange={this.handleChange}></TextBox>
-                            
+
                             <DropDownBoxPin title="Pin" col="pin" list={this.state.listPin} detail={this.state.pin} onChange={this.handleChangePin}></DropDownBoxPin>
 
                             <TextBox title="Cổng giao tiếp" col="congGiaoTiep" value={this.state.productDetail.congGiaoTiep} handleChange={this.handleChange}></TextBox>
-                            
+
                             <DropDownBoxHeDieuHanh title="Hệ điều hành" col="heDieuHanh" list={this.state.listHeDieuHanh} detail={this.state.heDieuHanh} onChange={this.handleChangeHeDieuHanh}></DropDownBoxHeDieuHanh>
 
                             <TextBox title="Độ phân giải Webcam" col="doPhanGiaiWC" value={this.state.productDetail.doPhanGiaiWC} handleChange={this.handleChange}></TextBox>
@@ -562,7 +662,7 @@ class productDetail extends Component {
                             <DropDownBoxThuongHieu title="Thương hiệu" col="thuongHieu" list={this.state.listThuongHieu} detail={this.state.thuongHieu} onChange={this.handleChangeThuongHieu}></DropDownBoxThuongHieu>
 
                             <Textarea title="Mô tả sơ lược" col="tomTat" value={this.state.productDetail.tomTat} handleChange={this.handleChange}></Textarea>
-                            
+
                             <div className="form-group col-sm-12 my-2 text-right">
                                 <button type="submit" className="btn btn-dark mx-2 my-2" ><h5>Lưu</h5></button>
                             </div>

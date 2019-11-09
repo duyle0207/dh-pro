@@ -23,4 +23,9 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
     public TaiKhoan findTaiKhoanByUserName(String username) {
         return taiKhoanRepository.findTaiKhoanByUserName(username);
     }
+
+    @Override
+    public TaiKhoan findById(int id) {
+        return taiKhoanRepository.findById(id).get();
+    }
 }

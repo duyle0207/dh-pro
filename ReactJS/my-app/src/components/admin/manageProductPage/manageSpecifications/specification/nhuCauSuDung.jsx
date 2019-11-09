@@ -6,6 +6,7 @@ class nhuCauSuDung extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             nhuCauSuDung: {
                 tenNhuCauSuDung: "",
                 id: ""
@@ -26,15 +27,36 @@ class nhuCauSuDung extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPagesNhuCauSuDung`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPagesNhuCauSuDung`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getNhuCauSuDung/page=${this.state.currentPage}`)).json();
+        const hdhList = await (await fetch(`/getNhuCauSuDung/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: hdhList });
     }
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getNhuCauSuDung/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getNhuCauSuDung/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -69,7 +91,8 @@ class nhuCauSuDung extends Component {
             method: (this.state.nhuCauSuDung.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.nhuCauSuDung),
         }).then((res) => {
@@ -94,7 +117,11 @@ class nhuCauSuDung extends Component {
     }
 
     async handleOnClickTable(id) {
-        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`)).json();
+        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ nhuCauSuDung: nhuCauSuDung });
     }
 
@@ -156,7 +183,7 @@ class nhuCauSuDung extends Component {
                                                 <tr>
                                                     <th scope="col">#</th>
                                                     <th scope="col">Nhu cầu sử dụng</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -164,9 +191,9 @@ class nhuCauSuDung extends Component {
                                                     return <tr onClick={() => this.handleOnClickTable(value.id)}>
                                                         <th scope="row">{value.id}</th>
                                                         <td>{value.tenNhuCauSuDung}</td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

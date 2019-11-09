@@ -33,6 +33,12 @@ class slidebarAdmin extends Component {
                             <span> Sản phẩm</span>
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/manageSpecification">
+                            <i class="fas fa-wrench"></i>
+                            <span> Linh kiện máy</span>
+                        </Link>
+                    </li>
                 </ul>
                 {this.props.children}
             </div>

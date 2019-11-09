@@ -13,8 +13,18 @@ class contentAdmin extends Component {
     }
 
     async componentDidMount() {
-        const list = await (await fetch(`/hung/sanPham`)).json();
-        this.setState({ productList: list })
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+        if(adInfo.accessToken)
+        {
+            const list = await (await fetch(`/hung/sanPham`,{
+                headers:{
+                    'method': 'GET',
+                    'Authorization' : `Bearer ${adInfo.accessToken}`
+                }
+            }
+            )).json();
+            this.setState({ productList: list })
+        }
     }
 
     async searchOnChange(event) {

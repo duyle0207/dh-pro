@@ -7,6 +7,7 @@ class cardDoHoa extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             CardDoHoa: {
                 id: '',
                 tenCardDoHoa: '',
@@ -16,7 +17,8 @@ class cardDoHoa extends Component {
             getTotalPages: '',
             currentPage: 1,
             error: false,
-            success: false
+            success: false,
+            accessToken: ''
         });
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -29,10 +31,28 @@ class cardDoHoa extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPages`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPages`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getCard/page=${this.state.currentPage}`)).json();
+        const cardList = await (await fetch(`/getCard/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: cardList });
+        console.log(this.state.list);
     }
 
     handleClick() {
@@ -51,7 +71,8 @@ class cardDoHoa extends Component {
             method: (this.state.CardDoHoa.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.CardDoHoa),
         }).then((res) => {
@@ -78,7 +99,11 @@ class cardDoHoa extends Component {
     }
 
     async handleOnClickTable(id) {
-        const card = await (await fetch(`/cardDoHoa/${id}`)).json();
+        const card = await (await fetch(`/cardDoHoa/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ CardDoHoa: card });
         console.log(card);
     }
@@ -96,7 +121,11 @@ class cardDoHoa extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getCard/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getCard/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -109,6 +138,7 @@ class cardDoHoa extends Component {
     }
 
     async handleNextPage() {
+        console.log(this.state.totalPages);
         if (this.state.currentPage < this.state.totalPages) {
             this.setState({ currentPage: this.state.currentPage + 1 });
         }
@@ -128,7 +158,11 @@ class cardDoHoa extends Component {
                 });
                 this.setState({ list: newList });
                 this.setState({ error: false, success: true });
-                const totalPages = await(await fetch(`/getTotalPages`)).json();
+                const totalPages = await(await fetch(`/getTotalPages`,{
+                    headers:{
+                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                    }
+                })).json();
                 this.setState({ totalPages: totalPages });
             }
             else {
@@ -163,7 +197,7 @@ class cardDoHoa extends Component {
                                                     <th scope="col">Tên Card đồ họa</th>
                                                     <th scope="col">Bộ nhớ</th>
                                                     <th scope="col">Thiết kế</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -174,9 +208,9 @@ class cardDoHoa extends Component {
                                                         <td style={{ width: "12%" }}>{value.boNhoCard}GB</td>
                                                         <td style={{ width: "12%" }}>
                                                             {value.thietKeCard}</td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

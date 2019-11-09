@@ -11,7 +11,7 @@ class adminDashboard extends Component {
             <div>
                 <Header></Header>
                 <SildeBar>
-                    <Content>></Content>
+                    <Content></Content>
                 </SildeBar>
                 {/* <Footer></Footer> */}
             </div>

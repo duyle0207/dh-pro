@@ -7,6 +7,7 @@ class pin extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             pin: {
                 id: "",
                 thongTinPin: "",
@@ -29,9 +30,26 @@ class pin extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPagesPin`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPagesPin`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getPin/page=${this.state.currentPage}`)).json();
+        const cardList = await (await fetch(`/getPin/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: cardList });
     }
 
@@ -52,7 +70,8 @@ class pin extends Component {
             method: (this.state.pin.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.pin),
         }).then((res) => {
@@ -79,7 +98,11 @@ class pin extends Component {
     }
 
     async handleOnClickTable(id) {
-        const pin = await (await fetch(`/hung/pin/${id}`)).json();
+        const pin = await (await fetch(`/hung/pin/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ pin: pin });
     }
 
@@ -96,7 +119,11 @@ class pin extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getPin/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getPin/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -163,7 +190,7 @@ class pin extends Component {
                                                     <th scope="col">Thông tin pin</th>
                                                     <th scope="col">Thời gian sử dụng</th>
                                                     <th scope="col">Bộ sạc</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -174,9 +201,9 @@ class pin extends Component {
                                                         <td style={{ width: "20%" }}>{value.thoiGianSuDung} giờ</td>
                                                         <td style={{ width: "20%" }}>
                                                             {value.boSac}</td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

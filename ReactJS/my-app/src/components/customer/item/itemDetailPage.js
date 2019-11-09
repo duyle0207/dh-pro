@@ -32,8 +32,8 @@ class ItemDetailPage extends React.Component {
 
   async componentDidMount()
   {
-    const product = await(await fetch(`/hung/sanPham/${this.props.match.params.id}`)).json();
-    const imgList = await(await fetch(`/hung/getHinhSP/${this.props.match.params.id}`)).json();
+    const product = await(await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
+    const imgList = await(await fetch(`/customerUnauthenticated/getHinhSP/${this.props.match.params.id}`)).json();
     this.setState({product:product,imgList:imgList});
   }
 

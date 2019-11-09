@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class insertProductPage extends Component {
+class loginForm extends Component {
     render() {
         return (
             <div>
@@ -10,4 +10,4 @@ class insertProductPage extends Component {
     }
 }
 
-export default insertProductPage;
+export default loginForm;
