@@ -6,6 +6,7 @@ class heDieuHanh extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             heDieuHanh: {
                 id: '',
                 tenHeDieuHanh: ''
@@ -26,15 +27,36 @@ class heDieuHanh extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPagesHDH`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+        
+        const totalPages = await (await fetch(`/getTotalPagesHDH`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getHDH/page=${this.state.currentPage}`)).json();
+        const hdhList = await (await fetch(`/getHDH/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: hdhList });
     }
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getHDH/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getHDH/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -69,7 +91,8 @@ class heDieuHanh extends Component {
             method: (this.state.heDieuHanh.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.heDieuHanh),
         }).then((res) => {
@@ -94,7 +117,11 @@ class heDieuHanh extends Component {
     }
 
     async handleOnClickTable(id) {
-        const heDieuHanh = await (await fetch(`/heDieuHanh/${id}`)).json();
+        const heDieuHanh = await (await fetch(`/heDieuHanh/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ heDieuHanh: heDieuHanh });
         console.log(this.state.heDieuHanh.tenHeDieuHanh);
     }
@@ -157,7 +184,7 @@ class heDieuHanh extends Component {
                                                 <tr>
                                                     <th scope="col">#</th>
                                                     <th scope="col">Tên hệ điều hành</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -165,9 +192,9 @@ class heDieuHanh extends Component {
                                                     return <tr onClick={() => this.handleOnClickTable(value.id)}>
                                                         <th scope="row">{value.id}</th>
                                                         <td>{value.tenHeDieuHanh}</td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

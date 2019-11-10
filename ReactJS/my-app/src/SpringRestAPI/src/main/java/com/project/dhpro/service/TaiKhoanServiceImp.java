@@ -29,4 +29,8 @@ public class TaiKhoanServiceImp implements TaiKhoanService {
         taiKhoanRepository.save(taiKhoan);
         return taiKhoan;
     }
+    @Override
+    public TaiKhoan findById(int id) {
+        return taiKhoanRepository.findById(id).get();
+    }
 }

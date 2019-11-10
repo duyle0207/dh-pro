@@ -30,7 +30,7 @@ class compareItemsPage extends Component {
 
     async componentDidMount() {
         console.log(this.props.match.params.id);
-        const product = await(await fetch(`/hung/sanPham/${this.props.match.params.id}`)).json();
+        const product = await(await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
         this.setState({ product: product });
 
         this.setState({
@@ -49,7 +49,7 @@ class compareItemsPage extends Component {
     }
 
     async handleInsertItemClick(itemId) {
-        const product = await(await fetch(`/hung/sanPham/${itemId}`)).json();
+        const product = await(await fetch(`/customerUnauthenticated/sanPham/${itemId}`)).json();
         this.setState({ secondItem: product });
         console.log(this.state.secondItem);
         this.setState({ isCompare: !this.state.isCompare });

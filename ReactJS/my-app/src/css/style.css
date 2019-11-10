@@ -1,4 +1,13 @@
 *{margin: 0; padding: 0}
+body {
+    background: black;
+    color: #404040;
+    font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 20px;
+}
+
 html, body {
     height: 100%;
     width: 100%;

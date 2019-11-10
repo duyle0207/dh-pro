@@ -12,10 +12,18 @@ class content extends React.Component {
       productList: []
     })
   }
-
+  
   async componentDidMount() {
-    const list = await(await fetch(`/hung/sanPham`)).json();
+    const list = await(await fetch(`/customerUnauthenticated/sanPham`,{
+      method: 'GET',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        // 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTcyOTM0ODk2LCJleHAiOjE1NzM1Mzk2OTZ9.8wJ2czvjfsxlgKUQ7n7Rok4LmHMPDU9nXcdcDsm3s6MMnX0pGH1My-NiciDpYNRe6x9oH_en_clyMVsGQ5cB3A'
+      }
+    })).json();
     this.setState({ productList: list })
+    console.log(list);
   }
 
   render() {

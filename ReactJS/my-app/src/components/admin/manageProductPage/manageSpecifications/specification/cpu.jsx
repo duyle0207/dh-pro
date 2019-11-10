@@ -7,6 +7,7 @@ class cpu extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             cpu: {
                 tenCPU: "",
                 tocDoCPU: '',
@@ -31,15 +32,36 @@ class cpu extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPagesCPU`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPagesCPU`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const cpuList = await (await fetch(`/getCPU/page=${this.state.currentPage}`)).json();
+        const cpuList = await (await fetch(`/getCPU/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: cpuList });
     }
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getCPU/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getCPU/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -73,7 +95,8 @@ class cpu extends Component {
             method: (this.state.cpu.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.cpu),
         }).then((res) => {
@@ -102,7 +125,11 @@ class cpu extends Component {
     }
 
     async handleOnClickTable(id) {
-        const cpu = await (await fetch(`/cpu/${id}`)).json();
+        const cpu = await (await fetch(`/cpu/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ cpu: cpu });
         console.log(cpu);
     }
@@ -173,7 +200,7 @@ class cpu extends Component {
                                                     <th scope="col">Công nghệ CPU</th>
                                                     <th scope="col">Bộ nhớ đệm</th>
                                                     <th scope="col">Tốc độ Turbo</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -189,10 +216,10 @@ class cpu extends Component {
                                                         </td>
                                                         <td style={{ width: "15%" }}>
                                                             {value.tocDoTurbo} GHz
-                                                    </td>
-                                                        <td style={{ width: "2%" }}>
-                                                            <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
                                                         </td>
+                                                        {/* <td style={{ width: "2%" }}>
+                                                            <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

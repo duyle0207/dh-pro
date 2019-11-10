@@ -12,13 +12,13 @@ class searchItem extends Component {
 
     async componentDidMount()
     {
-        const product = await(await fetch(`/hung/sanPham/`)).json();
+        const product = await(await fetch(`/customerUnauthenticated/sanPham`)).json();
         this.setState({productList:product});
     }
 
     handleOnChange(event)
     {
-        fetch('/searchSPAdmin/', {
+        fetch('/customerUnauthenticated/searchSPAdmin', {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json',

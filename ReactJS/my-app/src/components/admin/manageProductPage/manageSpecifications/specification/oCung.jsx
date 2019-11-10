@@ -6,6 +6,7 @@ class oCung extends Component {
         this.state = ({
             isOpen: false,
             list: [],
+            adminInfo: {},
             oCung: {
                 tenOCung: "",
                 dungLuong: "",
@@ -27,15 +28,36 @@ class oCung extends Component {
     }
 
     async componentDidMount() {
-        const totalPages = await (await fetch(`/getTotalPagesOCung`)).json();
+
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+
+        this.setState({
+            adminInfo:adInfo,
+        },()=>{
+            console.log(this.state.adminInfo);
+        });
+
+        const totalPages = await (await fetch(`/getTotalPagesOCung`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getOCung/page=${this.state.currentPage}`)).json();
+        const hdhList = await (await fetch(`/getOCung/page=${this.state.currentPage}`,{
+            headers:{
+                'Authorization' : `Bearer ${adInfo.accessToken}`
+            }
+        })).json();
         this.setState({ list: hdhList });
     }
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getOCung/page=${nextState.currentPage}`)).json();
+            const cardList = await (await fetch(`/getOCung/page=${nextState.currentPage}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
             console.log(cardList);
             this.setState({ list: cardList });
         }
@@ -70,7 +92,8 @@ class oCung extends Component {
             method: (this.state.oCung.id === '') ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: JSON.stringify(this.state.oCung),
         }).then((res) => {
@@ -96,7 +119,11 @@ class oCung extends Component {
     }
 
     async handleOnClickTable(id) {
-        const oCung = await (await fetch(`/oCung/${id}`)).json();
+        const oCung = await (await fetch(`/oCung/${id}`,{
+            headers:{
+                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            }
+        })).json();
         this.setState({ oCung: oCung });
     }
 
@@ -160,7 +187,7 @@ class oCung extends Component {
                                                     <th scope="col">#</th>
                                                     <th scope="col">Tên ổ cứng</th>
                                                     <th scope="col">Dung lượn</th>
-                                                    <th scope="col"></th>
+                                                    {/* <th scope="col"></th> */}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -169,9 +196,9 @@ class oCung extends Component {
                                                         <th scope="row">{value.id}</th>
                                                         <td>{value.tenOCung}</td>
                                                         <td>{value.dungLuong}GB</td>
-                                                        <td style={{ width: "2%" }}>
+                                                        {/* <td style={{ width: "2%" }}>
                                                             <button type="button" class="btn btn-danger" onClick={() => this.deleteCard(value.id)} style={{ float: "right" }}><i class="fas fa-trash"></i></button>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 })
                                                 }

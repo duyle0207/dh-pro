@@ -1,5 +1,6 @@
 package com.project.dhpro.controller;
 
+import com.project.dhpro.jwt.JwtTokenProvider;
 import com.project.dhpro.models.*;
 
 import com.project.dhpro.service.*;
@@ -9,6 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -104,9 +109,7 @@ public class RestAPIController {
     @GetMapping(value = "/manHinh/{id}")
     ManHinh getManHinhById(@PathVariable("id") int id) {
         return manHinhService.findById(id);
-    }
-
-    ;
+    };
 
     @PostMapping(value = "/searchSPAdmin")
     List<SanPham> searchSanPhamAdmin(@Valid @RequestBody String keyword) {
@@ -524,4 +527,43 @@ public class RestAPIController {
 
     @GetMapping(value = "/thuongHieu/{id}")
     ThuongHieu getThuongHieuById(@PathVariable("id") int id){return thuongHieuService.findById(id);}
+
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    TaiKhoanService taiKhoanService;
+
+    @PostMapping("/login")
+    public ResponseEntity authenticateUser(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) {
+        System.out.println("Login");
+        // Xác thực từ username và password.
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        username,
+                        password
+                )
+        );
+
+        System.out.println(authentication.getPrincipal());
+
+        // Nếu không xảy ra exception tức là thông tin hợp lệ
+        // Set thông tin authentication vào Security Context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        int id = taiKhoanService.findTaiKhoanByUserName(authentication.getName()).getId();
+        // Trả về jwt cho người dùng.
+        String jwt = tokenProvider.generateToken(id);
+
+        System.out.println(jwt);
+
+
+        return ResponseEntity.ok().build();
+    }
 }

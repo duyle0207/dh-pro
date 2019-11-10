@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
 // import App from './App';
 import DashBoard from "../src/components/customer/dashboard/dashboard";
 import RouteURL from "../src/components/RouteURL";

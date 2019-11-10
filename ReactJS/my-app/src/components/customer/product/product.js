@@ -51,23 +51,23 @@ class Product extends Component {
     }
 
     async componentDidMount() {
-        const list = await (await fetch(`/hung/sanPham`)).json();
+        const list = await (await fetch(`/customerUnauthenticated/sanPham`)).json();
         list.reverse();
         this.setState({ products: list });
         holder = list;
-        const listThuongHieu = await (await fetch("/hung/listThuongHieu")).json();
+        const listThuongHieu = await (await fetch("/customerUnauthenticated/listThuongHieu")).json();
         this.setState({ thuongHieus: listThuongHieu });
-        const listHDH = await (await fetch("/hung/listHeDieuHanh")).json();
+        const listHDH = await (await fetch("/customerUnauthenticated/listHeDieuHanh")).json();
         this.setState({ heDieuHanhs: listHDH });
-        const listRAM = await (await fetch("/listRam")).json();
+        const listRAM = await (await fetch("/customerUnauthenticated/listRam")).json();
         this.setState({ rams: listRAM });
-        const listCPU = await (await fetch("/listCPU")).json();
+        const listCPU = await (await fetch("/customerUnauthenticated/listCPU")).json();
         this.setState({ cpus: listCPU });
-        const listOCung = await (await fetch("/listOCung")).json();
+        const listOCung = await (await fetch("/customerUnauthenticated/listOCung")).json();
         this.setState({ oCungs: listOCung });
-        const listVGA = await (await fetch("hung/cardDoHoa")).json();
+        const listVGA = await (await fetch("/customerUnauthenticated/listCardDoHoa")).json();
         this.setState({ vgas: listVGA });
-        const listNhuCau = await (await fetch("/listNhuCauSuDung")).json();
+        const listNhuCau = await (await fetch("/customerUnauthenticated/listNhuCauSuDung")).json();
         this.setState({ nhuCaus: listNhuCau });
     }
 

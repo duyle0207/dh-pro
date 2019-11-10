@@ -1,28 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Route, Redirect } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
-    return (
-        <Route
-            path={path}
-            {...rest}
-            render={props => {
-                return loggedIn ? (
-                    <Comp {...props} />
-                ) : (
-                        <Redirect
-                            to={{
-                                pathname: "/",
-                                state: {
-                                    prevLocation: path,
-                                    error: "You need to login first!",
-                                },
-                            }}
-                        />
-                    );
-            }}
-        />
-    );
-};
-
+const ProtectedRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        <Component {...props} />
+    )} />
+  )
 export default ProtectedRoute;
