@@ -6,6 +6,25 @@ import ItemCart from '../item/itemCart';
 import CartInfo from '../cart/cartInfo';
 
 class cart extends Component {
+
+    constructor(props)
+    {
+        super(props);
+
+        this.state = ({
+            cartLines: []
+        });
+    }
+    
+    async componentDidMount()
+    {
+        const cartLines = await (await fetch(`/customerUnauthenticated/shoppingCart`)).json()
+
+        this.setState({cartLines: cartLines.cartLines});
+
+        console.log(this.state.cartLines);
+    }
+
     render() {
         return (
             <div>
@@ -13,9 +32,12 @@ class cart extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
-                            <ItemCart></ItemCart>
-                            <ItemCart></ItemCart>
-                            <ItemCart></ItemCart>
+                            {
+                                (this.state.cartLines).map((value)=>{
+                                    // console.log(value);
+                                    return <ItemCart cartLines={value} product={value.sanPham}></ItemCart>
+                                })
+                            }
                         </div>
                     </div>
                 </div>

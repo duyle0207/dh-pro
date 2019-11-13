@@ -18,7 +18,8 @@ class header extends React.Component {
       success: false,
       error: false,
       userInfo: JSON.parse(localStorage.getItem("userInfo")),
-      isVisible: false
+      isVisible: false,
+      quantityCart: 0
     });
     this.onHandleChange = this.onHandleChange.bind(this);
     this.onSubmitLogin = this.onSubmitLogin.bind(this);
@@ -39,7 +40,12 @@ class header extends React.Component {
   }
 
   async componentDidMount() {
-    console.log(this.loginModal.current.display);
+    // console.log(this.loginModal.current.display);
+    const totalQuantity = await (await fetch('/customerUnauthenticated/getAllQuantity')).json();
+    console.log();
+    this.setState({
+      quantityCart: totalQuantity
+    })
   }
 
   handleOnBlur()
@@ -218,8 +224,10 @@ class header extends React.Component {
                     <small style={{ fontSize: 14 }}> (2)</small>
                   </i>
                 </a> */}
-                <img className="mt-1" width="40" height="40" src="https://image.flaticon.com/icons/svg/526/526737.svg"></img>
-                <b className="text-dark">(2)</b>
+                <Link className="navbar-brand" to="/cart">
+                  <img className="mt-1" width="40" height="40" src="https://image.flaticon.com/icons/svg/526/526737.svg"></img>
+                </Link>
+                {/* <b className="text-dark">({this.state.quantityCart})</b> */}
               </li>
             </ul>
             {/* <!-- The Modal --> */}
