@@ -8,6 +8,6 @@ public interface TaiKhoanService {
     List<TaiKhoan> getAll();
 
     TaiKhoan findTaiKhoanByUserName(String username);
-
+    TaiKhoan save(TaiKhoan taiKhoan);
     TaiKhoan findById(int id);
 }

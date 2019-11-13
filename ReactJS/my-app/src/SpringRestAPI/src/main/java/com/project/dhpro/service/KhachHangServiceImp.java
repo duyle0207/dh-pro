@@ -18,4 +18,10 @@ public class KhachHangServiceImp implements KhachHangService{
     public List<KhachHang> getAll() {
         return khachHangRepository.findAll();
     }
+
+    @Override
+    public KhachHang save(KhachHang khachHang) {
+        khachHangRepository.save(khachHang);
+        return khachHang;
+    }
 }

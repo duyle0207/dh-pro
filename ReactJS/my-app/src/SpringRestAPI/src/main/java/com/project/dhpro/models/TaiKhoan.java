@@ -1,12 +1,12 @@
 package com.project.dhpro.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
 
 @Entity
 @Table(name = "taikhoan")
 public class TaiKhoan {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
