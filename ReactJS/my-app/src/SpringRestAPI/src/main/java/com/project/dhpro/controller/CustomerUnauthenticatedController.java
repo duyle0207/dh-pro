@@ -4,6 +4,7 @@ import com.project.dhpro.jwt.JwtTokenProvider;
 import com.project.dhpro.models.*;
 import com.project.dhpro.payload.LoginResponse;
 import com.project.dhpro.service.*;
+import com.project.dhpro.ultils.CartUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -217,5 +218,69 @@ public class CustomerUnauthenticatedController {
         SanPham sp = sanPhamService.save(sanPham);
         System.out.println("ID: "+sp.getId());
         return new ResponseEntity<SanPham>(sp, HttpStatus.OK);
+    }
+
+    //Cart
+    @GetMapping(value="/shoppingCart")
+    public Cart getShoppingCart(HttpServletRequest request)
+    {
+        Cart cart = CartUtils.getCart(request);
+
+        double total = cart.setTotalCart();
+
+        cart.setTotal(total);
+
+        return cart;
+    }
+
+    @GetMapping(value = "/getAllQuantity")
+    public int getAllQuantity(HttpServletRequest request)
+    {
+        Cart cart = CartUtils.getCart(request);
+
+        return cart.getAllQuantity();
+    }
+
+    @GetMapping(value = "/getAmount")
+    public double getAmount(HttpServletRequest request)
+    {
+        Cart cart = CartUtils.getCart(request);
+
+        return cart.setTotalCart();
+    }
+
+    @PostMapping(value = "/addToCart/quantity={quantity}")
+    public Cart addToCart(@Valid @RequestBody SanPham sanPham,
+                          @PathVariable("quantity") int quantity,
+                          HttpServletRequest request)
+    {
+
+        System.out.println(quantity);
+
+        Cart cart = CartUtils.getCart(request);
+
+        cart.saveProductToCart(sanPham,quantity);
+
+        double total = cart.setTotalCart();
+
+        cart.setTotal(total);
+
+        return cart;
+    }
+
+    @DeleteMapping(value="/removeProduct/id={id}")
+    public Cart removeProduct(HttpServletRequest request,@PathVariable("id") int id)
+    {
+        Cart cart = (Cart) request.getSession().getAttribute("myCart");
+
+        SanPham sanPham = sanPhamService.findById(id);
+
+        cart.removeProduct(sanPham);
+
+        double total = cart.setTotalCart();
+
+        cart.setTotal(total);
+
+        return cart;
     }
 }

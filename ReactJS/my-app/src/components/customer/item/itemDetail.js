@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../../css/style.css';
 import ImageDetail from '../item/imageDetail';
+import { withRouter } from 'react-router';
 
 class itemDetail extends React.Component {
   constructor(props) {
@@ -14,17 +15,35 @@ class itemDetail extends React.Component {
 
     this.SetDetailImage = this.SetDetailImage.bind(this);
     this.setMainImage = this.setMainImage.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
   }
+
   setMainImage(source) {
     this.setState({ MainImg: source });
   }
+
   SetDetailImage() {
     var i = this.refs.mainIMG.src;
     this.refs.ImgDetail.src = i;
   }
+
+  async addToCart()
+  {
+    await fetch(`/customerUnauthenticated/addToCart/quantity=1`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.props.product)
+    }).then((res) => {
+      this.props.history.push("/cart");
+    });
+  }
+
   render() {
     return (
       <div className="row">
@@ -118,16 +137,13 @@ class itemDetail extends React.Component {
               <div className="col-sm-5">
               </div>
             </div>
-            <div className="btn-group" role="group" aria-label="Basic example">
-              <a href="#aaa" className="btn btn-lg btn-info text-uppercase">
-                Mua ngay
-              </a>
-              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase">
+            <div className="row" role="group" aria-label="Basic example">
+              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase" onClick={this.addToCart}>
                 <i className="fas fa-shopping-cart" />
-                Thêm vào giỏ hàng
+                 Thêm vào giỏ hàng
               </a>
             </div>
-            <div className="btn-group mt-4" role="group" aria-label="Basic example">
+            <div className="row mt-2" role="group" aria-label="Basic example">
               <a href={"/compareItem/"+this.props.product.id} className="btn btn-lg btn-warning text-uppercase" style={{ color: 'white' }}>
                 So sánh chi tiết
               </a>
@@ -139,4 +155,4 @@ class itemDetail extends React.Component {
   }
 }
 
-export default itemDetail;
+export default withRouter(itemDetail);
