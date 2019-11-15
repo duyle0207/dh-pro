@@ -51,6 +51,7 @@ class Product extends Component {
     }
 
     async componentDidMount() {
+        document.title = "Danh sách sản phẩm laptop chính hãng";
         const list = await (await fetch(`/customerUnauthenticated/sanPham`)).json();
         list.reverse();
         this.setState({ products: list });

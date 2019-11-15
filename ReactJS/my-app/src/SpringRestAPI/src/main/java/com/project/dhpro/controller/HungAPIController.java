@@ -130,18 +130,6 @@ public class HungAPIController {
         return taiKhoanService.getAll();
     }
 
-    @PostMapping("/dangKi")
-    public ResponseEntity<String> register(@Valid @RequestBody TaiKhoan taiKhoan) {
-        for (TaiKhoan tk : ListTaiKhoan()) {
-            if(tk.getUserName().equals(taiKhoan.getUserName()))
-                return new ResponseEntity<String>("Ten tai khoan da ton tai",HttpStatus.SEE_OTHER);
-        }
-        System.out.println(taiKhoan.toString());
-        taiKhoan.setPassword("aaaaaaaaaaaa");
-        TaiKhoan tk = taiKhoanService.save(taiKhoan);
-        return new ResponseEntity<String>(String.valueOf(tk.getId()),HttpStatus.OK);
-    }
-
     @Autowired
     QuanTriVienService quanTriVienService;
 

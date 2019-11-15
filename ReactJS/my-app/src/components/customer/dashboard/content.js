@@ -14,6 +14,7 @@ class content extends React.Component {
   }
   
   async componentDidMount() {
+    document.title = "DHPro hệ thống bán lẻ laptop nhập khẩu giá rẻ toàn quốc"
     const list = await(await fetch(`/customerUnauthenticated/sanPham`,{
       method: 'GET',
       headers:{

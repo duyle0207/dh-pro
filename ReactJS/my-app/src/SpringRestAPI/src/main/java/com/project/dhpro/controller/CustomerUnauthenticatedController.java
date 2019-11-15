@@ -12,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-    @RequestMapping("/customerUnauthenticated")
+@RequestMapping("/customerUnauthenticated")
 public class CustomerUnauthenticatedController {
 
     // Sản phẫm
@@ -171,6 +171,23 @@ public class CustomerUnauthenticatedController {
         System.out.println(authentication.getPrincipal());
 
         return loginResponse;
+    }
+
+    List<TaiKhoan> ListTaiKhoan() {
+        return taiKhoanService.getAll();
+    }
+
+    @PostMapping("/dangKi")
+    public ResponseEntity<String> register(@Valid @RequestBody TaiKhoan taiKhoan) {
+        for (TaiKhoan tk : ListTaiKhoan()) {
+            if(tk.getUserName().equals(taiKhoan.getUserName()))
+                return new ResponseEntity<String>("Username has already taken",HttpStatus.CONFLICT);
+        }
+        System.out.println(taiKhoan.toString());
+        String encodedPassword = new BCryptPasswordEncoder().encode(taiKhoan.getPassword());
+        taiKhoan.setPassword(encodedPassword);
+        TaiKhoan tk = taiKhoanService.save(taiKhoan);
+        return new ResponseEntity<String>(String.valueOf(tk.getRole()),HttpStatus.OK);
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
