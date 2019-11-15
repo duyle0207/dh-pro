@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../../css/style.css';
 import ImageDetail from '../item/imageDetail';
+import { withRouter } from 'react-router';
 
 class itemDetail extends React.Component {
   constructor(props) {
@@ -14,17 +15,35 @@ class itemDetail extends React.Component {
 
     this.SetDetailImage = this.SetDetailImage.bind(this);
     this.setMainImage = this.setMainImage.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   }
 
   componentDidMount() {
   }
+
   setMainImage(source) {
     this.setState({ MainImg: source });
   }
+
   SetDetailImage() {
     var i = this.refs.mainIMG.src;
     this.refs.ImgDetail.src = i;
   }
+
+  async addToCart()
+  {
+    await fetch(`/customerUnauthenticated/addToCart/quantity=1`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.props.product)
+    }).then((res) => {
+      this.props.history.push("/cart");
+    });
+  }
+
   render() {
     return (
       <div className="row">
@@ -119,7 +138,7 @@ class itemDetail extends React.Component {
               </div>
             </div>
             <div className="row" role="group" aria-label="Basic example">
-              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase">
+              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase" onClick={this.addToCart}>
                 <i className="fas fa-shopping-cart" />
                  Thêm vào giỏ hàng
               </a>
@@ -136,4 +155,4 @@ class itemDetail extends React.Component {
   }
 }
 
-export default itemDetail;
+export default withRouter(itemDetail);
