@@ -250,6 +250,22 @@ public class CustomerUnauthenticatedController {
         return cart;
     }
 
+    @PostMapping(value="/updateCart/quantity={quantity}")
+    public Cart updateCart(@Valid @RequestBody SanPham sanPham,
+                           @PathVariable("quantity") int quantity,
+                           HttpServletRequest request)
+    {
+        Cart cart = CartUtils.getCart(request);
+
+        cart.updateCart(sanPham,quantity);
+
+        double total = cart.setTotalCart();
+
+        cart.setTotal(total);
+
+        return cart;
+    }
+
     @DeleteMapping(value="/removeProduct/id={id}")
     public Cart removeProduct(HttpServletRequest request,@PathVariable("id") int id)
     {
@@ -265,4 +281,134 @@ public class CustomerUnauthenticatedController {
 
         return cart;
     }
+
+        @GetMapping(value = "/getChoosableQuantity/{id}")
+    public int checkProductQuantity(@PathVariable("id") int id,HttpServletRequest request)
+    {
+
+        int quantity = sanPhamService.findById(id).getSoLuong();
+
+        Cart cart = CartUtils.getCart(request);
+
+        if(cart.findCardLineInCart(id)==null)
+        {
+            return quantity;
+        }
+        int cartProductQuantity = cart.findCardLineInCart(id).getSoLuong();
+
+        return Math.abs(quantity - cartProductQuantity);
+    }
+
+    @GetMapping(value = "/getProductQuantity/{id}")
+    public int getProductQuantity(@PathVariable("id") int id, HttpServletRequest request)
+    {
+        int quantity = sanPhamService.findById(id).getSoLuong();
+
+        return quantity;
+    }
+
+    // Hóa đơn
+    @Autowired
+    HoaDonService hoaDonService;
+
+    @Autowired
+    ChiTietHoaDonService chiTietHoaDonService;
+
+    @GetMapping(value = "/chiTietHoaDon")
+    List<ChiTietHoaDon> ListChiTietHoaDon() {
+        return chiTietHoaDonService.getAll();
+    }
+
+    @GetMapping(value = "/hoaDon")
+    List<HoaDon> ListHoaDon() {
+        return hoaDonService.getAll();
+    }
+
+    @PostMapping(value = "/saveHoaDon")
+    public ResponseEntity saveHoaDon(@Valid @RequestBody HoaDon hoaDon, HttpServletRequest request)
+    {
+        HoaDon hd = hoaDonService.save(hoaDon);
+
+        Cart cart = CartUtils.getCart(request);
+
+        for ( CartLine line: cart.getCartLines()) {
+
+            SanPham sanPham = sanPhamService.findById(line.getSanPham().getId());
+
+            ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+
+            chiTietHoaDon.setHoaDon(hd);
+            chiTietHoaDon.setSanPham(sanPham);
+            chiTietHoaDon.setDonGia((int) line.getTongTien());
+            chiTietHoaDon.setSoLuong(line.getSoLuong());
+
+            chiTietHoaDonService.save(chiTietHoaDon);
+        }
+
+        CartUtils.removeCart(request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/getHoaDonByKhachHang")
+    public List<HoaDon> getHoaDonByKhachHang(@Valid @RequestBody KhachHang khachHang)
+    {
+        return hoaDonService.getHoaDonByKhachHang(khachHang);
+    }
+
+    @GetMapping(value = "/getCTHD/{idhd}")
+    public List<ChiTietHoaDon> getCTHD(@PathVariable("idhd") int idhd)
+    {
+        return chiTietHoaDonService.getChiTietHoaDonsByHoaDon(hoaDonService.getHoaDonByID(idhd));
+    }
+
+    //Tài khoản
+    @Autowired
+    KhachHangService khachHangService;
+
+    @GetMapping(value="/getCustomerByUsername/{username}")
+    public KhachHang getAlllTaiKhoang(@PathVariable String username)
+    {
+        TaiKhoan taiKhoan = taiKhoanService.findTaiKhoanByUserName(username);
+
+        KhachHang khachHang = khachHangService.findKHByIDTaiKhoan(taiKhoan);
+
+        return khachHang;
+    }
+
+    // Phương thức thanh toán
+    @Autowired
+    PhuongThucThanhToanService phuongThucThanhToanService;
+
+    @GetMapping(value = "/getPhuongThucThanhToan/{id}")
+    public PhuongThucThanhToan getPTTTByID(@PathVariable("id") int id)
+    {
+        return phuongThucThanhToanService.getById(id);
+    }
+
+    //Bình luận
+//    @Autowired
+//    BinhLuanService binhLuanService;
+//
+//    @GetMapping(value="/getBinhLuanBySPID/{id}")
+//    public List<BinhLuan> getBinhLuanBySPID(@PathVariable("id") int id)
+//    {
+//        SanPham sanPham = sanPhamService.findById(id);
+//        System.out.println(sanPham.getTenSP());
+//        return binhLuanService.getBinhLuansBySanPham(sanPham);
+//    }
+//
+//    @GetMapping(value="/test/{id}")
+//    public List<ChiTietHoaDon> getCTHDBySPID(@PathVariable("id") int id)
+//    {
+//        SanPham sanPham = sanPhamService.findById(id);
+//        System.out.println(sanPham.getTenSP());
+//        return chiTietHoaDonService.getChiTietHoaDonsBySanPham(sanPham);
+//    }
+
+//    @GetMapping(value="/getBinhLuanByID/{id}")
+//    public BinhLuan getBinhLuanByID(@PathVariable("id") int id)
+//    {
+//        return binhLuanService.getBinhLuanById(id);
+//    }
 }

@@ -13,8 +13,14 @@ import java.util.List;
 public class PhuongThucThanhToanServiceImp implements PhuongThucThanhToanService{
     @Autowired
     PhuongThucThanhToanRepository phuongThucThanhToanRepository;
+
     @Override
     public List<PhuongThucThanhToan> getAll() {
         return phuongThucThanhToanRepository.findAll();
+    }
+
+    @Override
+    public PhuongThucThanhToan getById(int id) {
+        return phuongThucThanhToanRepository.findById(id).get();
     }
 }

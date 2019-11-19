@@ -107,7 +107,7 @@ class specifications extends Component {
                     }
                 </table>
                 <div className="my-4" style={{ textAlign: 'center' }}>
-                    <button type="button" className="btn btn-outline-info" onClick={this.handleWatchDetail}>{this.state.isWatchDetail?"Thu gọn":"Xem mổ tả đầy đủ"}</button>
+                    <button type="button" className="btn btn-outline-info shadow-none" onClick={this.handleWatchDetail}>{this.state.isWatchDetail?"Thu gọn":"Xem mổ tả đầy đủ"}</button>
                 </div>
             </div>
         );

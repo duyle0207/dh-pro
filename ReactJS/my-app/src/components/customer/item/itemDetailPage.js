@@ -84,16 +84,16 @@ class ItemDetailPage extends React.Component {
                 >
                 </Description>
                 <div className="my-4" style={{ textAlign: 'center' }}>
-                  <button type="button" className="btn btn-outline-info" onClick={this.handleReadMore}>Thu gọn</button>
+                  <button type="button" className="btn btn-outline-info shadow-none" onClick={this.handleReadMore}>Thu gọn</button>
                 </div>
               </div>
               :
               <div className="col-sm-8">
                 <h1><span className="badge badge-info mb-2">Tóm tắt mô tả sản phẩm</span></h1>
                 <Sum sum={this.state.product.tomTat}></Sum>
-                <div className="my-4" style={{ textAlign: 'center' }}>
-                  <button type="button" className="btn btn-outline-info" onClick={this.handleReadMore}>Xem mổ tả đầy đủ</button>
-                </div>
+                {/* <div className="my-4" style={{ textAlign: 'center' }}>
+                  <button type="button" className="btn btn-outline-info shadow-none" onClick={this.handleReadMore}>Xem mổ tả đầy đủ</button>
+                </div> */}
               </div>
             }
             <div className="col-sm-4">

@@ -10,15 +10,27 @@ class itemDetail extends React.Component {
 
     this.state = ({
       MainImg: require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.product.hinh}`),
-      imgList: this.props.imgList
+      imgList: this.props.imgList,
+      quantity: 1,
+      productQuantity: '',
+      choosableQuantity: ''
     });
 
     this.SetDetailImage = this.SetDetailImage.bind(this);
     this.setMainImage = this.setMainImage.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.PlusQuantity = this.PlusQuantity.bind(this);
+    this.SubQuantity = this.SubQuantity.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const productQuantity = await (await fetch(`/customerUnauthenticated/getProductQuantity/${this.props.product.id}`)).json();
+    const choosableQuantity = await (await fetch(`/customerUnauthenticated/getChoosableQuantity/${this.props.product.id}`)).json();
+    console.log(choosableQuantity);
+    this.setState({
+      productQuantity: productQuantity,
+      choosableQuantity: choosableQuantity
+    });
   }
 
   setMainImage(source) {
@@ -30,18 +42,44 @@ class itemDetail extends React.Component {
     this.refs.ImgDetail.src = i;
   }
 
-  async addToCart()
-  {
-    await fetch(`/customerUnauthenticated/addToCart/quantity=1`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(this.props.product)
-    }).then((res) => {
-      this.props.history.push("/cart");
-    });
+  async addToCart() {
+    if(this.state.quantity <= this.state.choosableQuantity)
+    {
+      await fetch(`/customerUnauthenticated/updateCart/quantity=${this.state.quantity}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.props.product)
+      }).then((res) => {
+        this.props.history.push("/cart");
+      });
+    }
+    else{
+      alert(`Số sản phẩm trong kho chỉ còn ${this.state.choosableQuantity}`);
+    }
+  }
+
+  async PlusQuantity() {
+    var a = this.refs.quantity.value;
+    if (parseInt(a) < this.state.choosableQuantity) {
+      this.setState({
+        quantity: this.state.quantity + 1
+      });
+    }
+    else{
+      alert(`Số sản phẩm trong kho chỉ còn ${this.state.choosableQuantity}`);
+    }
+  }
+
+  async SubQuantity() {
+    var a = this.refs.quantity.value;
+    if (parseInt(a) > 1) {
+      this.setState({
+        quantity: this.state.quantity - 1
+      });
+    }
   }
 
   render() {
@@ -127,24 +165,41 @@ class itemDetail extends React.Component {
                   <dt>Màn hình</dt>
                   <dd>
                     {this.props.product.manHinh.kichThuoc} inches {this.props.product.manHinh.doPhanGiai} {this.props.product.manHinh.congNgheManHinh}
-                    {this.props.product.manHinh.manHinhCamUng ? " Cảm ứng": ""}
+                    {this.props.product.manHinh.manHinhCamUng ? " Cảm ứng" : ""}
                   </dd>
                 </dl>
               </div>
             </div>
             <hr />
-            <div className="row">
+            <div className="row mb-3">
+              <div className="col-sm-3">
+                <p className="h5 mt-2 text-gray">Số lượng: </p>
+              </div>
+              <div className="col-sm-4">
+                <div className="btn-group btn-group-sm" role="group" aria-label="..." style={{ float: 'left' }}>
+                  <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'right', width: '40px' }} onClick={this.SubQuantity} ref="sub">
+                    -
+                  </button>
+                  <input className="form-control" id="quantity" type="text" value={this.state.quantity}
+                    onChange={this.CheckQuantity} disabled={true}
+                    style={{ height: '40px', width: '50px' }} ref="quantity" />
+                  <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'left', width: '40px' }} onClick={this.PlusQuantity} ref="plus">
+                    +
+                  </button>
+                </div>
+              </div>
               <div className="col-sm-5">
+                <p className="h6 mt-2 text-secondary ">{this.state.productQuantity}  Sản phẫm có sẳn </p>
               </div>
             </div>
             <div className="row" role="group" aria-label="Basic example">
-              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase" onClick={this.addToCart}>
+              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase shadow-none" onClick={this.addToCart}>
                 <i className="fas fa-shopping-cart" />
-                 Thêm vào giỏ hàng
+                Thêm vào giỏ hàng
               </a>
             </div>
             <div className="row mt-2" role="group" aria-label="Basic example">
-              <a href={"/compareItem/"+this.props.product.id} className="btn btn-lg btn-warning text-uppercase" style={{ color: 'white' }}>
+              <a href={"/compareItem/" + this.props.product.id} className="btn btn-lg btn-warning text-uppercase shadow-none" style={{ color: 'white' }}>
                 So sánh chi tiết
               </a>
             </div>

@@ -12,8 +12,9 @@ class inputComment extends Component {
                     <div className="col-md-10 col-md-offset-3">
                         <div className="panel panel-info">
                             <div className="panel-body">
-                                <textarea placeholder="Bạn nghĩ gì về sản phẩm này" className="pb-cmnt-textarea" defaultValue={""} />
-                                <button className="btn btn-danger" type="button">Gửi</button>
+                                <input type="text" className="form-control" placeholder="Tiêu đề đánh giá"/>
+                                <textarea placeholder="Bạn nghĩ gì về sản phẩm này" className="pb-cmnt-textarea mt-2" defaultValue={""} />
+                                <button className="btn btn-danger mb-2" type="button">Gửi</button>
                             </div>
                         </div>
                     </div>

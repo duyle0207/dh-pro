@@ -1,31 +1,37 @@
 import React, { Component } from 'react';
 import '../../../css/style.css';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class itemCart extends Component {
     constructor(props) {
         super(props)
         this.state = ({
-            quantity: 1,
+            quantity: this.props.cartLines.soLuong,
             cardLines: {},
-            product: {}
+            product: {},
+            choosableQuantity: ''
         })
         this.PlusQuantity = this.PlusQuantity.bind(this);
         this.SubQuantity = this.SubQuantity.bind(this);
         this.CheckQuantity = this.CheckQuantity.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const choosableQuantity = await (await fetch(`/customerUnauthenticated/getProductQuantity/${this.props.product.id}`)).json();
+
         this.setState({
             cartLines: this.props.cartLines,
             product: this.props.product,
-            quantity: this.props.cartLines.soLuong
+            quantity: this.props.cartLines.soLuong,
+            choosableQuantity: choosableQuantity
         });
     }
 
     async PlusQuantity() {
         var a = this.refs.quantity.value;
-        if (parseInt(a) < 10) {
+        if (parseInt(a) < this.state.choosableQuantity) {
             this.setState({
                 quantity: this.state.quantity + 1
             }, (async () => {
@@ -40,6 +46,9 @@ class itemCart extends Component {
                     window.location.reload();
                 });
             }));
+        }
+        else{
+            alert(`Số sản phẩm trong kho chỉ còn ${this.state.choosableQuantity}`);
         }
     }
     async SubQuantity() {
@@ -92,7 +101,7 @@ class itemCart extends Component {
 
     render() {
         return (
-            <div className="product">
+            <div className="my-4">
                 <div className="row">
                     <div className="col-sm-2">
                         {this.state.product.hinh ? <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.product.hinh}`)} width="100px" height="100px;" alt='' /> : ""}
@@ -101,7 +110,7 @@ class itemCart extends Component {
                         <ul className="list-group" style={{ listStyleType: 'none' }}>
                             <li>
                                 <div className="lap-name">
-                                    {this.state.product.tenSP}
+                                    <Link to={`/itemDetail/${this.state.product.id}`} className="text-decoration-none shadow-none">{this.state.product.tenSP}</Link>
                                 </div>
                             </li>
                             <li> 
@@ -114,13 +123,13 @@ class itemCart extends Component {
                     </div>
                     <div className="col-sm-2">
                         <div className="btn-group btn-group-sm" role="group" aria-label="..." style={{ float: 'right' }}>
-                            <button className="btn btn-light" type="button" style={{ color: 'black', float: 'right', width: '40px' }} onClick={this.SubQuantity} ref="sub">
+                            <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'right', width: '40px' }} onClick={this.SubQuantity} ref="sub">
                                 -
                             </button>
                             <input className="form-control" id="quantity" type="text" value={this.state.quantity}
                                 onChange={this.CheckQuantity} disabled={true}
                                 style={{ height: '40px', width: '50px' }} ref="quantity" />
-                            <button className="btn btn-light" type="button" style={{ color: 'black', float: 'left', width: '40px' }} onClick={this.PlusQuantity} ref="plus">
+                            <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'left', width: '40px'}} onClick={this.PlusQuantity} ref="plus">
                                 +
                             </button>
                         </div>

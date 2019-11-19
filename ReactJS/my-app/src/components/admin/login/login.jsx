@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../../images/logo.png';
+import { withRouter  } from 'react-router';
 
 class login extends Component {
 
@@ -50,7 +51,7 @@ class login extends Component {
                     localStorage.setItem("adminInfo", JSON.stringify(data))
                     this.setState({ userInfo: JSON.parse(localStorage.getItem("adminInfo")) });
                     console.log(this.state.userInfo);
-                    this.props.history.push("/manageProduct");
+                    this.props.history.push("/admin");
                 }
                 else
                 {
@@ -101,4 +102,4 @@ class login extends Component {
     }
 }
 
-export default login;
+export default withRouter(login);

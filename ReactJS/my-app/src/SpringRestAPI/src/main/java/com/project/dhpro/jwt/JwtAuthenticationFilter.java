@@ -89,7 +89,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.sendError(403);
             }
         }
+        else
+        {
+            System.out.println("Good");
+            filterChain.doFilter(request,response);
+            return;
+        }
 
         filterChain.doFilter(request, response);
+        return;
     }
 }

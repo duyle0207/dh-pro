@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -565,5 +566,30 @@ public class RestAPIController {
 
 
         return ResponseEntity.ok().build();
+    }
+
+    @Autowired
+    KhachHangService khachHangService;
+
+    @PutMapping(value = "/updateKH")
+    public KhachHang updateKhachHang(@Valid @RequestBody KhachHang khachHang)
+    {
+        TaiKhoan taiKhoan = taiKhoanService.findTaiKhoanByUserName(khachHang.getTaiKhoan().getUserName());
+        if(!khachHang.getTaiKhoan().getPassword().equals(taiKhoan.getPassword()))
+        {
+            khachHang.getTaiKhoan().setPassword(BCrypt.hashpw(khachHang.getTaiKhoan().getPassword(),BCrypt.gensalt(12)));
+            taiKhoanService.save(khachHang.getTaiKhoan());
+        }
+
+        System.out.println("Mật khẫu: "+khachHang.getTaiKhoan().getPassword());
+
+        return khachHangService.save(khachHang);
+    }
+
+    @GetMapping(value = "/comparePassword/{username}/{pwd}")
+    public boolean comparePassword(@PathVariable("pwd") String pwd, @PathVariable("username") String username)
+    {
+        TaiKhoan taiKhoan = taiKhoanService.findTaiKhoanByUserName(username);
+        return BCrypt.checkpw(pwd, taiKhoan.getPassword());
     }
 }

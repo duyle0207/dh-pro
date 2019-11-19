@@ -59,8 +59,6 @@ public class Cart {
     {
         CartLine cartLine = this.findCardLineInCart(sanPham.getId());
 
-//        System.out.println(this.setTotalCart());
-
         if(cartLine==null)
         {
             cartLine = new CartLine();
@@ -74,6 +72,26 @@ public class Cart {
         {
             cartLine.setTongTien(soLuong*sanPham.getGia());
             cartLine.setSoLuong(soLuong);
+        }
+    }
+
+    public void updateCart(SanPham sanPham, int soLuong)
+    {
+        CartLine cartLine = this.findCardLineInCart(sanPham.getId());
+
+        if(cartLine==null)
+        {
+            cartLine = new CartLine();
+            cartLine.setSanPham(sanPham);
+            cartLine.setSoLuong(soLuong);
+            cartLine.setTongTien((sanPham.getGia())*soLuong);
+
+            this.cartLines.add(cartLine);
+        }
+        else
+        {
+            cartLine.setTongTien(soLuong*sanPham.getGia());
+            cartLine.setSoLuong(soLuong+cartLine.getSoLuong());
         }
     }
 

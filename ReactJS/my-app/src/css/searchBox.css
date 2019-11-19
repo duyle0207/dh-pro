@@ -123,10 +123,10 @@ input {
 
 .search .results a:hover {
     text-decoration: none;
-    color: #fff;
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
-    border-color: #2380dd #2179d5 #1a60aa;
-    background-color: #338cdf;
+    color: #556080;
+    /* text-shadow: 0 -1px rgba(0, 0, 0, 0.3); */
+    border-color: #E7ECED #E7ECED #E7ECED;
+    background-color: #E7ECED;
 }
 
 :-moz-placeholder {

@@ -17,11 +17,22 @@ import ScrollToTop from "./scrollToTop";
 import LoginPage from '../components/customer/login/login';
 import LoginAdminPage from '../components/admin/login/login';
 import ProductFilter from "./customer/product/product";
+import AccountInfoPage from "./customer/accountInfo/accountInfoPage/accountInfoPage";
 
 class RouteURL extends Component {
 
     checkAuth() {
         if (Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    checkAuthAdmin()
+    {
+        if (Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length === 0) {
             return false;
         }
         else {
@@ -36,16 +47,16 @@ class RouteURL extends Component {
                     <Route exact path="/" component={Dashboard} />
                     <Route path="/itemDetail/:id" component={ItemDetailPage} />
                     <Route path="/cart" component={Cart} />
-                    <Route path="/admin" component={AdminDashboard} />
+                    
                     <Route path="/login/:id" component={LoginPage} />
                     <Route path="/uploadFile" component={UpLoadFile} />
                     <Route path="/searchDemo" component={SearchDemo} />
                     <Route path="/compareItem/:id" component={CompareItemsPage} />
-                    <Route path="/manageProduct" component={ManageProductPage} />
+                    
                     <Route path="/productDetail/:id" component={ProductDetailPage} />
                     <Route path="/validate" component={Validate} />
                     <Route path="/products" component={ProductFilter} />
-                    <Route path="/manageSpecification" component={ManageSpecificationPage} />
+                    
                     <Route path="/404" component={Error} />
 
                     <ProtectLogin path="/login" isLogin={!this.checkAuth()} component={LoginPage} />
@@ -54,8 +65,15 @@ class RouteURL extends Component {
 
                     <Route></Route>
 
-                    <PrivateRoute path='/protected' isLogin={this.checkAuth()} component={AdminDashboard} />
-                    
+                    {/* <PrivateRoute path='/protected' isLogin={this.checkAuth()} component={AdminDashboard} /> */}
+
+                    <PrivateRoute path='/accountInfo' isLogin={this.checkAuth()} component={AccountInfoPage} />
+
+                    {/* Admin */}
+                    <PrivateRouteAdmin path="/admin" isLogin={this.checkAuthAdmin()} component={AdminDashboard} />
+                    <PrivateRouteAdmin path="/manageProduct" isLogin={this.checkAuthAdmin()} component={ManageProductPage} />
+                    <PrivateRouteAdmin path="/manageSpecification" isLogin={this.checkAuthAdmin()} component={ManageSpecificationPage} />
+
                 </ScrollToTop>
             </Router>
         );
@@ -67,6 +85,14 @@ const PrivateRoute = ({ component: Component, isLogin, ...rest }) => (
         isLogin
             ? <Component {...props} />
             : <Redirect to='/login' />
+    )} />
+)
+
+const PrivateRouteAdmin = ({ component: Component, isLogin, ...rest }) => (
+    <Route {...rest} render={(props) => (
+        isLogin
+            ? <Component {...props} />
+            : <Redirect to='/loginAdmin' />
     )} />
 )
 

@@ -51,7 +51,8 @@ class loginForm extends Component {
                     localStorage.setItem("userInfo", JSON.stringify(data))
                     this.setState({ userInfo: JSON.parse(localStorage.getItem("userInfo")) });
                     console.log(this.state.userInfo);
-                    this.props.history.push("/");
+                    // this.props.history.push("/");
+                    this.props.history.goBack();
                 }
                 else{
                     this.setState({error:true});

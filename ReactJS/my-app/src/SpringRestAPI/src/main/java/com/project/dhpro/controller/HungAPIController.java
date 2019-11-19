@@ -106,13 +106,8 @@ public class HungAPIController {
         return chiTietHoaDonService.getAll();
     }
 
-    @Autowired
-    BinhLuanService binhLuanService;
-
-    @GetMapping(value = "/binhLuan")
-    List<BinhLuan> ListBinhLuan() {
-        return binhLuanService.getAll();
-    }
+//    @Autowired
+//    BinhLuanService binhLuanService;
 
     @Autowired
     RoleService roleService;

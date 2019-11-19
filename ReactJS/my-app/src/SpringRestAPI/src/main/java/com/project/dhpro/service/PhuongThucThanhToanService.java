@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PhuongThucThanhToanService {
     List<PhuongThucThanhToan> getAll();
+
+    PhuongThucThanhToan getById(int id);
 }

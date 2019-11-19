@@ -11,7 +11,6 @@ import java.util.Set;
 public class SanPham {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "tensp")
@@ -32,22 +31,14 @@ public class SanPham {
     @Column(name = "amthanh")
     private String amThanh;
 
-    @Column(name="status")
-    private Boolean status;
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
     @Column(name = "conggiaotiep")
     private String congGiaoTiep;
 
     @Column(name = "dophangiaiwc")
     private String doPhanGiaiWC;
+
+    @Column(name = "status")
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "cpu")
@@ -99,6 +90,14 @@ public class SanPham {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
     private Set<BinhLuan> listBinhLuan = new HashSet<>();
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;
