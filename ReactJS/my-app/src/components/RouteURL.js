@@ -19,9 +19,15 @@ import LoginAdminPage from '../components/admin/login/login';
 import ProductFilter from "./customer/product/product";
 import AccountInfoPage from "./customer/accountInfo/accountInfoPage/accountInfoPage";
 
+import Paypal from './paypalDemo';
+
 class RouteURL extends Component {
 
     checkAuth() {
+        if(JSON.parse(localStorage.getItem("userInfo"))===null)
+        {
+            localStorage.setItem("userInfo",JSON.stringify({}));
+        }
         if (Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length === 0) {
             return false;
         }
@@ -32,6 +38,10 @@ class RouteURL extends Component {
 
     checkAuthAdmin()
     {
+        if(JSON.parse(localStorage.getItem("adminInfo"))===null)
+        {
+            localStorage.setItem("adminInfo",JSON.stringify({}));
+        }
         if (Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length === 0) {
             return false;
         }
@@ -74,6 +84,9 @@ class RouteURL extends Component {
                     <PrivateRouteAdmin path="/manageProduct" isLogin={this.checkAuthAdmin()} component={ManageProductPage} />
                     <PrivateRouteAdmin path="/manageSpecification" isLogin={this.checkAuthAdmin()} component={ManageSpecificationPage} />
 
+
+
+                    <Route path="/paypal" component={Paypal} />
                 </ScrollToTop>
             </Router>
         );

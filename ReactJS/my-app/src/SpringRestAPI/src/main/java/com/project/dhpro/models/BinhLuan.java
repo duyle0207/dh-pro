@@ -9,13 +9,27 @@ public class BinhLuan {
     @Column(name = "id")
     private int Id;
 
-    @OneToOne
-    @JoinColumn(name = "idkh")
-    private TaiKhoan taiKhoan;
+    @Column(name = "idkh")
+    private int idkh;
 
-    @ManyToOne
-    @JoinColumn(name = "idsp")
-    private SanPham sanPham;
+    public int getIdkh() {
+        return idkh;
+    }
+
+    public void setIdkh(int idkh) {
+        this.idkh = idkh;
+    }
+
+    @Column(name = "idsp")
+    private int idSP;
+
+    public int getIdSP() {
+        return idSP;
+    }
+
+    public void setIdSP(int idSP) {
+        this.idSP = idSP;
+    }
 
     @Column(name = "tieude")
     private String tieuDe;
@@ -34,21 +48,13 @@ public class BinhLuan {
         Id = id;
     }
 
-    public TaiKhoan getTaiKhoan() {
-        return taiKhoan;
-    }
-
-    public void setTaiKhoan(TaiKhoan taiKhoan) {
-        this.taiKhoan = taiKhoan;
-    }
-
-    public SanPham getSanPham() {
-        return sanPham;
-    }
-
-    public void setSanPham(SanPham sanPham) {
-        this.sanPham = sanPham;
-    }
+//    public TaiKhoan getTaiKhoan() {
+//        return taiKhoan;
+//    }
+//
+//    public void setTaiKhoan(TaiKhoan taiKhoan) {
+//        this.taiKhoan = taiKhoan;
+//    }
 
     public String getTieuDe() {
         return tieuDe;

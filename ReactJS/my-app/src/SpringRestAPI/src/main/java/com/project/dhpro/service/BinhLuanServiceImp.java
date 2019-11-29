@@ -16,8 +16,8 @@ public class BinhLuanServiceImp implements BinhLuanService{
     @Autowired
     BinhLuanRepository binhLuanRepository;
 
-//    @Override
-//    public List<BinhLuan> getBinhLuansBySanPham(SanPham sanPham) {
-//        return binhLuanRepository.getBinhLuansBySanPham(sanPham);
-//    }
+    @Override
+    public List<BinhLuan> getBinhLuansBySanPham(int id) {
+        return binhLuanRepository.getBinhLuansByIdSP(id);
+    }
 }

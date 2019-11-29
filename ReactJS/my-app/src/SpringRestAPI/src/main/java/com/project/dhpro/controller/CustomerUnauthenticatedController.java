@@ -300,7 +300,7 @@ public class CustomerUnauthenticatedController {
         return cart;
     }
 
-        @GetMapping(value = "/getChoosableQuantity/{id}")
+    @GetMapping(value = "/getChoosableQuantity/{id}")
     public int checkProductQuantity(@PathVariable("id") int id,HttpServletRequest request)
     {
 
@@ -385,12 +385,20 @@ public class CustomerUnauthenticatedController {
     KhachHangService khachHangService;
 
     @GetMapping(value="/getCustomerByUsername/{username}")
-    public KhachHang getAlllTaiKhoang(@PathVariable String username)
+    public KhachHang getAlllTaiKhoan(@PathVariable String username)
     {
         TaiKhoan taiKhoan = taiKhoanService.findTaiKhoanByUserName(username);
 
         KhachHang khachHang = khachHangService.findKHByIDTaiKhoan(taiKhoan);
 
+        return khachHang;
+    }
+
+    @GetMapping(value = "/getCustomerByTaiKhoanID/{id}")
+    public KhachHang getCustomerByTaiKhoanId(@PathVariable("id") int id)
+    {
+        TaiKhoan taiKhoan = taiKhoanService.findById(id);
+        KhachHang khachHang = khachHangService.findKHByIDTaiKhoan(taiKhoan);
         return khachHang;
     }
 
@@ -405,16 +413,14 @@ public class CustomerUnauthenticatedController {
     }
 
     //Bình luận
-//    @Autowired
-//    BinhLuanService binhLuanService;
-//
-//    @GetMapping(value="/getBinhLuanBySPID/{id}")
-//    public List<BinhLuan> getBinhLuanBySPID(@PathVariable("id") int id)
-//    {
-//        SanPham sanPham = sanPhamService.findById(id);
-//        System.out.println(sanPham.getTenSP());
-//        return binhLuanService.getBinhLuansBySanPham(sanPham);
-//    }
+    @Autowired
+    BinhLuanService binhLuanService;
+
+    @GetMapping(value="/getBinhLuanBySPID/{id}")
+    public List<BinhLuan> getBinhLuanBySPID(@PathVariable("id") int id)
+    {
+        return binhLuanService.getBinhLuansBySanPham(id);
+    }
 //
 //    @GetMapping(value="/test/{id}")
 //    public List<ChiTietHoaDon> getCTHDBySPID(@PathVariable("id") int id)

@@ -48,11 +48,12 @@ class login extends Component {
             // console.log(data !== undefined);
             if (data !== undefined) {
                 if (data.authorities[0].authority === "Admin") {
-                    alert("Success");
+                    // alert("Success");
                     localStorage.setItem("adminInfo", JSON.stringify(data))
-                    this.setState({ userInfo: JSON.parse(localStorage.getItem("adminInfo")) });
-                    console.log(this.state.userInfo);
-                    this.props.history.push("/admin");
+                    this.setState({ userInfo: JSON.parse(localStorage.getItem("adminInfo"))},()=>{
+                        this.props.history.push("/admin");
+                    });
+                    // console.log(this.state.userInfo);
                 }
                 else
                 {

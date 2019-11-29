@@ -59,7 +59,7 @@ class cart extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.cartLines.length===0?'':<CartInfo></CartInfo>}
+                {this.state.cartLines.length===0?'':<CartInfo cartLines={this.state.cartLines}></CartInfo>}
                 <Footer></Footer>
             </div>
         );

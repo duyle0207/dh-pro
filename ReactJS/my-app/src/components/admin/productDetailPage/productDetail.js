@@ -82,7 +82,8 @@ class productDetail extends Component {
         "soLuong": "",
         "hinh": "",
         "tomTat": "",
-        "listBinhLuan": []
+        "listBinhLuan": [],
+        "status": "1"
     };
     constructor(props) {
         super(props);
@@ -634,7 +635,8 @@ class productDetail extends Component {
 
                             <DropDownBoxOCung title="Ổ cứng" col="oCung" list={this.state.listOCung} detail={this.state.oCung} onChange={this.handleChangeOCung}></DropDownBoxOCung>
 
-                            {/* <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput> */}
+                            <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput>
+                            
                             <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
 
                             <DropDownBoxRAM title="RAM" col="ram" list={this.state.listRAM} detail={this.state.ram} onChange={this.handleChangeRAM}></DropDownBoxRAM>
