@@ -6,5 +6,7 @@ import com.project.dhpro.models.SanPham;
 import java.util.List;
 
 public interface BinhLuanService {
-//    List<BinhLuan> getBinhLuansBySanPham(SanPham sanPham);
+
+    List<BinhLuan> getBinhLuansBySanPham(int id);
+
 }

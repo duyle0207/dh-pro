@@ -28,7 +28,7 @@ public class HoaDonServiceImp implements HoaDonService{
 
     @Override
     public List<HoaDon> getHoaDonByKhachHang(KhachHang khachHang) {
-        return hoaDonRepository.getHoaDonsByKhachHang(khachHang);
+        return hoaDonRepository.getHoaDonsByKhachHangOrderByIdDesc(khachHang);
     }
 
     @Override

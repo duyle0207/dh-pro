@@ -88,8 +88,8 @@ public class SanPham {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
     private Set<ChiTietHoaDon> listChiTietHoaDon = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
-    private Set<BinhLuan> listBinhLuan = new HashSet<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sanPham")
+//    private Set<BinhLuan> listBinhLuan = new HashSet<>();
 
     public Boolean getStatus() {
         return status;
@@ -243,13 +243,13 @@ public class SanPham {
         this.nhuCauSuDung = nhuCauSuDung;
     }
 
-    public Set<BinhLuan> getListBinhLuan() {
-        return listBinhLuan;
-    }
-
-    public void setListBinhLuan(Set<BinhLuan> listBinhLuan) {
-        this.listBinhLuan = listBinhLuan;
-    }
+//    public Set<BinhLuan> getListBinhLuan() {
+//        return listBinhLuan;
+//    }
+//
+//    public void setListBinhLuan(Set<BinhLuan> listBinhLuan) {
+//        this.listBinhLuan = listBinhLuan;
+//    }
 
     public int getSoLuong() {
         return soLuong;

@@ -10,6 +10,9 @@ import Span from '../../commonComponents/span'
 import Description from './desbribeItem/describeItem';
 import Specification from './desbribeItem/specifications'
 import Sum from './desbribeItem/sum';
+
+
+
 class ItemDetailPage extends React.Component {
 
   constructor(props) {
@@ -25,18 +28,28 @@ class ItemDetailPage extends React.Component {
         hinh: 'https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
       },
       isLoading: true,
+      listBinhLuan: []
     });
     this.handleCommentBox = this.handleCommentBox.bind(this);
     this.handleReadMore = this.handleReadMore.bind(this);
   }
 
-  async componentDidMount()
-  {
-    const product = await(await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
-    const imgList = await(await fetch(`/customerUnauthenticated/getHinhSP/${this.props.match.params.id}`)).json();
-    this.setState({product:product,imgList:imgList}, () => {
+  async componentDidMount() {
+    const product = await (await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
+    const imgList = await (await fetch(`/customerUnauthenticated/getHinhSP/${this.props.match.params.id}`)).json();
+    const listBinhLuan = await (await fetch(`/customerUnauthenticated/getBinhLuanBySPID/${this.props.match.params.id}`)).json();
+
+    this.setState({
+      product: product,
+      imgList: imgList,
+      listBinhLuan: listBinhLuan
+    }, () => {
       document.title = this.state.product.tenSP;
     });
+
+    var tempDate = new Date();
+    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
+    console.log(date);
   }
 
   handleReadMore() {
@@ -57,12 +70,12 @@ class ItemDetailPage extends React.Component {
         <Header></Header>
         <div className="container my-4" style={{ marginTop: 50, marginBottom: 50 }}>
           <div className="card">
-            {this.state.product.hinh?
-            <ItemDetail 
-            product={this.state.product} 
-            imgList={this.state.imgList}
-            ></ItemDetail>
-            :""}
+            {this.state.product.hinh ?
+              <ItemDetail
+                product={this.state.product}
+                imgList={this.state.imgList}
+              ></ItemDetail>
+              : ""}
           </div>
         </div>
         <div className="container my-4">
@@ -99,7 +112,7 @@ class ItemDetailPage extends React.Component {
               </div>
             }
             <div className="col-sm-4">
-            {Object.keys(this.state.product).length!==0?<Specification product={this.state.product}></Specification>:""}
+              {Object.keys(this.state.product).length !== 0 ? <Specification product={this.state.product}></Specification> : ""}
             </div>
           </div>
           <div className="card">
@@ -110,7 +123,16 @@ class ItemDetailPage extends React.Component {
           </div>
           <Span content={'Đánh giá của khách hàng về sản phẩm này'}></Span>
           <div className="border-top">
-            <CustomerComment
+            {this.state.listBinhLuan.map((value) => {
+              return <CustomerComment
+                image={'https://img.icons8.com/plasticine/2x/user.png'}
+                username={value.idkh}
+                title={value.tieuDe}
+                content={value.noiDung}
+                ngayDang={value.ngayDang}>
+              </CustomerComment>
+            })}
+            {/* <CustomerComment
               image={'https://img.icons8.com/plasticine/2x/user.png'}
               username={'Lê Văn Duy'}
               title={'Hàng khá ngon'}
@@ -133,7 +155,7 @@ class ItemDetailPage extends React.Component {
               username={'Lê Văn Duy'}
               title={'Hàng khá ngon'}
               content={'Ngon quá'}>
-            </CustomerComment>
+            </CustomerComment> */}
           </div>
         </div>
         <Footer></Footer>

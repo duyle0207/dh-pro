@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../../../css/style.css';
 import InfoCartCustomer from './infoCartCustomer';
 import { withRouter } from 'react-router';
-
+import PaypalCheckoutButton from '../../PaypalCheckoutButton';
 
 class cartInfo extends Component {
 
@@ -40,6 +40,31 @@ class cartInfo extends Component {
                     tenPhuongThucThanhToan: ""
                 },
                 ten: ""
+            },
+            isCheckoutOnline: false,
+            order: {
+                customer: 'Test',
+                total: 0,
+                items: [
+                    // {
+                    //     name: 'hat',
+                    //     description: 'Brown hat.',
+                    //     quantity: '5',
+                    //     price: '3',
+                    //     tax: '0.01',
+                    //     sku: '1',
+                    //     currency: 'USD'
+                    // },
+                    // {
+                    //     name: 'handbag',
+                    //     description: 'Black handbag.',
+                    //     quantity: '1',
+                    //     price: '15',
+                    //     tax: '0.02',
+                    //     sku: 'product34',
+                    //     currency: 'USD'
+                    // }
+                ]
             }
         });
 
@@ -60,8 +85,11 @@ class cartInfo extends Component {
         return String(dd + '-' + mm + '-' + yyyy);
     }
 
+    items = [];
 
     async componentDidMount() {
+
+        console.log(this.props.cartLines);
 
         const cartQuantity = await (await fetch(`/customerUnauthenticated/getAllQuantity`)).json();
         const amount = await (await fetch(`/customerUnauthenticated/getAmount`)).json();
@@ -69,8 +97,7 @@ class cartInfo extends Component {
             cartQuantity: cartQuantity,
             amount: amount
         });
-        if(JSON.parse(localStorage.getItem("userInfo")).userName)
-        {
+        if (JSON.parse(localStorage.getItem("userInfo")).userName) {
             const customer = await (await fetch(`/customerUnauthenticated/getCustomerByUsername/${JSON.parse(localStorage.getItem("userInfo")).userName}`)).json();
             this.setState({
                 hoaDon: {
@@ -83,13 +110,51 @@ class cartInfo extends Component {
                 }
             });
         }
+
+        // console.log(this.props.cartLines);
+        
+        console.log(this.items);
+        this.props.cartLines.forEach(element => {
+
+            var item = {
+                name: '',
+                description: 'Test',
+                quantity: 0,
+                price: '',
+                tax: '0.02',
+                sku: 'product',
+                currency: 'USD'
+            };
+
+            item['name'] = element.sanPham.tenSP;
+            item['quantity'] = element.soLuong;
+            item['price'] = (element.tongTien/23000).toFixed(2);
+
+            this.items.push(item);
+        });
+
+        // console.log(this.items);
+        this.setState({order:{
+            customer: '1',
+            total: (this.state.amount/10000).toFixed(2),
+            items: this.items
+        }},()=>{
+            console.log(this.state.order);
+        })
     }
 
     async handleOnChange(event) {
-        var value = event.target.value;
-        var hd = this.state.hoaDon;
-        hd[event.target.name] = value;
-        this.setState({ hoaDon: hd });
+
+        if (event.target.id === "customRadio2") {
+            var hd = this.state.hoaDon;
+            hd['phuongThucThanhToan'] = 1;
+            this.setState({ isCheckoutOnline: true, hoaDon: hd });
+        }
+        else {
+            var hd = this.state.hoaDon;
+            hd['phuongThucThanhToan'] = 2;
+            this.setState({ isCheckoutOnline: false, hoaDon: hd });
+        }
 
         console.log(this.state.hoaDon);
     }
@@ -126,6 +191,9 @@ class cartInfo extends Component {
     }
 
     checkAuth() {
+        if (JSON.parse(localStorage.getItem("userInfo")) === null) {
+            localStorage.setItem("userInfo", JSON.stringify({}));
+        }
         if (Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length === 0) {
             return false;
         }
@@ -162,19 +230,36 @@ class cartInfo extends Component {
                                     PHƯƠNG THỨC THANH TOÁN
                                 </span>
                             </nav>
-                            <div class="form-check mx-4 my-4">
-                                <input class="form-check-input shadow-none" width="50px" height="50px" type="radio" name="phuongThucThanhToan" onChange={this.handleOnChange} id="exampleRadios1" value="1" required />
-                                <p class="h6 form-check-label" for="exampleRadios1">
+                            {/* <div class="form-check mx-4 my-4">
+                                <input className="form-check-input shadow-none" width="50px" height="50px"
+                                    type="radio" name="tructuyen" onChange={this.handleOnChange} id="exampleRadios1" value="1" required />
+                                <p className="h6 form-check-label" for="exampleRadios1" >
                                     Thanh toán tiền mặt khi nhận hàng
                             </p>
                             </div>
-                            <div class="form-check mx-4 my-4">
-                                <input class="form-check-input shadow-none" width="50px" height="50px" type="radio" name="phuongThucThanhToan" onChange={this.handleOnChange} id="exampleRadios2" value="2" required />
-                                <p class="h6 form-check-label" for="exampleRadios2">
+                            <div className="form-check mx-4 my-4">
+                                <input className="form-check-input shadow-none" width="50px" height="50px" type="radio" name="online" onChange={this.handleOnChange} id="exampleRadios2" value="2" required />
+                                <p className="h6 form-check-label" for="exampleRadios2">
                                     Thanh toán trực tuyến
                             </p>
+                            </div> */}
+                            <div className="custom-control custom-radio my-4">
+                                <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" onChange={this.handleOnChange} />
+                                <label className="custom-control-label" htmlFor="customRadio1">
+                                    <p className="h6 form-check-label" htmlFor="exampleRadios1" >
+                                        Thanh toán tiền mặt khi nhận hàng
+                                    </p>
+                                </label>
                             </div>
-                            <div className="row ml-2" style={{ paddingTop: '50px' }}>
+                            <div className="custom-control custom-radio my-4">
+                                <input type="radio" id="customRadio2" name="customRadio" className="custom-control-input" onChange={this.handleOnChange} />
+                                <label className="custom-control-label" htmlFor="customRadio2">
+                                    <p className="h6 form-check-label" htmlFor="exampleRadios1" >
+                                        Thanh toán trực tuyến
+                                    </p>
+                                </label>
+                            </div>
+                            <div className="row ml-2">
                                 <div className="col-sm-6">
                                     <p className="info-cart">Tổng sản phẩm:</p>
                                 </div>
@@ -197,10 +282,15 @@ class cartInfo extends Component {
                             <div className="row mt-2">
                                 <div className="col-sm-6"></div>
                                 <div className="col-sm-6">
-                                    <button type="submit" className="btn btn-danger"
-                                        style={{ width: '100%' }}>
-                                        Thanh toán
-                                </button>
+                                    {this.state.isCheckoutOnline ?
+                                        <PaypalCheckoutButton
+                                            order={this.state.order}
+                                        /> :
+                                        <button type="submit" className="btn btn-danger"
+                                            style={{ width: '100%' }}>
+                                            Thanh toán
+                                    </button>
+                                    }
                                 </div>
                             </div>
                         </div>

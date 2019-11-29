@@ -29,11 +29,13 @@ class contentAdmin extends Component {
 
     async searchOnChange(event) {
         // const list = await (await fetch('/searchSPAdmin/' + event.target.value)).json();
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
         fetch('/searchSPAdmin/', {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${adInfo.accessToken}`
             },
             body: (!event.target.value? "%":event.target.value)
         }).then(res => res.json()).then(result=>{
@@ -43,11 +45,13 @@ class contentAdmin extends Component {
 
     async deleteSanPham(id)
     {
+        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
         fetch(`/updateStatusSanPham/${id}`, {
             method: 'POST',
             headers: { 
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization' : `Bearer ${adInfo.accessToken}`
             }
         }).then(()=>{
             this.componentDidMount();

@@ -37,8 +37,8 @@ public class TaiKhoan {
     @OneToOne(mappedBy = "taiKhoan")
     private KhachHang khachHang;
 
-    @OneToOne(mappedBy = "taiKhoan")
-    private BinhLuan binhLuan;
+//    @OneToOne(mappedBy = "taiKhoan")
+//    private BinhLuan binhLuan;
 
     public int getId() {
         return id;
