@@ -80,8 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     System.out.println("Valid");
                 } else {
                     response.sendError(403);
-//                    response.
-//                return;
+                    return;
                 }
             } catch (Exception ex) {
                 System.out.println("Exception: " + ex.toString());

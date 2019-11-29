@@ -8,6 +8,8 @@ import com.project.dhpro.ultils.CartUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -188,7 +190,7 @@ public class CustomerUnauthenticatedController {
         String encodedPassword = new BCryptPasswordEncoder().encode(taiKhoan.getPassword());
         taiKhoan.setPassword(encodedPassword);
         TaiKhoan tk = taiKhoanService.save(taiKhoan);
-        return new ResponseEntity<String>(String.valueOf(tk.getRole()),HttpStatus.OK);
+        return new ResponseEntity<String>(String.valueOf(tk.getId()),HttpStatus.OK);
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)
@@ -394,6 +396,11 @@ public class CustomerUnauthenticatedController {
         return khachHang;
     }
 
+    @PostMapping("/themKhachHang")
+    public KhachHang addNewCus(@Valid @RequestBody KhachHang khachHang) {
+        return khachHangService.save(khachHang);
+    }
+
     // Phương thức thanh toán
     @Autowired
     PhuongThucThanhToanService phuongThucThanhToanService;
@@ -429,4 +436,27 @@ public class CustomerUnauthenticatedController {
 //    {
 //        return binhLuanService.getBinhLuanById(id);
 //    }
+
+    @Autowired
+    public JavaMailSender emailSender;
+
+    @PostMapping("/sendEmail")
+    public String sendEmail(@Valid @RequestBody Mail mail) {
+
+        // Create a Simple MailMessage.
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(mail.getMail());
+        message.setSubject("Confirm order at DHPro");
+        message.setText(mail.getContent());
+
+        try{
+            // Send Message!
+            this.emailSender.send(message);
+
+            return "success";
+        } catch (Exception e) {
+            return "fail";
+        }
+    }
 }

@@ -51,8 +51,8 @@ class loginForm extends Component {
                     localStorage.setItem("userInfo", JSON.stringify(data))
                     this.setState({ userInfo: JSON.parse(localStorage.getItem("userInfo")) });
                     console.log(this.state.userInfo);
-                    // this.props.history.push("/");
-                    this.props.history.goBack();
+                    this.props.history.push("/");
+                    // this.props.history.goBack();
                 }
                 else{
                     this.setState({error:true});
@@ -64,8 +64,8 @@ class loginForm extends Component {
 
     render() {
         return (
-            <div className="container" style={{ marginBottom: "100px", marginTop: "100px" }}>
-                <div className="row">
+            <div className="container">
+                <div className="row my-4">
                     <div className="col-sm-5">
                         <h2>Đăng nhập</h2>
                         <p>Đăng nhập để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.</p>
@@ -78,9 +78,9 @@ class loginForm extends Component {
                             <div id="dangnhap" className="container tab-pane active">
                                 <form onSubmit={this.onSubmitLogin}>
                                     <div className="form-group row">
-                                        <label htmlFor="staticEmail" className="col-sm-3 col-form-label">Email</label>
+                                        <label htmlFor="staticEmail" className="col-sm-3 col-form-label">Tên đăng nhập</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" name="username" placeholder="Nhập Email hoặc số điện thoại" onChange={this.onHandleChange} required />
+                                            <input type="text" className="form-control" name="username" placeholder="Nhập tên đăng nhập" onChange={this.onHandleChange} required />
                                         </div>
                                     </div>
                                     <div className="form-group row">

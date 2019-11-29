@@ -200,12 +200,12 @@ class profile extends Component {
                         </div>
                         <div className="col-sm-9">
                             <div className="custom-control custom-radio my-1">
-                                <input type="radio" id="customRadio1" className="customRadio" class="custom-control-input" onChange={this.onHandleChangeGender} ref={this.genderNam} />
-                                <label className="custom-control-label" for="customRadio1">Nam</label>
+                                <input type="radio" id="customRadio1" className="customRadio" className="custom-control-input" onChange={this.onHandleChangeGender} ref={this.genderNam} />
+                                <label className="custom-control-label" htmlFor="customRadio1">Nam</label>
                             </div>
                             <div className="custom-control custom-radio my-1">
-                                <input type="radio" id="customRadio2" className="customRadio" class="custom-control-input" onChange={this.onHandleChangeGender} ref={this.genderNu} />
-                                <label className="custom-control-label" for="customRadio2">Nữ</label>
+                                <input type="radio" id="customRadio2" className="customRadio" className="custom-control-input" onChange={this.onHandleChangeGender} ref={this.genderNu} />
+                                <label className="custom-control-label" htmlFor="customRadio2">Nữ</label>
                             </div>
                         </div>
                     </div>
@@ -214,9 +214,9 @@ class profile extends Component {
                             {/* <p className="mt-2 mx-2">Ngày sinh:</p> */}
                         </div>
                         <div className="col-sm-9">
-                            <div class="custom-control custom-checkbox">
+                            <div className="custom-control custom-checkbox">
                                 <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={this.onHandleChangeRatio}/>
-                                <label className="custom-control-label" for="customCheck1">Thay đổi mật khẫu</label>
+                                <label className="custom-control-label" htmlFor="customCheck1">Thay đổi mật khẫu</label>
                             </div>
                         </div>
                     </div>

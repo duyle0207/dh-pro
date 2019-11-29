@@ -2,9 +2,7 @@ package com.project.dhpro.controller;
 
 import com.project.dhpro.jwt.JwtTokenProvider;
 import com.project.dhpro.models.*;
-
 import com.project.dhpro.service.*;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -591,5 +587,15 @@ public class RestAPIController {
     {
         TaiKhoan taiKhoan = taiKhoanService.findTaiKhoanByUserName(username);
         return BCrypt.checkpw(pwd, taiKhoan.getPassword());
+    }
+
+    @Autowired
+    HoaDonService hoaDonService;
+
+    @PutMapping(value = "/confirmOrder")
+    public HoaDon confirmOrder(@RequestBody String orderId) {
+        HoaDon hoaDon = hoaDonService.getHoaDonByID(Integer.parseInt(orderId));
+        hoaDon.setTinhTrang("Đã xác nhận");
+        return hoaDonService.save(hoaDon);
     }
 }

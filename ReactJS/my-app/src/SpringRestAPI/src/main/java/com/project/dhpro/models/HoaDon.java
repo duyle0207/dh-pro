@@ -2,7 +2,6 @@ package com.project.dhpro.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,6 +30,9 @@ public class HoaDon {
 
     @Column(name = "tongtien")
     private int tongTien;
+
+    @Column(name = "tinhtrang")
+    private String tinhTrang;
 
     @ManyToOne
     @JoinColumn(name = "phuongthucthanhtoan")
@@ -109,5 +111,13 @@ public class HoaDon {
 
     public void setPhuongThucThanhToan(PhuongThucThanhToan phuongThucThanhToan) {
         this.phuongThucThanhToan = phuongThucThanhToan;
+    }
+
+    public String getTinhTrang() {
+        return tinhTrang;
+    }
+
+    public void setTinhTrang(String tinhTrang) {
+        this.tinhTrang = tinhTrang;
     }
 }

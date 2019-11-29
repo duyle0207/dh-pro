@@ -41,15 +41,13 @@ class header extends React.Component {
     }
   }
 
-  handleOnBlur()
-  {
+  handleOnBlur() {
     // alert("alert")
-    this.setState({isOnBlur: ''});
+    this.setState({ isOnBlur: '' });
   }
 
-  handleOnClickProduct()
-  {
-    this.setState({isOnBlur: 'block'});
+  handleOnClickProduct() {
+    this.setState({ isOnBlur: 'block' });
   }
 
   async componentDidMount() {
@@ -125,7 +123,7 @@ class header extends React.Component {
     this.setState({ userInfo: JSON.parse(localStorage.getItem("userInfo")) });
     this.props.history.push('/');
   }
-  
+
   render() {
     return (
       <div className="header">
@@ -136,65 +134,42 @@ class header extends React.Component {
             </Link>
             <div className="search" >
               <input type="text" onChange={this.handleOnChange} placeholder="Tìm kiếm" />
-              <ul className="results my-2"  style={{ display: this.state.isOnBlur}}>
+              <ul className="results my-2" style={{ display: this.state.isOnBlur }}>
                 {this.state.listSP.map((value) => {
                   return <a className="navbar-brand" onMouseEnter={this.handleOnClickProduct}
-                  onMouseLeave={this.handleOnBlur}  href={"/itemDetail/" + value.id}><li>
-                    <div className="row my-2">
-                      <div className="col-sm-4">
-                        <img width="100" height="100" src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} alt="" />
-                      </div>
-                      <div className="col-sm-8">
-                        <div className="row">
-                          {value.tenSP}
+                    onMouseLeave={this.handleOnBlur} href={"/itemDetail/" + value.id}><li>
+                      <div className="row my-2">
+                        <div className="col-sm-4">
+                          <img width="100" height="100" src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} alt="" />
                         </div>
-                        <div className="row">
-                          <span style={{ color: "red" }}><b>{value.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></span>
+                        <div className="col-sm-8">
+                          <div className="row">
+                            {value.tenSP}
+                          </div>
+                          <div className="row">
+                            <span style={{ color: "red" }}><b>{value.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
+                    </li>
                   </a>
                 }
                 )}
               </ul>
             </div>
             <ul className="navbar-nav">
-              <li className="nav-item mt-1 text-white mx-4">
-                <div className="dropdown">
-                  <div className="row">
-                    <div className="col-sm-12 text-white">
-                      {/* <button className="btn dropdown-toggle shadow-none text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Sản phẫm đã xem (2)
-                      </button> */}
-                      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a className="dropdown-item" href="#">Đơn hàng của tôi</a>
-                        <a className="dropdown-item" href="#">Tài khoản của tôi</a>
-                        <div className="dropdown-divider"></div>
-                        <a className="dropdown-item" onClick={this.handleLogOutClick} href="#">Đăng xuất</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
+              
               {Object.keys(this.state.userInfo).length === 0 ?
                 <li className="nav-item dropdown mr-4 mt-3">
-                  <a
-                    href={'/login'}
-                    className="text-white text-decoration-none">
-                    <p className="h5">Đăng nhập</p>
-                  </a>
-                  {/* <div className="dropdown-menu" aria-labelledby="user">
-                    <a className="dropdown-item" data-toggle="modal" data-target="#login" href="#login">
-                      Đăng nhập
-                    </a>
-                    <a className="dropdown-item" data-toggle="modal" data-target="#login" href="#login">
-                      Đăng kí
-                    </a>
-                    <a className="dropdown-item" data-toggle="modal" data-target="#login" href="#login">
-                      Quên mật khẩu
-                    </a>
-                  </div> */}
+                  <div className="dropdown">
+                    <Link to="#" className="text-white" data-toggle="dropdown" id="login" aria-haspopup="true" aria-expanded="false">
+                      <i className="fas fa-user fa-2x"></i>
+                    </Link>
+                    <div className="dropdown-menu" aria-labelledby="login">
+                      <a className="dropdown-item" href="/login">Đăng nhập</a>
+                      <Link className="dropdown-item" to="/register">Đăng kí</Link>
+                    </div>
+                  </div>
                 </li>
                 :
                 <li className="nav-item mt-1 text-white">
@@ -209,7 +184,7 @@ class header extends React.Component {
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           {/* <a className="dropdown-item" href="#">Đơn hàng của tôi</a> */}
-                          <a className="dropdown-item" href={'/accountInfo'}>Tài khoản của tôi</a>
+                          <a className="dropdown-item" href='/accountInfo'>Tài khoản của tôi</a>
                           <div className="dropdown-divider"></div>
                           <a className="dropdown-item" onClick={this.handleLogOutClick} href="#">Đăng xuất</a>
                         </div>

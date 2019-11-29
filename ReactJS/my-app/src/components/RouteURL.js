@@ -18,6 +18,8 @@ import LoginPage from '../components/customer/login/login';
 import LoginAdminPage from '../components/admin/login/login';
 import ProductFilter from "./customer/product/product";
 import AccountInfoPage from "./customer/accountInfo/accountInfoPage/accountInfoPage";
+import RegisterPage from "./customer/login/register";
+import ManageOrderPage from './admin/manageOrder/manageOrderPage';
 
 class RouteURL extends Component {
 
@@ -38,6 +40,10 @@ class RouteURL extends Component {
         else {
             return true;
         }
+    }
+
+    componentDidUpdate(){
+        console.log('New Route', this.checkAuth());
     }
 
     render() {
@@ -63,7 +69,7 @@ class RouteURL extends Component {
 
                     <Route path="/loginAdmin" component={LoginAdminPage} />
 
-                    <Route></Route>
+                    <Route path="/register" component={RegisterPage}/>
 
                     {/* <PrivateRoute path='/protected' isLogin={this.checkAuth()} component={AdminDashboard} /> */}
 
@@ -73,6 +79,7 @@ class RouteURL extends Component {
                     <PrivateRouteAdmin path="/admin" isLogin={this.checkAuthAdmin()} component={AdminDashboard} />
                     <PrivateRouteAdmin path="/manageProduct" isLogin={this.checkAuthAdmin()} component={ManageProductPage} />
                     <PrivateRouteAdmin path="/manageSpecification" isLogin={this.checkAuthAdmin()} component={ManageSpecificationPage} />
+                    <PrivateRouteAdmin path="/order" isLogin={this.checkAuthAdmin()} component={ManageOrderPage} />
 
                 </ScrollToTop>
             </Router>

@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
+import { withRouter  } from 'react-router';
 
 class RegisterForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            username: '', password: '', email: ''
+            username: '',
+            password: '',
+            email: '',
+            phone: '',
+            address: '',
+            date: '',
+            name: '',
+            gender: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleOptionChange = this.handleOptionChange.bind(this);
     }
 
     handleChange(event) {
@@ -20,17 +29,36 @@ class RegisterForm extends Component {
         else if (name === "password") {
             this.setState({ password: event.target.value });
         }
+        else if (name === "name") {
+            this.setState({ name: event.target.value });
+        }
+        else if (name === "phone") {
+            this.setState({ phone: event.target.value });
+        }
+        else if (name === "email") {
+            this.setState({ email: event.target.value });
+        }
+        else if (name === "address") {
+            this.setState({ address: event.target.value });
+        }
+        else if (name === "date") {
+            this.setState({ date: event.target.value });
+        }
+    }
+
+    handleOptionChange(changeEvent) {
+        this.setState({
+            gender: changeEvent.target.value
+        });
     }
 
     async handleSubmit(event) {
         event.preventDefault();
-        // alert("sss")
         fetch('/customerUnauthenticated/dangKi', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                // 'Access-Control-Allow-Origin': 'http://localhost:3000'
             },
             body: JSON.stringify({
                 userName: this.state.username,
@@ -47,10 +75,39 @@ class RegisterForm extends Component {
                 alert("Tên đăng nhập đã có người sử dụng");
             }
             else if (res.ok) {
-                alert("ĐK thành công");
+                return res.json();
             } else {
                 alert("Có lỗi xảy ra");
-                console.log(res);
+            }
+        }).then(data => {
+            console.log(data, typeof (data));
+            if (typeof (data) === "number") {
+                fetch('/customerUnauthenticated/themKhachHang', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        taiKhoan: {
+                            id: data,
+                            userName: "",
+                            password: "",
+                            email: null,
+                            role: {}
+                        },
+                        ten: this.state.name,
+                        diaChi: this.state.address,
+                        email: this.state.email,
+                        soDT: this.state.phone,
+                        ngaySinh: this.state.date,
+                        gioiTinh: this.state.gender
+                    })
+                }).then(res => {
+                    if(res.ok) {
+                        this.props.history.push("/login");
+                    }
+                })
             }
         }).catch(err => {
             console.log("Error");
@@ -60,62 +117,97 @@ class RegisterForm extends Component {
 
     render() {
         return (
-            <form className="col-6 offset-5" onSubmit={this.handleSubmit}>
-                {/* <div className="form-group row">
-                    <label htmlFor="name" className="col-sm-3 col-form-label">Họ tên</label>
-                    <div className="col-sm-9">
-                        <input type="text" className="form-control" id="name" placeholder="Nhập họ tên" />
+            <div className="container">
+                <div className="row my-4">
+                    <div className="col-6">
+                        <h2>Tạo tài khoản</h2>
+                        <p>Tạo tài khoản để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.</p>
+                        <img className="img-fluid" src="https://frontend.tikicdn.com/_new-next/static/img/graphic-map.png" alt="#alt"></img>
                     </div>
-                </div>
-                <div className="form-group row">
-                    <label htmlFor="phone" className="col-sm-3 col-form-label">SĐT</label>
-                    <div className="col-sm-9">
-                        <input type="text" className="form-control" id="phone" placeholder="Nhập số điện thoại" />
-                    </div>
-                </div> */}
-                <div className="form-group row">
-                    <label htmlFor="email" className="col-sm-3 col-form-label">Tên đăng nhập</label>
-                    <div className="col-sm-9">
-                        <input type="text" className="form-control" placeholder="Nhập tên đăng nhập" name="username"
-                            value={this.state.userName} onChange={this.handleChange}
-                        />
-                    </div>
-                </div>
-                <div className="form-group row">
-                    <label htmlFor="password" className="col-sm-3 col-form-label">Mật khẩu</label>
-                    <div className="col-sm-9">
-                        <input type="password" className="form-control" placeholder="Nhập mật khẩu từ 6 đến 32 kí tự" name="password"
-                            value={this.state.password} onChange={this.handleChange}
-                        />
-                    </div>
-                </div>
-                {/* <div className="row">
-                    <label className="col-sm-3 col-form-label">Giới tính</label>
-                    <div className='col-sm-9 my-auto'>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" />
-                            <label className="form-check-label" htmlFor="inlineRadio1">Nam</label>
+                    <form className="col-6" onSubmit={this.handleSubmit}>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Họ tên</label>
+                            <div className="col-sm-9">
+                                <input type="text" className="form-control" name="name" placeholder="Nhập họ tên" required
+                                    value={this.state.name} onChange={this.handleChange}
+                                />
+                            </div>
                         </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" />
-                            <label className="form-check-label" htmlFor="inlineRadio2">Nữ</label>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Địa chỉ</label>
+                            <div className="col-sm-9">
+                                <input type="text" className="form-control" name="address" placeholder="Nhập địa chỉ" required
+                                    value={this.state.address} onChange={this.handleChange}
+                                />
+                            </div>
                         </div>
-                    </div>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Email</label>
+                            <div className="col-sm-9">
+                                <input type="email" className="form-control" name="email" placeholder="Nhập email" required
+                                    value={this.state.email} onChange={this.handleChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">SĐT</label>
+                            <div className="col-sm-9">
+                                <input type="number" className="form-control" name="phone" placeholder="Nhập số điện thoại" required
+                                    value={this.state.phone} onChange={this.handleChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Tên đăng nhập</label>
+                            <div className="col-sm-9">
+                                <input type="text" className="form-control" placeholder="Nhập tên đăng nhập" name="username" required
+                                    value={this.state.userName} onChange={this.handleChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Mật khẩu</label>
+                            <div className="col-sm-9">
+                                <input type="password" className="form-control" placeholder="Nhập mật khẩu từ 6 đến 32 kí tự" name="password" required
+                                    value={this.state.password} onChange={this.handleChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <label className="col-sm-3 col-form-label">Giới tính</label>
+                            <div className='col-sm-9 my-auto'>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" value="Nam"
+                                        checked={this.state.gender === 'Nam'}
+                                        onChange={this.handleOptionChange}
+                                    />
+                                    <label className="form-check-label">Nam</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" value="Nữ"
+                                        checked={this.state.gender === 'Nữ'}
+                                        onChange={this.handleOptionChange}
+                                    />
+                                    <label className="form-check-label">Nữ</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label className="col-sm-3 col-form-label">Ngày sinh</label>
+                            <div className="col-sm-9">
+                                <input className="form-control" type="date" name="date" value={this.state.date} onChange={this.handleChange} />
+                            </div>
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-sm-9 offset-sm-3">
+                                <button className="btn btn-warning w-100">Tạo tài khoản</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div className="form-group row">
-                    <label htmlFor="example-date-input" className="col-sm-3 col-form-label">Ngày sinh</label>
-                    <div className="col-sm-9">
-                        <input className="form-control" type="date" id="example-date-input" />
-                    </div>
-                </div> */}
-                <div className="row mt-4">
-                    <div className="col-sm-9 offset-sm-3">
-                        <button className="btn btn-warning w-100">Tạo tài khoản</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         );
     }
 }
 
-export default RegisterForm;
+export default withRouter(RegisterForm);
