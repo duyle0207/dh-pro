@@ -1,9 +1,6 @@
 package com.project.dhpro.jwt;
 
-import com.project.dhpro.security.AccountDetailsServiceImpl;
-import com.project.dhpro.service.TaiKhoanService;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -16,7 +13,7 @@ public class JwtTokenProvider {
     private final String JWT_REFRESH_SECRET = "SecretForRefreshToken";
 
     //Thời gian có hiệu lực của chuỗi jwt
-    private final long JWT_EXPIRATION = 604800000L;
+    private final long JWT_EXPIRATION = 30000L;
 
 
     private final long JWT_REFRESH_EXPIRATION = 604800000L;

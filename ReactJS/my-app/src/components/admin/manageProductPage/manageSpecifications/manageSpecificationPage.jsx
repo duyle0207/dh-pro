@@ -20,7 +20,7 @@ class manageSpecificationPage extends Component {
     async componentWillMount()
     {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
-        console.log(JSON.parse(localStorage.getItem("adminInfo")).accessToken);
+        // console.log(JSON.parse(localStorage.getItem("adminInfo")).accessToken);
         this.setState({isAuthenticated: isTokenValid});
     }
 
