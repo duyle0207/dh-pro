@@ -22,4 +22,6 @@ public interface HoaDonService {
     List<Object[]> saleDaysInMonth();
 
     List<Object[]> saleMonthsInYear();
+    List<HoaDon> findAllByOrderByIdDesc();
+
 }

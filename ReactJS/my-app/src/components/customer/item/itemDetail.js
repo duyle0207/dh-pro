@@ -195,7 +195,7 @@ class itemDetail extends React.Component {
             <div className="row" role="group" aria-label="Basic example">
               <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase shadow-none" onClick={this.addToCart}>
                 <i className="fas fa-shopping-cart" />
-                Thêm vào giỏ hàng
+                &nbsp;&nbsp;Thêm vào giỏ hàng
               </a>
             </div>
             <div className="row mt-2" role="group" aria-label="Basic example">

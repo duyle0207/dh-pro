@@ -30,68 +30,80 @@ export class ManageOrder extends Component {
     }
 
     async onViewDetailClick(id) {
-        const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
-        this.setState({ productList: productList }, () => {
-            const dg = this.state.productList.reduce((accumulator, currentValue) => {
-                return (accumulator + currentValue.donGia)
-            }, 0);
-            this.setState({ donGia: dg });
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
+            this.setState({ productList: productList }, () => {
+                const dg = this.state.productList.reduce((accumulator, currentValue) => {
+                    return (accumulator + currentValue.donGia)
+                }, 0);
+                this.setState({ donGia: dg });
+            });
+        }
     }
 
     async onConfirmClick() {
-        this.setState({ isSending: true });
-        const customer = this.state.productList[0].hoaDon.khachHang;
-        const order = this.state.productList[0].hoaDon;
-        console.log("Order");
-        console.log(this.state.productList[0].hoaDon);
-        await fetch(`/customerUnauthenticated/sendEmail`, {
-            method: 'POST',
-            body: JSON.stringify({
-                mail: customer.email,
-                content: 'Đơn hàng của bạn đã được xác nhận',
-                hoaDon: order.id,
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then(async res => {
-            this.setState({ isSending: false });
-            if (res.ok) {
-                const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
-                console.log("Respone OK");
-                this.setState({ sendMailStatus: 'Gửi mail thành công!' });
-                fetch('/confirmOrder', {
-                    method: 'PUT',
-                    body: this.state.productList[0].hoaDon.id,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': "Bearer " + token
-                    }
-                }).then(async res => {
-                    if (res.ok) {
-                        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.setState({ isSending: true });
+            const customer = this.state.productList[0].hoaDon.khachHang;
+            const order = this.state.productList[0].hoaDon;
+            console.log("Order");
+            console.log(this.state.productList[0].hoaDon);
+            await fetch(`/customerUnauthenticated/sendEmail`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    mail: customer.email,
+                    content: 'Đơn hàng của bạn đã được xác nhận',
+                    hoaDon: order.id,
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }).then(async res => {
+                this.setState({ isSending: false });
+                if (res.ok) {
+                    const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+                    console.log("Respone OK");
+                    this.setState({ sendMailStatus: 'Gửi mail thành công!' });
+                    fetch('/confirmOrder', {
+                        method: 'PUT',
+                        body: this.state.productList[0].hoaDon.id,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': "Bearer " + token
+                        }
+                    }).then(async res => {
+                        if (res.ok) {
+                            const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
 
-                        const response = await fetch(`/hung/hoaDon`, {
-                            method: 'GET',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': "Bearer " + token
-                            }
-                        });
-                        const json = await response.json();
-                        this.setState({ orders: json }, () => console.log(this.state.orders));
-                    }
-                }).catch(err => console.log('Error', err));
+                            const response = await fetch(`/hung/hoaDon`, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': "Bearer " + token
+                                }
+                            });
+                            const json = await response.json();
+                            this.setState({ orders: json }, () => console.log(this.state.orders));
+                        }
+                    }).catch(err => console.log('Error', err));
 
-            } else {
-                console.log("Response fail");
-                this.setState({ sendMailStatus: 'Đã có lỗi xảy ra, không thể gửi mail!' });
-            }
-        }).catch(err => console.log(err));
+                } else {
+                    console.log("Response fail");
+                    this.setState({ sendMailStatus: 'Đã có lỗi xảy ra, không thể gửi mail!' });
+                }
+            }).catch(err => console.log(err));
+        }
     }
 
     render() {

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from '../../../images/logo.png';
-import { withRouter  } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
+import AuthContext from '../../router/Auth';
+import Modal from 'react-awesome-modal';
+
 
 class login extends Component {
 
@@ -10,11 +13,37 @@ class login extends Component {
             error: false,
             success: false,
             username: '',
-            password: ''
+            password: '',
+            visible: false
         })
 
         this.onSubmitLogin = this.onSubmitLogin.bind(this);
         this.onHandleChange = this.onHandleChange.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
+    }
+
+    componentDidMount() {
+        const queryString = require('query-string');
+
+        const params = queryString.parse(this.props.location.search);
+
+        if (params.message === "tokenexpired") {
+            this.setState({ visible: true });
+        }
+    }
+
+    openModal() {
+        this.setState({
+            visible: true
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            visible: false
+        });
     }
 
     async onHandleChange(event) {
@@ -42,34 +71,56 @@ class login extends Component {
                 return res.json();
             }
             else {
+                console.log("error");
                 this.setState({ error: true });
             }
-        }).then(data => {
+        }).then((data) => {
             // console.log(data !== undefined);
             if (data !== undefined) {
                 if (data.authorities[0].authority === "Admin") {
-                    // alert("Success");
                     localStorage.setItem("adminInfo", JSON.stringify(data))
-                    this.setState({ userInfo: JSON.parse(localStorage.getItem("adminInfo"))},()=>{
-                        this.props.history.push("/admin");
-                    });
-                    // console.log(this.state.userInfo);
+                    console.log("Login Component");
+                    this.setState({ success: true });
                 }
-                else
-                {
+                else {
                     this.setState({ error: true });
                 }
             }
         });
     }
 
+    redirectToAdminPage() {
+        // this.props.history.push("/admin");
+    }
+
+    asyncLocalStorage = {
+        setItem: function (key, value) {
+            return Promise.resolve().then(function () {
+                localStorage.setItem(key, value);
+            });
+        },
+        getItem: function (key) {
+            return Promise.resolve().then(function () {
+                return localStorage.getItem(key);
+            });
+        }
+    };
+
 
     render() {
+
+        if (this.state.success) {
+            return <Redirect to='/admin' />
+        }
+
         return (
             <React.Fragment>
                 <div className="container" style={{ marginTop: '200px' }}>
                     <div className="row mx-4 my-4">
                         <h1>Chào mừng đến với DHPro</h1>
+                        {/* <AuthContext.Consumer>
+
+                        </AuthContext.Consumer> */}
                     </div>
                     <div class="card">
                         <div className="row mx-3 my-3">
@@ -94,6 +145,32 @@ class login extends Component {
                                     </div>
                                 </form>
                             </div>
+                            <Modal visible={this.state.visible} width="400" height="200" effect="fadeInDown" onClickAway={() => this.closeModal()}>
+                                <div className="text-center">
+                                    <div className="" >
+                                        <div className="toast-header">
+                                            <strong className="mr-auto">Thông báo</strong>
+                                            {/* <small>11 mins ago</small> */}
+                                            <button type="button" className="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                                {/* <span aria-hidden="true" ></span> */}
+                                                <a className="text-decoration-none text-dark" href="javascript:void(0);" onClick={() => this.closeModal()}>&times;</a>
+                                            </button>
+                                        </div>
+                                        <div className="toast-body">
+                                            <div className="row mt-4">
+                                                <div className="col-sm-3">
+                                                    <i className="ml-4 fa fa-remove" style={{color:'#FE2020','fontSize':'60px'}}></i>
+                                                </div>
+                                                <div className="col-sm-9">
+                                                    <p className="h5 mx-3 mb-4 text-justify">Phiên đăng nhập của bạn đã hết vui lòng đăng nhập lại để tiếp tục</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* <h1><span className="badge badge-warning my-4">Thông báo</span></h1> */}
+                                    
+                                </div>
+                            </Modal>
                         </div>
 
                     </div>

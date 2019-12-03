@@ -15,7 +15,7 @@ import DropDownBoxThuongHieu from "./input/dropDownBoxThuong";
 import NumberInput from "./input/numberInput";
 import Textarea from "./input/textarea";
 // import a from "../../../SpringRestAPI/src/main/webapp/images/earth_orbit_2-wallpaper-1920x1080(2).jpg";
-
+import { withRouter, Redirect } from 'react-router';
 
 class productDetail extends Component {
     sp = {
@@ -87,6 +87,7 @@ class productDetail extends Component {
     };
     constructor(props) {
         super(props);
+
         this.state = ({
             adminInfo: {},
             isUpdateFail: false,
@@ -158,143 +159,156 @@ class productDetail extends Component {
         this.enableUpdateDecriptedImage = this.enableUpdateDecriptedImage.bind(this);
     }
 
+    async componentWillMount() {
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+    }
+
     async componentDidMount() {
 
-        var product;
-
-        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
-
-        if (adInfo.accessToken) {
-            this.setState({ adminInfo: adInfo });
-            //
-            if (this.props.idProduct !== 'new') {
-                const link = '/sanPham/' + this.props.idProduct;
-                product = await (await fetch(link, {
-                    headers: {
-                        'Authorization': `Bearer ${adInfo.accessToken}`
-                    }
-                })).json();
-
-                var a = await (await fetch(`/hung/getHinhSP/${this.props.idProduct}`, {
-                    headers: {
-                        'Authorization': `Bearer ${adInfo.accessToken}`
-                    }
-                })).json();
-
-                this.sp = product;
-
-                a.map((value, i) => {
-                    if (i === 0) {
-                        this.setState({
-                            source1: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                        });
-                    }
-                    if (i === 1) {
-                        this.setState({
-                            source2: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                        });
-                    }
-                    if (i === 2) {
-                        this.setState({
-                            source3: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                        });
-                    }
-                    if (i === 3) {
-                        this.setState({
-                            source4: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
-                        });
-                    }
-                });
-
-                this.setState({ productDetail: this.sp, listHinhSP: a });
-            }
-            else {
-                const link = '/sanPham/' + 0;
-                product = await (await fetch(link,{
-                    headers:{
-                        'Authorization' : `Bearer ${adInfo.accessToken}`
-                    }
-                })).json();
-                this.sp = product;
-                this.setState({ productDetail: this.sp });
-            }
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
         }
+        else {
+            var product;
 
-        this.setState({ source: this.state.productDetail.hinh });
+            var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
-        const cpuList = await (await fetch(`/listCPU`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+            if (adInfo.accessToken) {
+                this.setState({ adminInfo: adInfo });
+                //
+                if (this.props.idProduct !== 'new') {
+                    const link = '/sanPham/' + this.props.idProduct;
+                    product = await (await fetch(link, {
+                        headers: {
+                            'Authorization': `Bearer ${adInfo.accessToken}`
+                        }
+                    })).json();
+
+                    var a = await (await fetch(`/hung/getHinhSP/${this.props.idProduct}`, {
+                        headers: {
+                            'Authorization': `Bearer ${adInfo.accessToken}`
+                        }
+                    })).json();
+
+                    this.sp = product;
+
+                    a.map((value, i) => {
+                        if (i === 0) {
+                            this.setState({
+                                source1: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                            });
+                        }
+                        if (i === 1) {
+                            this.setState({
+                                source2: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                            });
+                        }
+                        if (i === 2) {
+                            this.setState({
+                                source3: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                            });
+                        }
+                        if (i === 3) {
+                            this.setState({
+                                source4: require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)
+                            });
+                        }
+                    });
+
+                    this.setState({ productDetail: this.sp, listHinhSP: a });
+                }
+                else {
+                    const link = '/sanPham/' + 0;
+                    product = await (await fetch(link, {
+                        headers: {
+                            'Authorization': `Bearer ${adInfo.accessToken}`
+                        }
+                    })).json();
+                    this.sp = product;
+                    this.setState({ productDetail: this.sp });
+                }
             }
-        })).json();
-        const oCungList = await (await fetch(`/listOCung`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const ramList = await (await fetch(`/listRam`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const cardList = await (await fetch(`/hung/cardDoHoa`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const manHinhList = await (await fetch(`/listManHinh`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const pinList = await (await fetch(`/hung/listPin`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const heDieuHanhList = await (await fetch(`/hung/listHeDieuHanh`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const nhuCauSuDungList = await (await fetch(`/listNhuCauSuDung`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        })).json();
-        const thuongHieuList = await (await fetch(`/hung/listThuongHieu`,{
-                headers:{
-                    'Authorization' : `Bearer ${adInfo.accessToken}`
+
+            this.setState({ source: this.state.productDetail.hinh });
+
+            const cpuList = await (await fetch(`/listCPU`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const oCungList = await (await fetch(`/listOCung`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const ramList = await (await fetch(`/listRam`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const cardList = await (await fetch(`/hung/cardDoHoa`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const manHinhList = await (await fetch(`/listManHinh`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const pinList = await (await fetch(`/hung/listPin`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const heDieuHanhList = await (await fetch(`/hung/listHeDieuHanh`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const nhuCauSuDungList = await (await fetch(`/listNhuCauSuDung`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            })).json();
+            const thuongHieuList = await (await fetch(`/hung/listThuongHieu`, {
+                headers: {
+                    'Authorization': `Bearer ${adInfo.accessToken}`
                 }
             })).json();
 
-        this.setState({
-            cpu: product.cpu,
-            listCPU: cpuList,
-            oCung: product.oCung,
-            listOCung: oCungList,
-            ram: product.ram,
-            listRAM: ramList,
-            cardDoHoa: product.cardDoHoa,
-            listCardDoHoa: cardList,
-            manHinh: product.manHinh,
-            listManHinh: manHinhList,
-            pin: product.pin,
-            listPin: pinList,
-            heDieuHanh: product.heDieuHanh,
-            listHeDieuHanh: heDieuHanhList,
-            nhuCauSuDung: product.nhuCauSuDung,
-            listNhuCauSuDung: nhuCauSuDungList,
-            thuongHieu: product.thuongHieu,
-            listThuongHieu: thuongHieuList,
-        });
+            this.setState({
+                cpu: product.cpu,
+                listCPU: cpuList,
+                oCung: product.oCung,
+                listOCung: oCungList,
+                ram: product.ram,
+                listRAM: ramList,
+                cardDoHoa: product.cardDoHoa,
+                listCardDoHoa: cardList,
+                manHinh: product.manHinh,
+                listManHinh: manHinhList,
+                pin: product.pin,
+                listPin: pinList,
+                heDieuHanh: product.heDieuHanh,
+                listHeDieuHanh: heDieuHanhList,
+                nhuCauSuDung: product.nhuCauSuDung,
+                listNhuCauSuDung: nhuCauSuDungList,
+                thuongHieu: product.thuongHieu,
+                listThuongHieu: thuongHieuList,
+            });
 
-        try {
-            require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`);
-            this.setState({ source: require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`) });
-        }
-        catch (e) {
-            this.setState({ source: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+            try {
+                require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`);
+                this.setState({ source: require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.productDetail.hinh}`) });
+            }
+            catch (e) {
+                this.setState({ source: "https://aliceasmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" });
+            }
         }
     }
 
@@ -311,14 +325,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.cpu.id;
         }
-        const cpu = await (await fetch(`/cpu/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const cpu = await (await fetch(`/cpu/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.cpu = cpu;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (cpu.error === "Forbidden" && cpu.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.cpu = cpu;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeOCung(event) {
@@ -326,14 +346,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.oCung.id;
         }
-        const oCung = await (await fetch(`/oCung/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const oCung = await (await fetch(`/oCung/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.oCung = oCung;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.oCung);
+        if (oCung.error === "Forbidden" && oCung.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.oCung = oCung;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.oCung);
+        }
     }
 
     async handleChangeRAM(event) {
@@ -341,14 +367,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.ram.id;
         }
-        const ram = await (await fetch(`/ram/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const ram = await (await fetch(`/ram/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.ram = ram;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.ram);
+        if (ram.error === "Forbidden" && ram.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.ram = ram;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.ram);
+        }
     }
 
     async handleChangeCard(event) {
@@ -356,14 +388,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.cardDoHoa.id;
         }
-        const cardDoHoa = await (await fetch(`/cardDoHoa/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const cardDoHoa = await (await fetch(`/cardDoHoa/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.cardDoHoa = cardDoHoa;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.cardDoHoa);
+        if (cardDoHoa.error === "Forbidden" && cardDoHoa.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.cardDoHoa = cardDoHoa;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.cardDoHoa);
+        }
     }
 
     async handleChangeCaManHinh(event) {
@@ -371,14 +409,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.manHinh.id;
         }
-        const manHinh = await (await fetch(`/manHinh/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const manHinh = await (await fetch(`/manHinh/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.manHinh = manHinh;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.manHinh);
+        if (manHinh.error === "Forbidden" && manHinh.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.manHinh = manHinh;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.manHinh);
+        }
     }
 
     async handleChangePin(event) {
@@ -386,14 +430,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.pin.id;
         }
-        const pin = await (await fetch(`/hung/pin/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const pin = await (await fetch(`/hung/pin/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.pin = pin;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.pin);
+        if (pin.error === "Forbidden" && pin.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.pin = pin;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.pin);
+        }
     }
 
     async handleChangeHeDieuHanh(event) {
@@ -401,14 +451,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.heDieuHanh.id;
         }
-        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const heDieuHanh = await (await fetch(`/hung/heDieuHanh/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.heDieuHanh = heDieuHanh;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (heDieuHanh.error === "Forbidden" && heDieuHanh.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.heDieuHanh = heDieuHanh;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeNhuCauSuDung(event) {
@@ -416,14 +472,20 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.nhuCauSuDung.id;
         }
-        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.nhuCauSuDung = nhuCauSuDung;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (nhuCauSuDung.error === "Forbidden" && nhuCauSuDung.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.nhuCauSuDung = nhuCauSuDung;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeThuongHieu(event) {
@@ -431,68 +493,81 @@ class productDetail extends Component {
         if (event.target.value === 'true') {
             id = this.state.thuongHieu.id;
         }
-        const thuongHieu = await (await fetch(`/hung/thuongHieu/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+        const thuongHieu = await (await fetch(`/hung/thuongHieu/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.thuongHieu = thuongHieu;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (thuongHieu.error === "Forbidden" && thuongHieu.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.thuongHieu = thuongHieu;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
     //#endregion
 
     async updateSanPham(event) {
         event.preventDefault();
-        if (!this.state.source) {
-            alert("Xin hãy upload hình cho sản phẩm");
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
-            await fetch('/customerUnauthenticated/saveSanPham', {
-                method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.state.productDetail)
-            }).then(res => {
-                if (!res.ok) {
-                    this.setState({ isUpdateFail: true });
-                }
-                else {
-                    this.setState({ isUpdateSuccess: true, isUpdateFail: false });
-                    return res.json();
-                }
-            }).then(data => console.log(data));
-
-            if (this.state.isUpdateMainImage) {
-                fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
-                    method: 'post',
-                    headers: {
-                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-                    },
-                    body: this.state.dataFile
-                }).then(res => {
-                    if (res.ok) {
-                        console.log(res);
-                        alert("File uploaded successfully.");
-                    }
-                });
+            if (!this.state.source) {
+                alert("Xin hãy upload hình cho sản phẩm");
             }
-
-            if (this.state.isUpdateDecriptedImage) {
-                fetch(`/hung/saveMulFile/${this.state.productDetail.tenSP}`, {
-                    method: 'post',
+            else {
+                await fetch('/customerUnauthenticated/saveSanPham', {
+                    method: (this.props.idProduct !== 'new') ? 'PUT' : 'POST',
                     headers: {
-                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: this.state.multipleFile
+                    body: JSON.stringify(this.state.productDetail)
                 }).then(res => {
-                    if (res.ok) {
-                        console.log(res);
-                        alert("File uploaded successfully.");
+                    if (!res.ok) {
+                        this.setState({ isUpdateFail: true });
                     }
-                });
+                    else {
+                        this.setState({ isUpdateSuccess: true, isUpdateFail: false });
+                        return res.json();
+                    }
+                }).then(data => console.log(data));
+
+                if (this.state.isUpdateMainImage) {
+                    fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
+                        method: 'post',
+                        headers: {
+                            'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                        },
+                        body: this.state.dataFile
+                    }).then(res => {
+                        if (res.ok) {
+                            console.log(res);
+                            // alert("File uploaded successfully.");
+                        }
+                    });
+                }
+
+                if (this.state.isUpdateDecriptedImage) {
+                    fetch(`/hung/saveMulFile/${this.state.productDetail.tenSP}`, {
+                        method: 'post',
+                        headers: {
+                            'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                        },
+                        body: this.state.multipleFile
+                    }).then(res => {
+                        if (res.ok) {
+                            console.log(res);
+                            alert("Thêm sản phẩm thành công");
+                            this.props.history.push('/manageProduct');
+                        }
+                    });
+                }
             }
         }
     }
@@ -565,7 +640,7 @@ class productDetail extends Component {
         fetch(`/hung/savefile/${this.state.productDetail.tenSP}`, {
             method: 'post',
             headers: {
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             },
             body: this.state.dataFile
         }).then(res => {
@@ -618,7 +693,7 @@ class productDetail extends Component {
                                     }
                                 </ul>
                                 <div className="text-center">
-                                    <button type="button" className="btn btn-dark mx-4" onClick={this.enableUpdateDecriptedImage}>Upload</button>
+                                    <button type="button" className="btn btn-dark mx-4 my-4" onClick={this.enableUpdateDecriptedImage}>Upload</button>
                                 </div>
                             </div>
                         </div>
@@ -636,7 +711,7 @@ class productDetail extends Component {
                             <DropDownBoxOCung title="Ổ cứng" col="oCung" list={this.state.listOCung} detail={this.state.oCung} onChange={this.handleChangeOCung}></DropDownBoxOCung>
 
                             <NumberInput title="Số lượng" col="soLuong" value={this.state.productDetail.soLuong} handleChange={this.handleChange}></NumberInput>
-                            
+
                             <TextBox title="Màu sắc" col="mauSac" value={this.state.productDetail.mauSac} handleChange={this.handleChange} ></TextBox>
 
                             <DropDownBoxRAM title="RAM" col="ram" list={this.state.listRAM} detail={this.state.ram} onChange={this.handleChangeRAM}></DropDownBoxRAM>
@@ -691,4 +766,4 @@ class productDetail extends Component {
     }
 }
 
-export default productDetail;
+export default withRouter(productDetail);

@@ -17,11 +17,17 @@ class cart extends Component {
     }
 
     async componentDidMount() {
-        const cartLines = await (await fetch(`/customerUnauthenticated/shoppingCart`)).json()
+        const cartLines = await (await fetch(`/customerUnauthenticated/shoppingCart`)).json();
 
         this.setState({ cartLines: cartLines.cartLines });
 
         console.log(this.state.cartLines);
+    }
+
+    async CheckQuantity()
+    {
+        const removedProductFromCart = await(await fetch(`/customerUnauthenticated/checkCartQuantityBeforeCheckOut`)).json();
+        console.log(removedProductFromCart);
     }
 
     render() {
@@ -33,6 +39,7 @@ class cart extends Component {
                         <span class="navbar-brand mb-0 h1">
                             GIỎ HÀNG
                         </span>
+                        <button className="btn" onClick={this.CheckQuantity}>Check</button>
                     </nav>
                 </div>
                 <div className="container">

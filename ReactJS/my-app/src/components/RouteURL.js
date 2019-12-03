@@ -21,39 +21,46 @@ import AccountInfoPage from "./customer/accountInfo/accountInfoPage/accountInfoP
 import RegisterPage from "./customer/login/register";
 import ManageOrderPage from './admin/manageOrder/manageOrderPage';
 
+import PrivateRoute from './router/PrivateRoute';
+import PrivateRouteAdmin from './router/PrivateRouteAdmin';
+import ProtectLogin from './router/ProtectLogin';
 import Paypal from './paypalDemo';
+
 
 class RouteURL extends Component {
 
-    checkAuth() {
-        if(JSON.parse(localStorage.getItem("userInfo"))===null)
-        {
-            localStorage.setItem("userInfo",JSON.stringify({}));
-        }
-        if (Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length === 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
+    constructor(props)
+    {
+        super(props);
+
+        // console.log(this.props.);
+
+        this.createLocalStorage();
+
+        this.state = ({
+            isLogin: false,
+        })
     }
 
-    checkAuthAdmin()
+    async componentDidMount()
+    {
+       
+    }
+
+    createLocalStorage()
     {
         if(JSON.parse(localStorage.getItem("adminInfo"))===null)
         {
             localStorage.setItem("adminInfo",JSON.stringify({}));
         }
-        if (Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length === 0) {
-            return false;
-        }
-        else {
-            return true;
+        if(JSON.parse(localStorage.getItem("userInfo"))===null)
+        {
+            localStorage.setItem("userInfo",JSON.stringify({}));
         }
     }
 
-    componentDidUpdate(){
-        console.log('New Route', this.checkAuth());
+    componentDidUpdate(prevProps, prevState, snapshot){
+        console.log(prevProps.location.pathname);
     }
 
     render() {
@@ -64,34 +71,32 @@ class RouteURL extends Component {
                     <Route path="/itemDetail/:id" component={ItemDetailPage} />
                     <Route path="/cart" component={Cart} />
                     
-                    <Route path="/login/:id" component={LoginPage} />
+                    {/* <Route path="/login/:id" component={LoginPage} />
                     <Route path="/uploadFile" component={UpLoadFile} />
-                    <Route path="/searchDemo" component={SearchDemo} />
+                    <Route path="/searchDemo" component={SearchDemo} /> */}
+
                     <Route path="/compareItem/:id" component={CompareItemsPage} />
                     
-                    <Route path="/productDetail/:id" component={ProductDetailPage} />
                     <Route path="/validate" component={Validate} />
                     <Route path="/products" component={ProductFilter} />
                     
                     <Route path="/404" component={Error} />
 
-                    <ProtectLogin path="/login" isLogin={!this.checkAuth()} component={LoginPage} />
-
-                    <Route path="/loginAdmin" component={LoginAdminPage} />
+                    <ProtectLogin path="/login" component={LoginPage} />
 
                     <Route path="/register" component={RegisterPage}/>
 
                     {/* <PrivateRoute path='/protected' isLogin={this.checkAuth()} component={AdminDashboard} /> */}
 
-                    <PrivateRoute path='/accountInfo' isLogin={this.checkAuth()} component={AccountInfoPage} />
+                    <PrivateRoute path='/accountInfo' component={AccountInfoPage} />
 
                     {/* Admin */}
-                    <PrivateRouteAdmin path="/admin" isLogin={this.checkAuthAdmin()} component={AdminDashboard} />
-                    <PrivateRouteAdmin path="/manageProduct" isLogin={this.checkAuthAdmin()} component={ManageProductPage} />
-                    <PrivateRouteAdmin path="/manageSpecification" isLogin={this.checkAuthAdmin()} component={ManageSpecificationPage} />
-                    <PrivateRouteAdmin path="/order" isLogin={this.checkAuthAdmin()} component={ManageOrderPage} />
-
-
+                    <Route path="/loginAdmin" component={LoginAdminPage} />
+                    <PrivateRouteAdmin path="/admin" component={AdminDashboard} />
+                    <PrivateRouteAdmin path="/manageProduct" component={ManageProductPage} />
+                    <PrivateRouteAdmin path="/manageSpecification" component={ManageSpecificationPage} />
+                    <PrivateRouteAdmin path="/order" component={ManageOrderPage} />
+                    <PrivateRouteAdmin path="/productDetail/:id" component={ProductDetailPage} />
 
                     <Route path="/paypal" component={Paypal} />
                 </ScrollToTop>
@@ -100,28 +105,28 @@ class RouteURL extends Component {
     }
 }
 
-const PrivateRoute = ({ component: Component, isLogin, ...rest }) => (
-    <Route {...rest} render={(props) => (
-        isLogin
-            ? <Component {...props} />
-            : <Redirect to='/login' />
-    )} />
-)
+// const PrivateRoute = ({ component: Component, isLogin, ...rest }) => (
+//     <Route {...rest} render={(props) => (
+//         isLogin
+//             ? <Component {...props} />
+//             : <Redirect to='/login' />
+//     )} />
+// )
 
-const PrivateRouteAdmin = ({ component: Component, isLogin, ...rest }) => (
-    <Route {...rest} render={(props) => (
-        isLogin
-            ? <Component {...props} />
-            : <Redirect to='/loginAdmin' />
-    )} />
-)
+// const PrivateRouteAdmin = ({ component: Component, isLogin, ...rest }) => (
+//     <Route {...rest} render={(props) => (
+//         JSON.parse(localStorage.getItem("adminInfo")).accessToken
+//             ? <Component {...props} />
+//             : <Redirect to='/loginAdmin' />
+//     )} />
+// )
 
-const ProtectLogin = ({ component: Component, isLogin, ...rest }) => (
-    <Route {...rest} render={(props) => (
-        isLogin
-            ? <Component {...props} />
-            : <Redirect to='/' />
-    )} />
-)
+// const ProtectLogin = ({ component: Component, isLogin, ...rest }) => (
+//     <Route {...rest} render={(props) => (
+//         isLogin
+//             ? <Component {...props} />
+//             : <Redirect to='/' />
+//     )} />
+// )
 
 export default RouteURL;

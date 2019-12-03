@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class oCung extends Component {
     constructor(props) {
@@ -32,20 +33,20 @@ class oCung extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
 
-        const totalPages = await (await fetch(`/getTotalPagesOCung`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const totalPages = await (await fetch(`/getTotalPagesOCung`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getOCung/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const hdhList = await (await fetch(`/getOCung/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: hdhList });
@@ -53,9 +54,9 @@ class oCung extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getOCung/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const cardList = await (await fetch(`/getOCung/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(cardList);
@@ -64,14 +65,28 @@ class oCung extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }
         }
     }
 
@@ -88,24 +103,31 @@ class oCung extends Component {
     async insert(event) {
         console.log(this.state.oCung);
         event.preventDefault();
-        await fetch('/insertOCung', {
-            method: (this.state.oCung.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.oCung),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            await fetch('/insertOCung', {
+                method: (this.state.oCung.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.oCung),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -119,12 +141,19 @@ class oCung extends Component {
     }
 
     async handleOnClickTable(id) {
-        const oCung = await (await fetch(`/oCung/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ oCung: oCung });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const oCung = await (await fetch(`/oCung/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ oCung: oCung });
+        }
     }
 
     handeClearBtn() {
@@ -176,7 +205,7 @@ class oCung extends Component {
                     {this.state.isOpen ?
                         <div className="container-fluid">
                             <div className="row">
-                                
+
                             </div>
                             <div className="row">
                                 <div className="col-sm-8">
@@ -235,9 +264,9 @@ class oCung extends Component {
                             <div className="row mx-4">
                                 <nav className="float-right" aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item" onClick={this.handlePreviousPage}><a class="page-link"  href="#">Previous</a></li>
+                                        <li class="page-item" onClick={this.handlePreviousPage}><a class="page-link" href="#">Previous</a></li>
                                         <li class="page-item"><a class="page-link" href="#">{this.state.currentPage}</a></li>
-                                        <li class="page-item" onClick={this.handleNextPage} ><a class="page-link"  href="#">Next</a></li>
+                                        <li class="page-item" onClick={this.handleNextPage} ><a class="page-link" href="#">Next</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -251,4 +280,4 @@ class oCung extends Component {
     }
 }
 
-export default oCung;
+export default withRouter(oCung);

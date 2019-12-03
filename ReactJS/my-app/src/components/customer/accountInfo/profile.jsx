@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class profile extends Component {
 
@@ -18,8 +19,8 @@ class profile extends Component {
         };
 
         //Ref
-        this.genderNam = React.createRef();
-        this.genderNu = React.createRef();
+        // this.genderNam = React.createRef();
+        // this.genderNu = React.createRef();
         //Func
         this.onHandleChangeRatio = this.onHandleChangeRatio.bind(this);
         this.onHandleChange = this.onHandleChange.bind(this);
@@ -36,7 +37,7 @@ class profile extends Component {
             customer: customer,
         });
 
-        this.state.customer.gioiTinh === "Nam" ? (this.genderNam.current.checked = true) : (this.genderNu.current.checked = true);
+        // this.state.customer.gioiTinh === "Nam" ? (this.genderNam.current.checked = true) : (this.genderNu.current.checked = true);
     }
 
     onHandleChangeRatio(event) {
@@ -57,91 +58,100 @@ class profile extends Component {
 
     async onHandleClickSave(event) {
         event.preventDefault();
-        var cusInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-        if(this.state.isChangePassword)
-        {
-            const comparePassword = await (await fetch(`/comparePassword/${this.state.customer.taiKhoan.userName}/${this.state.oldPassword}`,{
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("userInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            await fetch(`/customerUnauthenticated/logout`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${cusInfo.accessToken}`
-                }
-            })).json();
-    
-            if(!comparePassword)
-            {
-                this.setState({isOldPasswordTrue:false});
-            }
-            else{
-                if(this.state.newPassword!==this.state.confirmNewPassword)
-                {
-                    alert("Mật khẫu không khớp");
-                }
-                else{
-                    const cus = this.state.customer;
-                    cus["taiKhoan"]["password"] = this.state.newPassword;
-                    
-                    this.setState({customer: cus});
-                    
-                    await fetch(`/updateKH`, {
-                        method: 'PUT',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${cusInfo.accessToken}`
-                        },
-                        body: JSON.stringify(this.state.customer)
-                    }).then(res => {
-                        if (res.ok) {
-                            this.setState({ isUpdateSuccess: true, isUpdateFail: false });
-                        }
-                        else {
-                            this.setState({ isUpdateFail: true, isUpdateSuccess: false });
-                        }
-                    });
-                }
-            }
-        }
-        else{
-            await fetch(`/updateKH`, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${cusInfo.accessToken}`
-                },
-                body: JSON.stringify(this.state.customer)
-            }).then(res => {
-                if (res.ok) {
-                    this.setState({ isUpdateSuccess: true, isUpdateFail: false });
-                }
-                else {
-                    this.setState({ isUpdateFail: true, isUpdateSuccess: false });
+                    'Content-Type': 'application/json'
                 }
             });
+            localStorage.removeItem("userInfo");
+            this.props.history.push('/login?message=tokenexpired');
+        }
+        else {
+            var cusInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+            if (this.state.isChangePassword) {
+                const comparePassword = await (await fetch(`/comparePassword/${this.state.customer.taiKhoan.userName}/${this.state.oldPassword}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${cusInfo.accessToken}`
+                    }
+                })).json();
+
+                if (!comparePassword) {
+                    this.setState({ isOldPasswordTrue: false });
+                }
+                else {
+                    if (this.state.newPassword !== this.state.confirmNewPassword) {
+                        alert("Mật khẫu không khớp");
+                    }
+                    else {
+                        const cus = this.state.customer;
+                        cus["taiKhoan"]["password"] = this.state.newPassword;
+
+                        this.setState({ customer: cus });
+
+                        await fetch(`/updateKH`, {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${cusInfo.accessToken}`
+                            },
+                            body: JSON.stringify(this.state.customer)
+                        }).then(res => {
+                            if (res.ok) {
+                                this.setState({ isUpdateSuccess: true, isUpdateFail: false });
+                            }
+                            else {
+                                this.setState({ isUpdateFail: true, isUpdateSuccess: false });
+                            }
+                        });
+                    }
+                }
+            }
+            else {
+                await fetch(`/updateKH`, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${cusInfo.accessToken}`
+                    },
+                    body: JSON.stringify(this.state.customer)
+                }).then(res => {
+                    if (res.ok) {
+                        this.setState({ isUpdateSuccess: true, isUpdateFail: false });
+                    }
+                    else {
+                        this.setState({ isUpdateFail: true, isUpdateSuccess: false });
+                    }
+                });
+            }
         }
     }
 
-    handleChangePassword(event)
-    {
-        this.setState({oldPassword: event.target.value});
+    handleChangePassword(event) {
+        this.setState({ oldPassword: event.target.value });
     }
 
-    onHandleConfirmPassword(event)
-    {
-        this.setState({confirmNewPassword: event.target.value});
+    onHandleConfirmPassword(event) {
+        this.setState({ confirmNewPassword: event.target.value });
     }
 
-    onHandleNewPassword(event)
-    {
-        this.setState({newPassword: event.target.value});
+    onHandleNewPassword(event) {
+        this.setState({ newPassword: event.target.value });
     }
 
     render() {
         return (
-            <React.Fragment>
+            <div style={{ marginBottom: 200 }}>
                 <nav className="navbar navbar-light bg-light mb-3">
                     <span className="navbar-brand mb-0 h1">
                         Đơn hàng của tôi
@@ -194,7 +204,7 @@ class profile extends Component {
                             <input type="number" className="form-control w-75" width="40px" name="soDT" value={this.state.customer.soDT} placeholder="Số điện thoại" onChange={this.onHandleChange} required />
                         </div>
                     </div>
-                    <div className="row my-4">
+                    {/* <div className="row my-4">
                         <div className="col-sm-3">
                             <p className="mt-2 mx-2">Giới tính:</p>
                         </div>
@@ -208,14 +218,14 @@ class profile extends Component {
                                 <label className="custom-control-label" htmlFor="customRadio2">Nữ</label>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="row my-4">
                         <div className="col-sm-3">
                             {/* <p className="mt-2 mx-2">Ngày sinh:</p> */}
                         </div>
                         <div className="col-sm-9">
                             <div className="custom-control custom-checkbox">
-                                <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={this.onHandleChangeRatio}/>
+                                <input type="checkbox" className="custom-control-input" id="customCheck1" onChange={this.onHandleChangeRatio} />
                                 <label className="custom-control-label" htmlFor="customCheck1">Thay đổi mật khẫu</label>
                             </div>
                         </div>
@@ -229,11 +239,11 @@ class profile extends Component {
                                 <div className="col-sm-9">
                                     <input type="text" className="form-control w-75" width="40px" name="password" placeholder="Mật khẫu cũ" onChange={this.handleChangePassword} value={this.state.oldPassword} required />
                                     {!this.state.isOldPasswordTrue ?
-                                    <p className="text-danger">Mật khẫu cũ không hợp lệ</p>
-                                    :
-                                    ""
+                                        <p className="text-danger">Mật khẫu cũ không hợp lệ</p>
+                                        :
+                                        ""
                                     }
-                                    
+
                                 </div>
                             </div>
                             <div className="row my-4">
@@ -265,9 +275,9 @@ class profile extends Component {
                         </div>
                     </div>
                 </form>
-            </React.Fragment>
+            </div>
         );
     }
 }
 
-export default profile;
+export default withRouter(profile);

@@ -57,4 +57,7 @@ public class HoaDonServiceImp implements HoaDonService{
     }
 
 
+    public List<HoaDon> findAllByOrderByIdDesc() {
+        return hoaDonRepository.findAllByOrderByIdDesc();
+    }
 }
