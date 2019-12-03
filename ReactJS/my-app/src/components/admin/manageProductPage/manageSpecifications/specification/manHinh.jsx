@@ -68,6 +68,7 @@ class manHinh extends Component {
         event.preventDefault();
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -107,6 +108,7 @@ class manHinh extends Component {
     async handleOnClickTable(id) {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -147,6 +149,7 @@ class manHinh extends Component {
     async handlePreviousPage() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -159,6 +162,7 @@ class manHinh extends Component {
     async handleNextPage() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {

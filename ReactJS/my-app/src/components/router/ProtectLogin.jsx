@@ -7,15 +7,18 @@ import { Route, Redirect } from 'react-router-dom';
 
 function CheckAuthAdmin() {
 
-    if (JSON.parse(localStorage.getItem("adminInfo")) === null) {
-        localStorage.setItem("adminInfo", JSON.stringify({}));
+    if (JSON.parse(localStorage.getItem("userInfo")) === null) {
+        localStorage.setItem("userInfo", JSON.stringify({}));
     }
-    if (Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length === 0) {
-        return false
+    console.log(Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length);
+    if (Object.keys(JSON.parse(localStorage.getItem("userInfo"))).length === 0) {
+        console.log("true")
+        return true;
     }
     else {
         // const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
-        return true;
+        console.log("false");
+        return false;
     }
 }
 
@@ -24,12 +27,13 @@ function CheckAuthAdmin() {
 //     return CheckAuthAdmin();
 // }
 
-const PrivateRouteAdmin = ({ component: Component, ...rest }) => (
+const ProtectLogin = ({ component: Component, ...rest }) => (
     
     <Route {...rest} render={(props) => {
+        console.log("Route");
         return  CheckAuthAdmin()
             ? <Component {...props} />
-            : <Redirect to='/loginAdmin' />
+            : <Redirect to='/' />
     }} />
 )
-export default PrivateRouteAdmin;
+export default ProtectLogin;

@@ -23,6 +23,7 @@ import ManageOrderPage from './admin/manageOrder/manageOrderPage';
 
 import PrivateRoute from './router/PrivateRoute';
 import PrivateRouteAdmin from './router/PrivateRouteAdmin';
+import ProtectLogin from './router/ProtectLogin';
 import Paypal from './paypalDemo';
 
 
@@ -70,9 +71,10 @@ class RouteURL extends Component {
                     <Route path="/itemDetail/:id" component={ItemDetailPage} />
                     <Route path="/cart" component={Cart} />
                     
-                    <Route path="/login/:id" component={LoginPage} />
+                    {/* <Route path="/login/:id" component={LoginPage} />
                     <Route path="/uploadFile" component={UpLoadFile} />
-                    <Route path="/searchDemo" component={SearchDemo} />
+                    <Route path="/searchDemo" component={SearchDemo} /> */}
+
                     <Route path="/compareItem/:id" component={CompareItemsPage} />
                     
                     <Route path="/validate" component={Validate} />
@@ -80,7 +82,7 @@ class RouteURL extends Component {
                     
                     <Route path="/404" component={Error} />
 
-                    <ProtectLogin path="/login" isLogin={true} component={LoginPage} />
+                    <ProtectLogin path="/login" component={LoginPage} />
 
                     <Route path="/register" component={RegisterPage}/>
 
@@ -119,12 +121,12 @@ class RouteURL extends Component {
 //     )} />
 // )
 
-const ProtectLogin = ({ component: Component, isLogin, ...rest }) => (
-    <Route {...rest} render={(props) => (
-        isLogin
-            ? <Component {...props} />
-            : <Redirect to='/' />
-    )} />
-)
+// const ProtectLogin = ({ component: Component, isLogin, ...rest }) => (
+//     <Route {...rest} render={(props) => (
+//         isLogin
+//             ? <Component {...props} />
+//             : <Redirect to='/' />
+//     )} />
+// )
 
 export default RouteURL;

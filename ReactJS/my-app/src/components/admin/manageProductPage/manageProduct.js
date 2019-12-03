@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import '../../../css/sb-admin.css'
 import Product from './product'
 import { withRouter, Redirect } from 'react-router';
+import Pagination from "../../Pagination";
 
+const pageLimit = 8;
 
 class contentAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            productList: []
+            productList: [],
+            currentProducts: [],
         });
         this.searchOnChange = this.searchOnChange.bind(this);
         this.deleteSanPham = this.deleteSanPham.bind(this);
@@ -16,16 +19,32 @@ class contentAdmin extends Component {
 
     async componentDidMount() {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
-        if (adInfo.accessToken) {
-            const list = await (await fetch(`/hung/sanPham`, {
-                headers: {
-                    'method': 'GET',
-                    'Authorization': `Bearer ${adInfo.accessToken}`
-                }
-            }
-            )).json();
-            this.setState({ productList: list })
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
         }
+        else {
+            if (adInfo.accessToken) {
+                const list = await (await fetch(`/hung/sanPham`, {
+                    headers: {
+                        'method': 'GET',
+                        'Authorization': `Bearer ${adInfo.accessToken}`
+                    }
+                }
+                )).json();
+                this.setState({ productList: list })
+                this.setState({ currentProducts: this.state.productList.slice(0, pageLimit) });
+            }
+        }
+    }
+
+    onPageChanged = data => {
+        const offset = (data.currentPage - 1) * data.pageLimit;
+        const currentProducts = this.state.productList.slice(offset, offset + data.pageLimit);
+        this.setState({
+            currentProducts: currentProducts,
+        });
     }
 
     async searchOnChange(event) {
@@ -40,7 +59,13 @@ class contentAdmin extends Component {
             },
             body: (!event.target.value ? "%" : event.target.value)
         }).then(res => res.json()).then(result => {
-            this.setState({ productList: result });
+            if (result.error === "Forbidden" && result.status === 403) {
+                localStorage.removeItem("adminInfo");
+                this.props.history.push('/loginAdmin?message=tokenexpired');
+            }
+            else {
+                this.setState({ productList: result });
+            }
         });
     }
 
@@ -67,7 +92,7 @@ class contentAdmin extends Component {
     }
 
     render() {
-        const list = this.state.productList;
+        const list = this.state.currentProducts;
         console.log(list);
         const postList = list.map((p, i) => {
             return <Product key={i}
@@ -75,6 +100,8 @@ class contentAdmin extends Component {
                 imageSrc={p.hinh}
                 lapName={p.tenSP}
                 status={p.status}
+                soLuong={p.soLuong}
+                gia={p.gia}
                 lapBrand={p.thuongHieu.tenThuongHieu}
                 updateFunc={this.deleteSanPham}
             ></Product>
@@ -104,8 +131,10 @@ class contentAdmin extends Component {
                                 <th scope="col">Ảnh minh họa</th>
                                 <th scope="col">Thương hiệu</th>
                                 <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Tình trạng</th>
-                                <th scope="col"></th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Giá</th>
+                                {/* <th scope="col">Tình trạng</th> */}
+                                {/* <th scope="col"></th> */}
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -113,6 +142,12 @@ class contentAdmin extends Component {
                             {postList}
                         </tbody>
                     </table>
+                    <div className="d-flex justify-content-center">
+                    {
+                        (this.state.currentProducts.length > 0) &&
+                        <Pagination totalRecords={this.state.productList.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                    }
+                </div>
                 </div>
             </div>
         );

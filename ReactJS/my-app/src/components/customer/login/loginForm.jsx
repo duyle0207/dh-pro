@@ -4,6 +4,7 @@ import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import { GoogleLogout } from 'react-google-login';
 import '../../../css/facebookBtn.css';
+import Modal from 'react-awesome-modal';
 
 class loginForm extends Component {
 
@@ -18,13 +19,37 @@ class loginForm extends Component {
             userID: "",
             name: "",
             email: "",
-            picture: ""
+            picture: "",
+            visible: false
         })
 
         this.onSubmitLogin = this.onSubmitLogin.bind(this);
         this.onHandleChange = this.onHandleChange.bind(this);
         this.responseFacebook = this.responseFacebook.bind(this);
     }
+
+    componentDidMount() {
+        const queryString = require('query-string');
+
+        const params = queryString.parse(this.props.location.search);
+
+        if (params.message === "tokenexpired") {
+            this.setState({ visible: true });
+        }
+    }
+
+    openModal() {
+        this.setState({
+            visible: true
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            visible: false
+        });
+    }
+
 
     async onHandleChange(event) {
         var name = event.target.name;
@@ -161,6 +186,9 @@ class loginForm extends Component {
                     this.props.history.push("/");
                 }
                 else {
+                    // var usInfo = JSON.parse(localStorage.setItem("userInfo", JSON.stringify(data)));
+                    // usInfo['customerName'] = response.w3.ig;
+                    // localStorage.setItem("userInfo", JSON.stringify(usInfo));
                     fetch('/customerUnauthenticated/themKhachHang', {
                         method: 'POST',
                         headers: {
@@ -184,6 +212,9 @@ class loginForm extends Component {
                         })
                     }).then(res => {
                         if (res.ok) {
+                            var usInfo = JSON.parse(localStorage.getItem("userInfo"));
+                            usInfo['customerName'] = response.w3.ig;
+                            localStorage.setItem("userInfo", JSON.stringify(usInfo));
                             this.props.history.push("/");
                         }
                     })
@@ -214,13 +245,38 @@ class loginForm extends Component {
         //         </div>
         //     );
         // } else {
-
         // }
+
         return (
             <div className="container">
+                <Modal visible={this.state.visible} width="400" height="200" effect="fadeInDown" onClickAway={() => this.closeModal()}>
+                    <div className="text-center">
+                        <div className="" >
+                            <div className="toast-header">
+                                <strong className="mr-auto">Thông báo</strong>
+                                {/* <small>11 mins ago</small> */}
+                                <button type="button" className="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                    {/* <span aria-hidden="true" ></span> */}
+                                    <a className="text-decoration-none text-dark" href="javascript:void(0);" onClick={() => this.closeModal()}>&times;</a>
+                                </button>
+                            </div>
+                            <div className="toast-body">
+                                <div className="row mt-4">
+                                    <div className="col-sm-3">
+                                        <i className="ml-4 fa fa-remove" style={{ color: '#FE2020', 'fontSize': '60px' }}></i>
+                                    </div>
+                                    <div className="col-sm-9">
+                                        <p className="h5 mx-3 mb-4 text-justify">Phiên đăng nhập của bạn đã hết vui lòng đăng nhập lại để tiếp tục</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <h1><span className="badge badge-warning my-4">Thông báo</span></h1> */}
+
+                    </div>
+                </Modal>
                 <div className="row my-4">
                     <div className="col-sm-5">
-
                         <h2>Đăng nhập</h2>
                         <p>Đăng nhập để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.</p>
                         <img className="img-fluid" src="https://frontend.tikicdn.com/_new-next/static/img/graphic-map.png" alt="#alt"></img>

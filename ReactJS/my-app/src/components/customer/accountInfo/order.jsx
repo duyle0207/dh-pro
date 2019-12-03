@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Product from './product';
 import Products from './products';
+import Pagination from "../../Pagination";
+
+const pageLimit = 8;
 
 class order extends Component {
 
@@ -11,9 +14,18 @@ class order extends Component {
             hoaDon: [],
             productList: [],
             idhd: '',
-            donGia: 0
+            donGia: 0,
+            currentHoaDon: [],
         });
         this.handleViewProduct = this.handleViewProduct.bind(this);
+    }
+
+    onPageChanged = data => {
+        const offset = (data.currentPage - 1) * data.pageLimit;
+        const currentHoaDon = this.state.hoaDon.slice(offset, offset + data.pageLimit);
+        this.setState({
+            currentHoaDon: currentHoaDon,
+        });
     }
 
     async componentDidMount() {
@@ -26,7 +38,7 @@ class order extends Component {
             body: JSON.stringify(this.props.customer)
         })).json();
 
-        this.setState({ hoaDon: hoaDon });
+        this.setState({ hoaDon: hoaDon, currentHoaDon: this.state.hoaDon.slice(0, pageLimit) });
         console.log(hoaDon);
     }
 
@@ -37,18 +49,18 @@ class order extends Component {
         this.setState({ idhd: id }, async () => {
             // alert(this.state.idhd);
             const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${this.state.idhd}`)).json();
-            this.setState({ productList: productList },()=>{
-                const dg = this.state.productList.reduce((accumulator, currentValue)=>{
+            this.setState({ productList: productList }, () => {
+                const dg = this.state.productList.reduce((accumulator, currentValue) => {
                     return (accumulator + currentValue.donGia)
-                },0);
-                this.setState({donGia: dg});
+                }, 0);
+                this.setState({ donGia: dg });
             });
         });
     }
 
     render() {
         return (
-            <React.Fragment>
+            <div style={{ marginBottom: 350 }} >
                 {this.state.idhd !== '' ?
                     <React.Fragment>
                         <nav className="navbar navbar-light bg-light mb-2">
@@ -74,7 +86,7 @@ class order extends Component {
                                 })}
                             </tbody>
                         </table>
-                        <div className="row ml-2" style={{ marginBottom: '50%' }}>
+                        <div className="row ml-2">
                             <div className="col-sm-6 mt-1">
                                 <p className="h5 info-cart">Tạm tính</p>
                             </div>
@@ -92,22 +104,29 @@ class order extends Component {
                                 Đơn hàng của tôi
                             </span>
                         </nav>
-                        <table className="table table-borderless table-hover">
+                        <table className="table table-borderless table-hover" style={{height:270}}>
                             <thead className="thead-secondary">
                                 <tr>
-                                    <th scope="col">Mã đơn hàng</th>
+                                    <th scope="col">#</th>
                                     <th scope="col">Ngày mua</th>
                                     <th scope="col">Tổng tiền</th>
                                     <th scope="col">Tình trạng</th>
+                                    <th scope="col">Thanh toán</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.hoaDon.map((value) => {
-                                    return <Product id={value.id} ngayMuaHang={value.ngayMuaHang} tinhTrang={value.tinhTrang} tongTien={value.tongTien} handleViewProduct={this.handleViewProduct}></Product>
+                                {this.state.currentHoaDon.map((value) => {
+                                    return <Product id={value.id} thanhToan={value.phuongThucThanhToan} ngayMuaHang={value.ngayMuaHang} tinhTrang={value.tinhTrang} tongTien={value.tongTien} handleViewProduct={this.handleViewProduct}></Product>
                                 })}
                             </tbody>
                         </table>
+                        <div className="d-flex justify-content-center">
+                            {
+                                (this.state.hoaDon.length > 0) &&
+                                <Pagination totalRecords={this.state.hoaDon.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                            }
+                        </div>
                     </div>
                 }
 
@@ -116,7 +135,7 @@ class order extends Component {
                         return <Products product={value}></Products>
                     })
                 } */}
-            </React.Fragment>
+            </div>
         );
     }
 }

@@ -69,6 +69,7 @@ class pin extends Component {
         console.log(JSON.stringify(this.state.pin));
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -107,6 +108,7 @@ class pin extends Component {
     async handleOnClickTable(id) {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -145,6 +147,7 @@ class pin extends Component {
     async handlePreviousPage() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -157,6 +160,7 @@ class pin extends Component {
     async handleNextPage() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {

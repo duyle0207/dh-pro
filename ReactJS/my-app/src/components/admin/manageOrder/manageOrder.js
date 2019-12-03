@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import Products from '../../customer/accountInfo/products';
 import { withRouter } from 'react-router';
+import Pagination from "../../Pagination";
+
+const pageLimit = 8;
 
 export class ManageOrder extends Component {
     constructor() {
@@ -11,7 +14,8 @@ export class ManageOrder extends Component {
             donGia: '',
             isSending: false,
             sendMailStatus: '',
-            isConfirm: true
+            isConfirm: true,
+            currentOrder: [],
         }
         this.onConfirmClick = this.onConfirmClick.bind(this);
     }
@@ -29,11 +33,21 @@ export class ManageOrder extends Component {
         });
         const json = await response.json();
         this.setState({ orders: json }, () => console.log(this.state.orders));
+        this.setState({ currentOrder: this.state.orders.slice(0, pageLimit) }, () => console.log(this.state.orders));
+    }
+
+    onPageChanged = data => {
+        const offset = (data.currentPage - 1) * data.pageLimit;
+        const currentOrder = this.state.orders.slice(offset, offset + data.pageLimit);
+        this.setState({
+            currentOrder: currentOrder,
+        });
     }
 
     async onViewDetailClick(id, tinhTrang) {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -54,6 +68,7 @@ export class ManageOrder extends Component {
     async onConfirmClick() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
@@ -131,7 +146,7 @@ export class ManageOrder extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.orders.map((order) => {
+                        {this.state.currentOrder.map((order) => {
                             return (
                                 <tr key={order.id}>
                                     <th scope="row">{order.id}</th>
@@ -152,6 +167,12 @@ export class ManageOrder extends Component {
                         })}
                     </tbody>
                 </table>
+                <div className="d-flex justify-content-center">
+                    {
+                        (this.state.currentOrder.length > 0) &&
+                        <Pagination totalRecords={this.state.orders.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                    }
+                </div>
                 <div className="modal fade" id="confirmForm" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">

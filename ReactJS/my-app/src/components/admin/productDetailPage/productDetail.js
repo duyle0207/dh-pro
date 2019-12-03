@@ -330,9 +330,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.cpu = cpu;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (cpu.error === "Forbidden" && cpu.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.cpu = cpu;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeOCung(event) {
@@ -345,9 +351,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.oCung = oCung;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.oCung);
+        if (oCung.error === "Forbidden" && oCung.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.oCung = oCung;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.oCung);
+        }
     }
 
     async handleChangeRAM(event) {
@@ -360,9 +372,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.ram = ram;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.ram);
+        if (ram.error === "Forbidden" && ram.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.ram = ram;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.ram);
+        }
     }
 
     async handleChangeCard(event) {
@@ -375,9 +393,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.cardDoHoa = cardDoHoa;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.cardDoHoa);
+        if (cardDoHoa.error === "Forbidden" && cardDoHoa.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.cardDoHoa = cardDoHoa;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.cardDoHoa);
+        }
     }
 
     async handleChangeCaManHinh(event) {
@@ -390,9 +414,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.manHinh = manHinh;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.manHinh);
+        if (manHinh.error === "Forbidden" && manHinh.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.manHinh = manHinh;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.manHinh);
+        }
     }
 
     async handleChangePin(event) {
@@ -405,9 +435,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.pin = pin;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail.pin);
+        if (pin.error === "Forbidden" && pin.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.pin = pin;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail.pin);
+        }
     }
 
     async handleChangeHeDieuHanh(event) {
@@ -420,9 +456,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.heDieuHanh = heDieuHanh;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (heDieuHanh.error === "Forbidden" && heDieuHanh.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.heDieuHanh = heDieuHanh;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeNhuCauSuDung(event) {
@@ -435,9 +477,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.nhuCauSuDung = nhuCauSuDung;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (nhuCauSuDung.error === "Forbidden" && nhuCauSuDung.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.nhuCauSuDung = nhuCauSuDung;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
 
     async handleChangeThuongHieu(event) {
@@ -450,9 +498,15 @@ class productDetail extends Component {
                 'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
             }
         })).json();
-        this.sp.thuongHieu = thuongHieu;
-        this.setState({ productDetail: this.sp });
-        console.log(this.state.productDetail);
+        if (thuongHieu.error === "Forbidden" && thuongHieu.status === 403) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.sp.thuongHieu = thuongHieu;
+            this.setState({ productDetail: this.sp });
+            console.log(this.state.productDetail);
+        }
     }
     //#endregion
 
@@ -494,7 +548,7 @@ class productDetail extends Component {
                     }).then(res => {
                         if (res.ok) {
                             console.log(res);
-                            alert("File uploaded successfully.");
+                            // alert("File uploaded successfully.");
                         }
                     });
                 }
@@ -509,7 +563,8 @@ class productDetail extends Component {
                     }).then(res => {
                         if (res.ok) {
                             console.log(res);
-                            alert("File uploaded successfully.");
+                            alert("Thêm sản phẩm thành công");
+                            this.props.history.push('/manageProduct');
                         }
                     });
                 }
@@ -638,7 +693,7 @@ class productDetail extends Component {
                                     }
                                 </ul>
                                 <div className="text-center">
-                                    <button type="button" className="btn btn-dark mx-4" onClick={this.enableUpdateDecriptedImage}>Upload</button>
+                                    <button type="button" className="btn btn-dark mx-4 my-4" onClick={this.enableUpdateDecriptedImage}>Upload</button>
                                 </div>
                             </div>
                         </div>

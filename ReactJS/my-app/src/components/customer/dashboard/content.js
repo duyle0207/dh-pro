@@ -29,7 +29,7 @@ class content extends React.Component {
 
   render() {
     var list = this.state.productList.map((value,index)=>{
-        if(value.status===true)
+        if(value.soLuong>0)
         {
           return <Item imgSrc={value.hinh} lapName={value.tenSP} brand={value.thuongHieu.tenThuongHieu} price={value.gia} id={value.id} key={index} product={value}></Item>
         }

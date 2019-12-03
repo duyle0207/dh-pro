@@ -6,7 +6,7 @@ import Logo from "../../../images/logo.png";
 class footer extends React.Component {
   render() {
     return (
-      <footer style={{ paddingTop: 50 }}>
+      <footer style={{ paddingTop: 55 }}>
         <div className="container-fluid" style={{backgroundColor: '#1F2024'}}>
           <div className="container" style={{ paddingTop: 30 }}>
             <div className="row mb-4" id="top-footer-1">

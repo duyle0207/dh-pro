@@ -27,6 +27,7 @@ class manageSpecificationPage extends Component {
     render() {
         if(!this.state.isAuthenticated)
         {
+            localStorage.removeItem("adminInfo");
             return <Redirect to='/loginAdmin?message=tokenexpired'></Redirect>
         }
         else {

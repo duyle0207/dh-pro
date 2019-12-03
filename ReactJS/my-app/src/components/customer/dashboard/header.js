@@ -158,7 +158,6 @@ class header extends React.Component {
               </ul>
             </div>
             <ul className="navbar-nav">
-              
               {Object.keys(this.state.userInfo).length === 0 ?
                 <li className="nav-item dropdown mr-4 mt-3">
                   <div className="dropdown">
@@ -200,7 +199,17 @@ class header extends React.Component {
                   </i>
                 </a> */}
                 <Link className="navbar-brand" to="/cart">
-                  <img className="mt-1" width="40" height="40" src="https://image.flaticon.com/icons/svg/526/526737.svg"></img>
+                  <div className="row">
+                    <div className="col-sm-4">
+                      <img className="mt-1" width="40" height="40" src="https://image.flaticon.com/icons/svg/526/526737.svg"></img>
+                    </div>
+                    <div className="col-sm-8">
+                      <span className="badge badge-light ml-1"> {this.state.quantityCart}</span>
+                      {/* <small className="ml-1"></small> */}
+                      {/* <p ></p> */}
+                    </div>
+                  </div>
+
                 </Link>
                 {/* <b className="text-dark">({this.state.quantityCart})</b> */}
               </li>

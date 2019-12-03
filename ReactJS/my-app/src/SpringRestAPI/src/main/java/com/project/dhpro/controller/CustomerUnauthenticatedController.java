@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -225,6 +226,7 @@ public class CustomerUnauthenticatedController {
         for (TaiKhoan tk : ListTaiKhoan()) {
             if(tk.getUserName().equals(taiKhoan.getUserName()))
             {
+                System.out.println("Có rồi nè");
                 TaiKhoan taiKhoan2 = taiKhoanService.findTaiKhoanByUserName(tk.getUserName());
                 taiKhoan2.setPassword(taiKhoan.getPassword());
                 TaiKhoan taiKhoan1 = taiKhoanService.save(taiKhoan2);
@@ -240,6 +242,7 @@ public class CustomerUnauthenticatedController {
                 return loginResponse;
             }
         }
+        System.out.println("Chưa có");
         System.out.println(taiKhoan.toString());
         String encodedPassword = new BCryptPasswordEncoder().encode(taiKhoan.getPassword());
         taiKhoan.setPassword(encodedPassword);
@@ -252,7 +255,7 @@ public class CustomerUnauthenticatedController {
         loginResponse.setAccessToken(jwt);
         loginResponse.setNewAccount(true);
         loginResponse.setId(tk.getId());
-        loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(tk).getTen());
+//        loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(tk).getTen());
 
         return loginResponse;
     }
@@ -281,6 +284,7 @@ public class CustomerUnauthenticatedController {
     @PostMapping("/saveSanPham")
     public ResponseEntity<SanPham> insertAccount(@Valid @RequestBody SanPham sanPham) throws URISyntaxException {
         System.out.println(sanPham);
+        sanPham.setStatus(true);
         SanPham sp = sanPhamService.save(sanPham);
         System.out.println("ID: "+sp.getId());
         return new ResponseEntity<SanPham>(sp, HttpStatus.OK);
@@ -391,6 +395,31 @@ public class CustomerUnauthenticatedController {
         return quantity;
     }
 
+    @GetMapping(value = "/checkCartQuantityBeforeCheckOut")
+    public List<SanPham> checkCartQuantityBeforeCheckOut(HttpServletRequest request)
+    {
+
+        List<SanPham> removedSanPhamFromCart = new ArrayList<SanPham>();;
+        Cart cart = CartUtils.getCart(request);
+
+        if(cart!=null)
+        {
+            for (CartLine cartLine : cart.getCartLines()) {
+                SanPham sanPham = sanPhamService.findById(cartLine.getSanPham().getId());
+                if(cartLine.getSoLuong()>sanPham.getSoLuong())
+                {
+                    removedSanPhamFromCart.add(cartLine.getSanPham());
+                }
+            }
+            for(SanPham sanPham: removedSanPhamFromCart)
+            {
+                cart.removeProduct(sanPham);
+            }
+        }
+        return removedSanPhamFromCart;
+    }
+
+
     // Hóa đơn
     @Autowired
     HoaDonService hoaDonService;
@@ -425,6 +454,9 @@ public class CustomerUnauthenticatedController {
             chiTietHoaDon.setSanPham(sanPham);
             chiTietHoaDon.setDonGia((int) line.getTongTien());
             chiTietHoaDon.setSoLuong(line.getSoLuong());
+
+            SanPham sp = sanPhamService.findById(line.getSanPham().getId());
+            sp.setSoLuong(sp.getSoLuong()-line.getSoLuong());
 
             chiTietHoaDonService.save(chiTietHoaDon);
         }
@@ -464,6 +496,7 @@ public class CustomerUnauthenticatedController {
     public KhachHang addNewCus(@Valid @RequestBody KhachHang khachHang) {
         return khachHangService.save(khachHang);
     }
+
     @GetMapping(value = "/getCustomerByTaiKhoanID/{id}")
     public KhachHang getCustomerByTaiKhoanId(@PathVariable("id") int id)
     {
