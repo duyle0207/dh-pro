@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class ram extends Component {
 
@@ -66,24 +67,31 @@ class ram extends Component {
     async insertCardDoHoa(event) {
         event.preventDefault();
         console.log(JSON.stringify(this.state.ram));
-        await fetch('/insertRAM', {
-            method: (this.state.ram.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.ram),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            await fetch('/insertRAM', {
+                method: (this.state.ram.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.ram),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });   
+        }
     }
 
     clearField() {
@@ -98,12 +106,19 @@ class ram extends Component {
     }
 
     async handleOnClickTable(id) {
-        const ram = await (await fetch(`/ram/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ ram: ram });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            const ram = await (await fetch(`/ram/${id}`,{
+                headers:{
+                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ ram: ram });   
+        }
     }
 
     async handeClearBtn() {
@@ -130,14 +145,28 @@ class ram extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }   
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }   
         }
     }
 
@@ -261,4 +290,4 @@ class ram extends Component {
 
 }
 
-export default ram;
+export default withRouter(ram);

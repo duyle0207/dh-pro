@@ -180,7 +180,7 @@ class header extends React.Component {
                       </div>
                       <div className="col-sm-10 text-white">
                         <button className="btn dropdown-toggle shadow-none text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Chào {this.state.userInfo.userName}
+                          Chào {this.state.userInfo.customerName}
                         </button>
                         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           {/* <a className="dropdown-item" href="#">Đơn hàng của tôi</a> */}

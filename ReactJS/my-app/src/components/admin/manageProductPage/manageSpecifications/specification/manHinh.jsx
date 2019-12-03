@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class manHinh extends Component {
     constructor(props) {
@@ -34,20 +35,20 @@ class manHinh extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
 
-        const totalPages = await (await fetch(`/getTotalPages`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const totalPages = await (await fetch(`/getTotalPages`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getManHinh/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const cardList = await (await fetch(`/getManHinh/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: cardList });
@@ -65,24 +66,30 @@ class manHinh extends Component {
 
     async insert(event) {
         event.preventDefault();
-        await fetch('/insertManHinh', {
-            method: (this.state.manHinh.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.manHinh),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            await fetch('/insertManHinh', {
+                method: (this.state.manHinh.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.manHinh),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -98,13 +105,19 @@ class manHinh extends Component {
     }
 
     async handleOnClickTable(id) {
-        const manHinh = await (await fetch(`/manHinh/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ manHinh: manHinh });
-        console.log(manHinh);
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const manHinh = await (await fetch(`/manHinh/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ manHinh: manHinh });
+            console.log(manHinh);
+        }
     }
 
     async handeClearBtn() {
@@ -121,9 +134,9 @@ class manHinh extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const manHinhList = await (await fetch(`/getManHinh/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const manHinhList = await (await fetch(`/getManHinh/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(manHinhList);
@@ -132,14 +145,26 @@ class manHinh extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }
         }
     }
 
@@ -274,4 +299,4 @@ class manHinh extends Component {
     }
 }
 
-export default manHinh;
+export default withRouter(manHinh);

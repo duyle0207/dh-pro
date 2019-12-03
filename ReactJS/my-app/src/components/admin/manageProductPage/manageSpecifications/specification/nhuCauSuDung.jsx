@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class nhuCauSuDung extends Component {
     constructor(props) {
@@ -31,20 +32,20 @@ class nhuCauSuDung extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
 
-        const totalPages = await (await fetch(`/getTotalPagesNhuCauSuDung`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const totalPages = await (await fetch(`/getTotalPagesNhuCauSuDung`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getNhuCauSuDung/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const hdhList = await (await fetch(`/getNhuCauSuDung/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: hdhList });
@@ -52,9 +53,9 @@ class nhuCauSuDung extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getNhuCauSuDung/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const cardList = await (await fetch(`/getNhuCauSuDung/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(cardList);
@@ -63,14 +64,28 @@ class nhuCauSuDung extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }   
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else{
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }   
         }
     }
 
@@ -87,24 +102,30 @@ class nhuCauSuDung extends Component {
     async insert(event) {
         console.log(this.state.heDieuHanh);
         event.preventDefault();
-        await fetch('/insertNhuCauSuDung', {
-            method: (this.state.nhuCauSuDung.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.nhuCauSuDung),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            await fetch('/insertNhuCauSuDung', {
+                method: (this.state.nhuCauSuDung.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.nhuCauSuDung),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -117,12 +138,18 @@ class nhuCauSuDung extends Component {
     }
 
     async handleOnClickTable(id) {
-        const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ nhuCauSuDung: nhuCauSuDung });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const nhuCauSuDung = await (await fetch(`/nhuCauSuDung/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ nhuCauSuDung: nhuCauSuDung });
+        }
     }
 
     handeClearBtn() {
@@ -173,7 +200,7 @@ class nhuCauSuDung extends Component {
                     {this.state.isOpen ?
                         <div className="container-fluid">
                             <div className="row">
-                                
+
                             </div>
                             <div className="row">
                                 <div className="col-sm-8">
@@ -226,9 +253,9 @@ class nhuCauSuDung extends Component {
                             <div className="row mx-4">
                                 <nav className="float-right" aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item" onClick={this.handlePreviousPage}><a class="page-link"  href="#">Previous</a></li>
+                                        <li class="page-item" onClick={this.handlePreviousPage}><a class="page-link" href="#">Previous</a></li>
                                         <li class="page-item"><a class="page-link" href="#">{this.state.currentPage}</a></li>
-                                        <li class="page-item" onClick={this.handleNextPage} ><a class="page-link"  href="#">Next</a></li>
+                                        <li class="page-item" onClick={this.handleNextPage} ><a class="page-link" href="#">Next</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -242,4 +269,4 @@ class nhuCauSuDung extends Component {
     }
 }
 
-export default nhuCauSuDung;
+export default withRouter(nhuCauSuDung);

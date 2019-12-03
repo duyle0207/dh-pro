@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class pin extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = ({
@@ -34,20 +35,20 @@ class pin extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
 
-        const totalPages = await (await fetch(`/getTotalPagesPin`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const totalPages = await (await fetch(`/getTotalPagesPin`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getPin/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const cardList = await (await fetch(`/getPin/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: cardList });
@@ -66,24 +67,30 @@ class pin extends Component {
     async insertCardDoHoa(event) {
         event.preventDefault();
         console.log(JSON.stringify(this.state.pin));
-        await fetch('/insertPin', {
-            method: (this.state.pin.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.pin),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            await fetch('/insertPin', {
+                method: (this.state.pin.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.pin),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -98,12 +105,18 @@ class pin extends Component {
     }
 
     async handleOnClickTable(id) {
-        const pin = await (await fetch(`/hung/pin/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ pin: pin });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const pin = await (await fetch(`/hung/pin/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ pin: pin });
+        }
     }
 
     async handeClearBtn() {
@@ -119,9 +132,9 @@ class pin extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getPin/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const cardList = await (await fetch(`/getPin/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(cardList);
@@ -130,14 +143,26 @@ class pin extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }
         }
     }
 
@@ -260,4 +285,4 @@ class pin extends Component {
     }
 }
 
-export default pin;
+export default withRouter(pin);

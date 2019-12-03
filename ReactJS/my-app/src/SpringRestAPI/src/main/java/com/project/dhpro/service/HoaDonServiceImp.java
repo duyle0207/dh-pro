@@ -35,4 +35,9 @@ public class HoaDonServiceImp implements HoaDonService{
     public HoaDon getHoaDonByID(int id) {
         return hoaDonRepository.findById(id).get();
     }
+
+    @Override
+    public List<HoaDon> findAllByOrderByIdDesc() {
+        return hoaDonRepository.findAllByOrderByIdDesc();
+    }
 }

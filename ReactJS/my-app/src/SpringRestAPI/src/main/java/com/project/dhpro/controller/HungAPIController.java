@@ -149,6 +149,11 @@ public class HungAPIController {
         return hoaDonService.getAll();
     }
 
+    @GetMapping(value = "/hoaDonOrderByDesc")
+    List<HoaDon> ListHoaDonOrderByDesc() {
+        return hoaDonService.findAllByOrderByIdDesc();
+    }
+
     @DeleteMapping(value="/deleteSanPham/{id}")
     public  ResponseEntity<SanPham> deleteSanPham(@PathVariable("id") int id)
     {

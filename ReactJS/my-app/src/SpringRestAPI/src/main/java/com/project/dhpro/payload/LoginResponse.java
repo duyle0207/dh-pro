@@ -22,6 +22,46 @@ public class LoginResponse {
 
     private String accessToken;
 
+    private String refreshToken;
+
+    private boolean newAccount;
+
+    private int id;
+
+    private String customerName;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isNewAccount() {
+        return newAccount;
+    }
+
+    public void setNewAccount(boolean newAccount) {
+        this.newAccount = newAccount;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public String getUserName() {
         return userName;
     }

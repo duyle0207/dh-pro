@@ -1,0 +1,33 @@
+.btnFacebook { 
+    width: 200px;
+    height:50px;  
+    border-radius: 4px;
+    background: #3b5998;
+    color:white;
+    border:0px transparent;  
+    /* text-align: center; */
+    margin:5px;
+    display: inline-block; 
+    padding-right: 25px;
+  }
+.icon{
+    float: left;
+}
+.btnGoogle { 
+    margin:5px;
+    width: 200px;
+    height:50px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.btnGoogle:hover {
+    background: #db3236;
+    opacity: 0.6;
+  }
+  
+@media only screen and (max-width : 399px) {
+    .btnFacebook,.btnGoogle{
+      width: 100%
+    }
+}

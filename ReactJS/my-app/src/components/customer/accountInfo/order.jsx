@@ -74,7 +74,7 @@ class order extends Component {
                                 })}
                             </tbody>
                         </table>
-                        <div className="row ml-2">
+                        <div className="row ml-2" style={{ marginBottom: '50%' }}>
                             <div className="col-sm-6 mt-1">
                                 <p className="h5 info-cart">Tạm tính</p>
                             </div>
@@ -98,12 +98,13 @@ class order extends Component {
                                     <th scope="col">Mã đơn hàng</th>
                                     <th scope="col">Ngày mua</th>
                                     <th scope="col">Tổng tiền</th>
+                                    <th scope="col">Tình trạng</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {this.state.hoaDon.map((value) => {
-                                    return <Product id={value.id} ngayMuaHang={value.ngayMuaHang} tongTien={value.tongTien} handleViewProduct={this.handleViewProduct}></Product>
+                                    return <Product id={value.id} ngayMuaHang={value.ngayMuaHang} tinhTrang={value.tinhTrang} tongTien={value.tongTien} handleViewProduct={this.handleViewProduct}></Product>
                                 })}
                             </tbody>
                         </table>

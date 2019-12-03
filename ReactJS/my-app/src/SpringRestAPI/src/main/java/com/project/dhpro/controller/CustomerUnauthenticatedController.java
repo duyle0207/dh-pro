@@ -112,7 +112,7 @@ public class CustomerUnauthenticatedController {
         return oCungService.findAll();
     }
 
-    //Card đồ họa
+    //Card đồ họadangKi
     @Autowired
     CardDoHoaService cardDoHoaService;
 
@@ -143,7 +143,7 @@ public class CustomerUnauthenticatedController {
 
     @PostMapping("/login")
     public LoginResponse authenticateUser(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) {
-        System.out.println("Login");
+//        System.out.println("Login");
         // Xác thực từ username và password.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -164,16 +164,34 @@ public class CustomerUnauthenticatedController {
         // Trả về jwt cho người dùng.
         String jwt = tokenProvider.generateToken(id);
 
-        System.out.println(jwt);
+        String refreshToken = tokenProvider.generateRefreshToken(id);
+
+        System.out.println("Access token: "+jwt);
+        System.out.println("Refresh token: "+refreshToken);
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setAuthorities((Collection<GrantedAuthority>) authentication.getAuthorities());
         loginResponse.setUserName(authentication.getName());
         loginResponse.setAccessToken(jwt);
+        loginResponse.setRefreshToken(refreshToken);
+        loginResponse.setId(id);
+        System.out.println(authentication.getAuthorities());
+
+
+
+        if(!(taiKhoanService.findById(id).getRole().getTenRole()).equals("Admin")) {
+            loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(taiKhoanService.findById(id)).getTen());
+        }
 
         System.out.println(authentication.getPrincipal());
 
         return loginResponse;
+    }
+
+    @GetMapping(value = "/validateJWT/{jwt}")
+    boolean validateJWT(@PathVariable("jwt") String jwt)
+    {
+        return tokenProvider.validateToken(jwt);
     }
 
     List<TaiKhoan> ListTaiKhoan() {
@@ -191,6 +209,52 @@ public class CustomerUnauthenticatedController {
         taiKhoan.setPassword(encodedPassword);
         TaiKhoan tk = taiKhoanService.save(taiKhoan);
         return new ResponseEntity<String>(String.valueOf(tk.getId()),HttpStatus.OK);
+    }
+
+    @PutMapping("/updateSocialAccount")
+    ResponseEntity saveSocialAccount(@Valid @RequestBody TaiKhoan taiKhoan)
+    {
+        System.out.println(taiKhoan.getId());
+        taiKhoanService.save(taiKhoan);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/dangKySocialAccount")
+    public LoginResponse registerSocialAccount(@Valid @RequestBody TaiKhoan taiKhoan)
+    {
+        for (TaiKhoan tk : ListTaiKhoan()) {
+            if(tk.getUserName().equals(taiKhoan.getUserName()))
+            {
+                TaiKhoan taiKhoan2 = taiKhoanService.findTaiKhoanByUserName(tk.getUserName());
+                taiKhoan2.setPassword(taiKhoan.getPassword());
+                TaiKhoan taiKhoan1 = taiKhoanService.save(taiKhoan2);
+
+                LoginResponse loginResponse = new LoginResponse();
+                loginResponse.setUserName(taiKhoan1.getUserName());
+                String jwt = tokenProvider.generateToken(taiKhoan1.getId());
+                loginResponse.setAccessToken(jwt);
+                loginResponse.setNewAccount(false);
+                loginResponse.setId(taiKhoan1.getId());
+                loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(taiKhoan1).getTen());
+
+                return loginResponse;
+            }
+        }
+        System.out.println(taiKhoan.toString());
+        String encodedPassword = new BCryptPasswordEncoder().encode(taiKhoan.getPassword());
+        taiKhoan.setPassword(encodedPassword);
+        TaiKhoan tk = taiKhoanService.save(taiKhoan);
+
+        //Login response
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setUserName(tk.getUserName());
+        String jwt = tokenProvider.generateToken(tk.getId());
+        loginResponse.setAccessToken(jwt);
+        loginResponse.setNewAccount(true);
+        loginResponse.setId(tk.getId());
+        loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(tk).getTen());
+
+        return loginResponse;
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)

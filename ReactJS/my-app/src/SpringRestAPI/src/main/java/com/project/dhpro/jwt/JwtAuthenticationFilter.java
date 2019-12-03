@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Checking"); 
+        System.out.println("Checking");
         String url = request.getRequestURI();
         if (!url.startsWith("/login") && !url.startsWith("/customerUnauthenticated")) {
             System.out.println("Checking");

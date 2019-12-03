@@ -53,7 +53,7 @@ class headerAdmin extends Component {
                                     <i className="fas fa-user-circle fa-fw" />
                                 </div>
                                 <div className="col-sm-8">
-                                    <p className="h6">duy</p>
+                                    <p className="h6">{JSON.parse(localStorage.getItem("adminInfo")).userName}</p>
                                 </div>
                             </div>
                             

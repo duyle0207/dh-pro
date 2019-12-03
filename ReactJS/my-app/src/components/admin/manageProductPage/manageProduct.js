@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../../css/sb-admin.css'
 import Product from './product'
+import { withRouter, Redirect } from 'react-router';
+
 
 class contentAdmin extends Component {
     constructor(props) {
@@ -14,12 +16,11 @@ class contentAdmin extends Component {
 
     async componentDidMount() {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
-        if(adInfo.accessToken)
-        {
-            const list = await (await fetch(`/hung/sanPham`,{
-                headers:{
+        if (adInfo.accessToken) {
+            const list = await (await fetch(`/hung/sanPham`, {
+                headers: {
                     'method': 'GET',
-                    'Authorization' : `Bearer ${adInfo.accessToken}`
+                    'Authorization': `Bearer ${adInfo.accessToken}`
                 }
             }
             )).json();
@@ -32,32 +33,37 @@ class contentAdmin extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
         fetch('/searchSPAdmin/', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+                'Authorization': `Bearer ${adInfo.accessToken}`
             },
-            body: (!event.target.value? "%":event.target.value)
-        }).then(res => res.json()).then(result=>{
+            body: (!event.target.value ? "%" : event.target.value)
+        }).then(res => res.json()).then(result => {
             this.setState({ productList: result });
         });
     }
 
-    async deleteSanPham(id)
-    {
-        var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
-        fetch(`/updateStatusSanPham/${id}`, {
-            method: 'POST',
-            headers: { 
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${adInfo.accessToken}`
-            }
-        }).then(()=>{
-            this.componentDidMount();
-            // const newList = this.state.productList.filter(i => i.id!==id);
-            // this.setState({ productList: newList });
-        });
+    async deleteSanPham(id) {
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
+            fetch(`/updateStatusSanPham/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${adInfo.accessToken}`
+                }
+            }).then(() => {
+                this.componentDidMount();
+                // const newList = this.state.productList.filter(i => i.id!==id);
+                // this.setState({ productList: newList });
+            });
+        }
     }
 
     render() {
@@ -71,7 +77,7 @@ class contentAdmin extends Component {
                 status={p.status}
                 lapBrand={p.thuongHieu.tenThuongHieu}
                 updateFunc={this.deleteSanPham}
-                ></Product>
+            ></Product>
         });
         return (
             <div id="content-wrapper">
@@ -113,4 +119,4 @@ class contentAdmin extends Component {
     }
 }
 
-export default contentAdmin;
+export default withRouter(contentAdmin);

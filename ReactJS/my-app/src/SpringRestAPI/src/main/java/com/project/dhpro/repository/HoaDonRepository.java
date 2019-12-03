@@ -11,4 +11,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
 
     List<HoaDon> getHoaDonsByKhachHangOrderByIdDesc(KhachHang khachHang);
 
+    List<HoaDon> findAllByOrderByIdDesc();
+
 }

@@ -54,7 +54,7 @@ class accountInfoPage extends Component {
                             <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                 <nav className="navbar navbar-light bg-light mt-4">
                                     <span className="navbar-brand mb-0 h1">
-                                        Tài khoản của {JSON.parse(localStorage.getItem("userInfo")).userName}
+                                        Tài khoản của {JSON.parse(localStorage.getItem("userInfo")).customerName}
                                     </span>
                                 </nav>
                                 <a className="nav-link bg-light text-dark my-2" onClick={this.handleViewProfile} id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
@@ -79,7 +79,7 @@ class accountInfoPage extends Component {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-sm-8 mt-4" style={{ height: '800px' }}>
+                        <div className="col-sm-8 mt-4" style={{ height: '50%' }}>
                             {this.state.isViewOrder?
                             <OrderList customer={this.state.customer}></OrderList>
                             :

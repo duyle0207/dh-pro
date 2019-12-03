@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class cardDoHoa extends Component {
 
@@ -35,20 +36,20 @@ class cardDoHoa extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
 
-        const totalPages = await (await fetch(`/getTotalPages`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const totalPages = await (await fetch(`/getTotalPages`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const cardList = await (await fetch(`/getCard/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const cardList = await (await fetch(`/getCard/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: cardList });
@@ -67,24 +68,30 @@ class cardDoHoa extends Component {
 
     async insertCardDoHoa(event) {
         event.preventDefault();
-        await fetch('/insertCard', {
-            method: (this.state.CardDoHoa.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.CardDoHoa),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            await fetch('/insertCard', {
+                method: (this.state.CardDoHoa.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.CardDoHoa),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -99,13 +106,19 @@ class cardDoHoa extends Component {
     }
 
     async handleOnClickTable(id) {
-        const card = await (await fetch(`/cardDoHoa/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ CardDoHoa: card });
-        console.log(card);
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const card = await (await fetch(`/cardDoHoa/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ CardDoHoa: card });
+            console.log(card);
+        }
     }
 
     async handeClearBtn() {
@@ -121,9 +134,9 @@ class cardDoHoa extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getCard/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const cardList = await (await fetch(`/getCard/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(cardList);
@@ -132,15 +145,27 @@ class cardDoHoa extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }
         }
     }
 
     async handleNextPage() {
-        console.log(this.state.totalPages);
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            console.log(this.state.totalPages);
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }
         }
     }
 
@@ -151,16 +176,16 @@ class cardDoHoa extends Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-        }).then(async(res) => {
+        }).then(async (res) => {
             if (res.ok) {
                 const newList = this.state.list.filter((value, index) => {
                     return value.id !== id
                 });
                 this.setState({ list: newList });
                 this.setState({ error: false, success: true });
-                const totalPages = await(await fetch(`/getTotalPages`,{
-                    headers:{
-                        'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+                const totalPages = await (await fetch(`/getTotalPages`, {
+                    headers: {
+                        'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                     }
                 })).json();
                 this.setState({ totalPages: totalPages });
@@ -270,4 +295,4 @@ class cardDoHoa extends Component {
     }
 }
 
-export default cardDoHoa;
+export default withRouter(cardDoHoa);

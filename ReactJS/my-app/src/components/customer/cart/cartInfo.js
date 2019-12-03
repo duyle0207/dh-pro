@@ -3,6 +3,11 @@ import '../../../css/style.css';
 import InfoCartCustomer from './infoCartCustomer';
 import { withRouter } from 'react-router';
 import PaypalCheckoutButton from '../../PaypalCheckoutButton';
+import ReactDOM from 'react-dom';
+import paypal from 'paypal-checkout';
+
+const PayPalButton = paypal.Button.driver('react', { React, ReactDOM });
+
 
 class cartInfo extends Component {
 
@@ -46,24 +51,6 @@ class cartInfo extends Component {
                 customer: 'Test',
                 total: 0,
                 items: [
-                    // {
-                    //     name: 'hat',
-                    //     description: 'Brown hat.',
-                    //     quantity: '5',
-                    //     price: '3',
-                    //     tax: '0.01',
-                    //     sku: '1',
-                    //     currency: 'USD'
-                    // },
-                    // {
-                    //     name: 'handbag',
-                    //     description: 'Black handbag.',
-                    //     quantity: '1',
-                    //     price: '15',
-                    //     tax: '0.02',
-                    //     sku: 'product34',
-                    //     currency: 'USD'
-                    // }
                 ]
             }
         });
@@ -112,7 +99,7 @@ class cartInfo extends Component {
         }
 
         // console.log(this.props.cartLines);
-        
+
         console.log(this.items);
         this.props.cartLines.forEach(element => {
 
@@ -128,17 +115,19 @@ class cartInfo extends Component {
 
             item['name'] = element.sanPham.tenSP;
             item['quantity'] = element.soLuong;
-            item['price'] = (element.tongTien/23000).toFixed(2);
+            item['price'] = (element.tongTien / 23000).toFixed(2);
 
             this.items.push(item);
         });
 
         // console.log(this.items);
-        this.setState({order:{
-            customer: '1',
-            total: (this.state.amount/10000).toFixed(2),
-            items: this.items
-        }},()=>{
+        this.setState({
+            order: {
+                customer: '1',
+                total: (this.state.amount / 23000).toFixed(2),
+                items: this.items
+            }
+        }, () => {
             console.log(this.state.order);
         })
     }
@@ -147,20 +136,19 @@ class cartInfo extends Component {
 
         if (event.target.id === "customRadio2") {
             var hd = this.state.hoaDon;
-            hd['phuongThucThanhToan'] = 1;
+            hd['phuongThucThanhToan'] = 2;
             this.setState({ isCheckoutOnline: true, hoaDon: hd });
         }
         else {
             var hd = this.state.hoaDon;
-            hd['phuongThucThanhToan'] = 2;
+            hd['phuongThucThanhToan'] = 1;
             this.setState({ isCheckoutOnline: false, hoaDon: hd });
         }
 
         console.log(this.state.hoaDon);
     }
 
-    async saveHoaDon(event) {
-        event.preventDefault();
+    async checkOutOnline() {
         if (this.checkAuth()) {
             const customer = await (await fetch(`/customerUnauthenticated/getCustomerByUsername/${JSON.parse(localStorage.getItem("userInfo")).userName}`)).json();
             const pttt = await (await fetch(`/customerUnauthenticated/getPhuongThucThanhToan/${this.state.hoaDon.phuongThucThanhToan}`)).json();
@@ -190,6 +178,49 @@ class cartInfo extends Component {
         }
     }
 
+    async saveHoaDon(event) {
+        event.preventDefault();
+        
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("userInfo")).accessToken}`)).json();
+        if(!isTokenValid)
+        {
+            this.props.history.push('/login?message=tokenexpired');
+        }
+        else{
+            if (this.checkAuth()) {
+                const customer = await (await fetch(`/customerUnauthenticated/getCustomerByUsername/${JSON.parse(localStorage.getItem("userInfo")).userName}`)).json();
+                const pttt = await (await fetch(`/customerUnauthenticated/getPhuongThucThanhToan/${this.state.hoaDon.phuongThucThanhToan}`)).json();
+                this.setState({
+                    hoaDon: {
+                        ...this.state.hoaDon,
+                        khachHang: customer,
+                        phuongThucThanhToan: pttt,
+                        tongTien: this.state.amount
+                    }
+                });
+                console.log(this.state.hoaDon);
+                await fetch(`/customerUnauthenticated/saveHoaDon`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.state.hoaDon)
+                }).then((res) => {
+                    this.props.history.push("/")
+                });
+            }
+            else {
+                // alert("Đăng nhập để thực hiện thanh toán");
+                this.props.history.push("/login");
+            }
+        }
+    }
+
+    check() {
+        alert("Test Paypal");
+    }
+
     checkAuth() {
         if (JSON.parse(localStorage.getItem("userInfo")) === null) {
             localStorage.setItem("userInfo", JSON.stringify({}));
@@ -205,6 +236,69 @@ class cartInfo extends Component {
     handleInfoCus() {
         this.setState({ visibleInfoCus: !this.state.visibleInfoCus })
     }
+
+    //Check out
+    paypalConf = {
+        currency: 'USD',
+        env: 'sandbox',
+        client: {
+            sandbox: 'AbKP2tVAmb6-KKd8DQsPpkeUiEW3YjcdnCyib-i5RVMtDfxNemnsyq9s6hkhOosRAV6jvBxRaeZ89W8O',
+            production: '-- id--',
+        },
+        style: {
+            label: 'checkout',
+            size: 'responsive',
+            shape: 'pill',
+            color: 'gold',
+            layout: 'horizontal',
+        }
+    };
+
+    payment = (data, actions) => {
+        const payment = {
+            "intent": "sale",
+            "redirect_urls": {
+                "return_url": "https://www.paypal.com",
+                "cancel_url": "https://www.paypal.com"
+            },
+            "payer": {
+                "payment_method": "paypal"
+            },
+            transactions: [
+                {
+                    "amount": {
+                        "total": this.state.order.total,
+                        "currency": "USD",
+                    },
+                    "description": "The payment transaction description.",
+                    "custom": "EBAY_EMS_90048630024435",
+                }
+            ],
+            note_to_payer: 'Contact us for any questions on your order.'
+        };
+        // console
+        return actions.payment.create({ payment });
+    };
+
+    onAuthorize = (data, actions) => {
+        return actions.payment.execute()
+            .then(response => {
+                // alert(`onAuthorize: ${response.id}`);
+                this.checkOutOnline();
+            })
+            .catch(error => {
+                console.log(error);
+                alert("Error")
+            });
+    };
+
+    onError = (error) => {
+        console.log(error);
+    };
+
+    onCancel = (data, actions) => {
+        alert("Cancel");
+    };
 
     render() {
 
@@ -244,7 +338,7 @@ class cartInfo extends Component {
                             </p>
                             </div> */}
                             <div className="custom-control custom-radio my-4">
-                                <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" onChange={this.handleOnChange} />
+                                <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" onChange={this.handleOnChange} required/>
                                 <label className="custom-control-label" htmlFor="customRadio1">
                                     <p className="h6 form-check-label" htmlFor="exampleRadios1" >
                                         Thanh toán tiền mặt khi nhận hàng
@@ -283,8 +377,16 @@ class cartInfo extends Component {
                                 <div className="col-sm-6"></div>
                                 <div className="col-sm-6">
                                     {this.state.isCheckoutOnline ?
-                                        <PaypalCheckoutButton
-                                            order={this.state.order}
+                                        <PayPalButton
+                                            env={this.paypalConf.env}
+                                            client={this.paypalConf.client}
+                                            payment={(data, actions) => this.payment(data, actions)}
+                                            onAuthorize={(data, actions) => this.onAuthorize(data, actions)}
+                                            onCancel={(data, actions) => this.onCancel(data, actions)}
+                                            onError={(error) => this.onError(error)}
+                                            style={this.paypalConf.style}
+                                            commit
+                                            locale="en_US"
                                         /> :
                                         <button type="submit" className="btn btn-danger"
                                             style={{ width: '100%' }}>

@@ -15,4 +15,6 @@ public interface HoaDonService {
 
     HoaDon getHoaDonByID(int id);
 
+    List<HoaDon> findAllByOrderByIdDesc();
+
 }

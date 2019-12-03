@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Products from '../../customer/accountInfo/products';
+import { withRouter } from 'react-router';
 
 export class ManageOrder extends Component {
     constructor() {
@@ -9,7 +10,8 @@ export class ManageOrder extends Component {
             productList: [],
             donGia: '',
             isSending: false,
-            sendMailStatus: ''
+            sendMailStatus: '',
+            isConfirm: true
         }
         this.onConfirmClick = this.onConfirmClick.bind(this);
     }
@@ -17,7 +19,7 @@ export class ManageOrder extends Component {
     async componentDidMount() {
         const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
 
-        const response = await fetch(`/hung/hoaDon`, {
+        const response = await fetch(`/hung/hoaDonOrderByDesc`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -29,67 +31,83 @@ export class ManageOrder extends Component {
         this.setState({ orders: json }, () => console.log(this.state.orders));
     }
 
-    async onViewDetailClick(id) {
-        const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
-        this.setState({ productList: productList }, () => {
-            const dg = this.state.productList.reduce((accumulator, currentValue) => {
-                return (accumulator + currentValue.donGia)
-            }, 0);
-            this.setState({ donGia: dg });
-        });
+    async onViewDetailClick(id, tinhTrang) {
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (tinhTrang !== "Đã xác nhận") {
+                this.setState({ isConfirm: false });
+            }
+
+            const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
+            this.setState({ productList: productList }, () => {
+                const dg = this.state.productList.reduce((accumulator, currentValue) => {
+                    return (accumulator + currentValue.donGia)
+                }, 0);
+                this.setState({ donGia: dg });
+            });
+        }
     }
 
     async onConfirmClick() {
-        this.setState({ isSending: true });
-        const customer = this.state.productList[0].hoaDon.khachHang;
-        console.log(customer.email);
-        console.log(this.state.productList[0].hoaDon);
-        await fetch(`/customerUnauthenticated/sendEmail`, {
-            method: 'POST',
-            body: JSON.stringify({
-                mail: customer.email,
-                content: 'Đơn hàng của bạn đã được xác nhận',
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        }).then(async res => {
-            this.setState({ isSending: false });
-            if (res.ok) {
-                const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
-                console.log("Respone OK");
-                this.setState({ sendMailStatus: 'Send mail success!' });
-                fetch('/confirmOrder', {
-                    method: 'PUT',
-                    body: this.state.productList[0].hoaDon.id,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': "Bearer " + token
-                    }
-                }).then(async res => {
-                    if (res.ok) {
-                        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            this.setState({ isSending: true });
+            const customer = this.state.productList[0].hoaDon.khachHang;
+            console.log(customer.email);
+            console.log(this.state.productList[0].hoaDon);
+            await fetch(`/customerUnauthenticated/sendEmail`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    mail: customer.email,
+                    content: 'Đơn hàng của bạn đã được xác nhận',
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }).then(async res => {
+                this.setState({ isSending: false });
+                if (res.ok) {
+                    const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+                    console.log("Respone OK");
+                    this.setState({ sendMailStatus: 'Send mail success!' });
+                    fetch('/confirmOrder', {
+                        method: 'PUT',
+                        body: this.state.productList[0].hoaDon.id,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': "Bearer " + token
+                        }
+                    }).then(async res => {
+                        if (res.ok) {
+                            const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
 
-                        const response = await fetch(`/hung/hoaDon`, {
-                            method: 'GET',
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json',
-                                'Authorization': "Bearer " + token
-                            }
-                        });
-                        const json = await response.json();
-                        this.setState({ orders: json }, () => console.log(this.state.orders));
-                    }
-                }).catch(err => console.log('Error', err));
+                            const response = await fetch(`/hung/hoaDon`, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'Authorization': "Bearer " + token
+                                }
+                            });
+                            const json = await response.json();
+                            this.setState({ orders: json }, () => console.log(this.state.orders));
+                        }
+                    }).catch(err => console.log('Error', err));
 
-            } else {
-                console.log("Response fail");
-                this.setState({ sendMailStatus: 'Send mail fail! Something went wrong!' });
-            }
-        }).catch(err => console.log(err));
+                } else {
+                    console.log("Response fail");
+                    this.setState({ sendMailStatus: 'Send mail fail! Something went wrong!' });
+                }
+            }).catch(err => console.log(err));
+        }
     }
 
     render() {
@@ -121,12 +139,12 @@ export class ManageOrder extends Component {
                                     <td>{order.diaChi}</td>
                                     <td>{order.soDT}</td>
                                     <td>{order.ngayMuaHang}</td>
-                                    <td>{order.tongTien}</td>
+                                    <td><b>{order.tongTien.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></td>
                                     <td>{order.phuongThucThanhToan.tenPhuongThucThanhToan}</td>
-                                    <td>{order.tinhTrang}</td>
+                                    <td>{order.tinhTrang === "Đã xác nhận" ? <span class="badge badge-success mt-2">Đã xác nhận</span> : <span class="badge badge-danger mt-2">Chưa xác nhận</span>}</td>
                                     <td>
                                         <button className="btn btn-success" data-toggle="modal" data-target="#confirmForm"
-                                            onClick={() => this.onViewDetailClick(order.id)}>Xem chi tiết
+                                            onClick={() => this.onViewDetailClick(order.id, order.tinhTrang)}>Xem chi tiết
                                         </button>
                                     </td>
                                 </tr>
@@ -163,10 +181,15 @@ export class ManageOrder extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Đóng</button>
-                                <button type="button" className="btn btn-success" data-toggle="modal" data-target="#sendMail"
-                                    data-dismiss="modal" onClick={this.onConfirmClick}>
-                                    Xác nhận đơn hàng
+                                {!this.state.isConfirm ?
+                                    <button type="button" className="btn btn-success" data-toggle="modal" data-target="#sendMail"
+                                        data-dismiss="modal" onClick={this.onConfirmClick}>
+                                        Xác nhận đơn hàng
                                 </button>
+                                    :
+                                    ""
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -193,4 +216,4 @@ export class ManageOrder extends Component {
     }
 }
 
-export default ManageOrder;
+export default withRouter(ManageOrder);

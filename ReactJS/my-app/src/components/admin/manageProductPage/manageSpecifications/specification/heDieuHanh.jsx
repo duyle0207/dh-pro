@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
 class heDieuHanh extends Component {
     constructor(props) {
@@ -31,20 +32,20 @@ class heDieuHanh extends Component {
         var adInfo = JSON.parse(localStorage.getItem("adminInfo"));
 
         this.setState({
-            adminInfo:adInfo,
-        },()=>{
+            adminInfo: adInfo,
+        }, () => {
             console.log(this.state.adminInfo);
         });
-        
-        const totalPages = await (await fetch(`/getTotalPagesHDH`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+
+        const totalPages = await (await fetch(`/getTotalPagesHDH`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ totalPages: totalPages });
-        const hdhList = await (await fetch(`/getHDH/page=${this.state.currentPage}`,{
-            headers:{
-                'Authorization' : `Bearer ${adInfo.accessToken}`
+        const hdhList = await (await fetch(`/getHDH/page=${this.state.currentPage}`, {
+            headers: {
+                'Authorization': `Bearer ${adInfo.accessToken}`
             }
         })).json();
         this.setState({ list: hdhList });
@@ -52,9 +53,9 @@ class heDieuHanh extends Component {
 
     async componentWillUpdate(nextProps, nextState) {
         if (nextState.currentPage !== this.state.currentPage) {
-            const cardList = await (await fetch(`/getHDH/page=${nextState.currentPage}`,{
-                headers:{
-                    'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
+            const cardList = await (await fetch(`/getHDH/page=${nextState.currentPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
                 }
             })).json();
             console.log(cardList);
@@ -63,14 +64,26 @@ class heDieuHanh extends Component {
     }
 
     async handlePreviousPage() {
-        if (this.state.currentPage > 1) {
-            this.setState({ currentPage: this.state.currentPage - 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage > 1) {
+                this.setState({ currentPage: this.state.currentPage - 1 });
+            }
         }
     }
 
     async handleNextPage() {
-        if (this.state.currentPage < this.state.totalPages) {
-            this.setState({ currentPage: this.state.currentPage + 1 });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            if (this.state.currentPage < this.state.totalPages) {
+                this.setState({ currentPage: this.state.currentPage + 1 });
+            }
         }
     }
 
@@ -85,26 +98,34 @@ class heDieuHanh extends Component {
     }
 
     async insert(event) {
-        console.log(this.state.heDieuHanh);
+
         event.preventDefault();
-        await fetch('/insertHDH', {
-            method: (this.state.heDieuHanh.id === '') ? 'POST' : 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            },
-            body: JSON.stringify(this.state.heDieuHanh),
-        }).then((res) => {
-            if (res.ok) {
-                this.setState({ error: false, success: true });
-                this.clearField();
-                this.componentDidMount();
-            }
-            else {
-                this.setState({ error: true, success: false });
-            }
-        });
+
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            console.log(this.state.heDieuHanh);
+            await fetch('/insertHDH', {
+                method: (this.state.heDieuHanh.id === '') ? 'POST' : 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                },
+                body: JSON.stringify(this.state.heDieuHanh),
+            }).then((res) => {
+                if (res.ok) {
+                    this.setState({ error: false, success: true });
+                    this.clearField();
+                    this.componentDidMount();
+                }
+                else {
+                    this.setState({ error: true, success: false });
+                }
+            });
+        }
     }
 
     clearField() {
@@ -117,13 +138,19 @@ class heDieuHanh extends Component {
     }
 
     async handleOnClickTable(id) {
-        const heDieuHanh = await (await fetch(`/heDieuHanh/${id}`,{
-            headers:{
-                'Authorization' : `Bearer ${this.state.adminInfo.accessToken}`
-            }
-        })).json();
-        this.setState({ heDieuHanh: heDieuHanh });
-        console.log(this.state.heDieuHanh.tenHeDieuHanh);
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const heDieuHanh = await (await fetch(`/heDieuHanh/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.state.adminInfo.accessToken}`
+                }
+            })).json();
+            this.setState({ heDieuHanh: heDieuHanh });
+            console.log(this.state.heDieuHanh.tenHeDieuHanh);
+        }
     }
 
     handeClearBtn() {
@@ -174,7 +201,7 @@ class heDieuHanh extends Component {
                     {this.state.isOpen ?
                         <div className="container-fluid">
                             <div className="row">
-                                
+
                             </div>
                             <div className="row">
                                 <div className="col-sm-8">
@@ -243,4 +270,4 @@ class heDieuHanh extends Component {
     }
 }
 
-export default heDieuHanh;
+export default withRouter(heDieuHanh);

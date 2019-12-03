@@ -9,6 +9,7 @@ class product extends Component {
                     <th scope="row">{this.props.id}</th>
                     <td>{this.props.ngayMuaHang}</td>
                     <td>{(this.props.tongTien).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</td>
+                    <td>{this.props.tinhTrang === "Đã xác nhận" ? <span class="badge badge-success">Đã xác nhận</span> : <span class="badge badge-danger">Chưa xác nhận</span>}</td>
                     <td className="w-10"><button className="btn" onClick={()=>this.props.handleViewProduct(this.props.id)}>Xem chi tiết</button></td>
                 </tr>
             </React.Fragment>
