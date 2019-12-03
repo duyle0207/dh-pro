@@ -120,4 +120,20 @@ public class HoaDon {
     public void setTinhTrang(String tinhTrang) {
         this.tinhTrang = tinhTrang;
     }
+
+    @Override
+    public String toString() {
+        return "HoaDon{" +
+                "id=" + id +
+                ", khachHang=" + khachHang +
+                ", tenKH='" + tenKH + '\'' +
+                ", diaChi='" + diaChi + '\'' +
+                ", soDT='" + soDT + '\'' +
+                ", ngayMuaHang='" + ngayMuaHang + '\'' +
+                ", tongTien=" + tongTien +
+                ", tinhTrang='" + tinhTrang + '\'' +
+                ", phuongThucThanhToan=" + phuongThucThanhToan +
+                ", listChiTietHoaDon=" + listChiTietHoaDon +
+                '}';
+    }
 }

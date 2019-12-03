@@ -1,159 +1,7 @@
 import React, { Component } from 'react';
 import Card from './cardDashboard';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
-const dataNgay = [
-    {
-        name: ' 1', doanhThu: 4000, donHang: 40
-    },
-    {
-        name: ' 2', doanhThu: 3000, donHang: 30
-    },
-    {
-        name: ' 3', doanhThu: 2000, donHang: 20
-    },
-    {
-        name: ' 4', doanhThu: 2780, donHang: 28
-    },
-    {
-        name: ' 5', doanhThu: 1890, donHang: 19
-    },
-    {
-        name: ' 6', doanhThu: 2390, donHang: 24
-    },
-    {
-        name: ' 7', doanhThu: 3490, donHang: 34
-    },
-    {
-        name: ' 8', doanhThu: 2000, donHang: 20
-    },
-    {
-        name: ' 9', doanhThu: 2780, donHang: 28
-    },
-    {
-        name: ' 10', doanhThu: 1890, donHang: 18
-    },
-    {
-        name: ' 11', doanhThu: 2390, donHang: 23
-    },
-    {
-        name: '12', doanhThu: 3490, donHang: 34
-    },
-    {
-        name: ' 13', doanhThu: 4000, donHang: 40
-    },
-    {
-        name: ' 14', doanhThu: 3000, donHang: 30
-    },
-    {
-        name: ' 15', doanhThu: 2000, donHang: 20
-    },
-    {
-        name: ' 16', doanhThu: 2780, donHang: 28
-    },
-    {
-        name: ' 17', doanhThu: 1890, donHang: 19
-    },
-    {
-        name: ' 18', doanhThu: 2390, donHang: 24
-    },
-    {
-        name: ' 19', doanhThu: 3490, donHang: 32
-    },
-    {
-        name: ' 20', doanhThu: 2000, donHang: 18
-    },
-    {
-        name: ' 21', doanhThu: 2780, donHang: 19
-    },
-    {
-        name: ' 22', doanhThu: 1890, donHang: 18
-    },
-    {
-        name: ' 23', doanhThu: 2390, donHang: 22
-    },
-    {
-        name: '24', doanhThu: 3490, donHang: 30
-    },
-    {
-        name: ' 25', doanhThu: 4000, donHang: 38
-    },
-    {
-        name: ' 26', doanhThu: 3000, donHang: 26
-    },
-    {
-        name: ' 27', doanhThu: 2000, donHang: 12
-    },
-    {
-        name: ' 28', doanhThu: 2780, donHang: 25
-    },
-    {
-        name: ' 29', doanhThu: 1890, donHang: 16
-    },
-    {
-        name: ' 30', doanhThu: 2390, donHang: 21
-    },
-    {
-        name: ' 31', doanhThu: 3490, donHang: 28
-    },
-];
-
-const dataThang = [
-    {
-        name: ' 1', doanhThu: 4000, donHang: 40
-    },
-    {
-        name: ' 2', doanhThu: 3000, donHang: 30
-    },
-    {
-        name: ' 3', doanhThu: 2000, donHang: 20
-    },
-    {
-        name: ' 4', doanhThu: 2780, donHang: 28
-    },
-    {
-        name: ' 5', doanhThu: 1890, donHang: 19
-    },
-    {
-        name: ' 6', doanhThu: 2390, donHang: 24
-    },
-    {
-        name: ' 7', doanhThu: 3490, donHang: 34
-    },
-    {
-        name: ' 8', doanhThu: 2000, donHang: 20
-    },
-    {
-        name: ' 9', doanhThu: 2780, donHang: 28
-    },
-    {
-        name: ' 10', doanhThu: 1890, donHang: 18
-    },
-    {
-        name: ' 11', doanhThu: 2390, donHang: 23
-    },
-    {
-        name: '12', doanhThu: 3490, donHang: 34
-    },
-];
-
-const dataNam = [
-    {
-        name: '2015', doanhThu: 2000, donHang: 6
-    },
-    {
-        name: '2016', doanhThu: 560, donHang: 1
-    },
-    {
-        name: '2017', doanhThu: 3110, donHang: 9
-    },
-    {
-        name: '2018', doanhThu: 4102, donHang: 13
-    },
-    {
-        name: '2019', doanhThu: 1890, donHang: 4
-    },
-];
+import {Link} from 'react-router-dom';
 
 const divChart = {
     border: '1px solid #dddddd',
@@ -162,45 +10,141 @@ const divChart = {
     marginLeft: '15px',
 }
 
+var date = new Date();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+function daysInMonth(month, year) {
+    return new Date(year, month, 0).getDate();
+}
+
 class contentAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = ({
             chartType: '',
             data: [],
+            totalSales: 0,
+            totalOrders: 0,
+            totalCustomers: 0,
+            hot: [],
+            not: [],
 
         });
         this.onNgayClick = this.onNgayClick.bind(this);
         this.onThangClick = this.onThangClick.bind(this);
-        this.onNamClick = this.onNamClick.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+        try {
+            const statistic = await fetch('/getStatistic', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            });
+            const data = await statistic.json();
+            console.log(data);
+            this.setState({
+                chartType: 'ngay',
+                totalSales: data[0] / 1000000.0,
+                totalOrders: data[1],
+                totalCustomers: data[2],
+            });
+            const saleDaysInMonth = await fetch('/chartDay', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            });
+            const saleDaysInMonthValue = await saleDaysInMonth.json();
+            console.log(saleDaysInMonthValue);
+            console.log(daysInMonth(month, year));
+            var ngay = [];
+            for (let i = 0; i < daysInMonth(month, year); i++) {
+                ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+                saleDaysInMonthValue.forEach(element => {
+                    if (element[0] === i + 1)
+                        ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+                });
+            }
+            console.log('Ngay', ngay);
+            this.setState({
+                data: ngay,
+            });
+            const hot = await fetch('/hotAndNot', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            });
+            const hotValue = await hot.json();
+            const notValue = hotValue;
+            console.log('Hot', notValue);
+            await this.setState({hot: hotValue.splice(0,3), not: notValue.splice(0, 3) });
+        } catch (e) {
+            console.log('Error', e);
+        }
+    }
+
+    async onNgayClick() {
+        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+        const saleDaysInMonth = await fetch('/chartDay', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            }
+        });
+        const saleDaysInMonthValue = await saleDaysInMonth.json();
+        console.log(saleDaysInMonthValue);
+        console.log(daysInMonth(month, year));
+        var ngay = [];
+        for (let i = 0; i < daysInMonth(month, year); i++) {
+            ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+            saleDaysInMonthValue.forEach(element => {
+                if (element[0] === i + 1)
+                    ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+            });
+        }
+        console.log('Ngay', ngay);
         this.setState({
             chartType: 'ngay',
-            data: dataNgay
-        });
+            data: ngay,
+        })
     }
 
-    onNgayClick() {
-        this.setState({
-            chartType: 'ngay',
-            data: dataNgay
+    async onThangClick() {
+        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+        const response = await fetch('/chartMonth', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            }
         });
-    }
-
-    onThangClick() {
+        const data = await response.json();
+        var thang = [];
+        for (let i = 0; i < 12; i++) {
+            thang[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+            data.forEach(element => {
+                if (element[0] === i + 1)
+                    thang[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+            });
+        }
         this.setState({
             chartType: 'thang',
-            data: dataThang
-        });
-    }
-
-    onNamClick() {
-        this.setState({
-            chartType: 'nam',
-            data: dataNam
-        });
+            data: thang,
+        })
     }
 
     render() {
@@ -211,9 +155,9 @@ class contentAdmin extends Component {
                         <h2>Dashboard</h2>
                     </div>
                     <div className="row mb-4">
-                        <Card icon='fa-money-bill-alt' number='150 triệu' desciption='Tổng doanh thu(VND)' color='#00799e'></Card>
-                        <Card icon='fa-shopping-cart' number='200' desciption='Lượt đặt hàng' color='#5cb85b'></Card>
-                        <Card icon='fa-user' number='300' desciption='Tổng khách hàng' color='#d9534f'></Card>
+                        <Card icon='fa-money-bill-alt' number={`${this.state.totalSales} triệu`} desciption='Doanh thu tháng' color='#00799e'></Card>
+                        <Card icon='fa-shopping-cart' number={this.state.totalOrders} desciption='Lượt đặt hàng tháng' color='#5cb85b'></Card>
+                        <Card icon='fa-user' number={this.state.totalCustomers} desciption='Tổng khách hàng' color='#d9534f'></Card>
                     </div>
                     <div className="row my-4">
                         <div className="col-sm-12">
@@ -227,10 +171,6 @@ class contentAdmin extends Component {
                                         {this.state.chartType === 'thang' ?
                                             <button type="button" className="btn btn-outline-secondary active">Tháng</button> :
                                             <button type="button" className="btn btn-outline-secondary" onClick={this.onThangClick}>Tháng</button>
-                                        }
-                                        {this.state.chartType === 'nam' ?
-                                            <button type="button" className="btn btn-outline-secondary active">Năm</button> :
-                                            <button type="button" className="btn btn-outline-secondary" onClick={this.onNamClick}>Năm</button>
                                         }
                                     </div>
                                 </div>
@@ -264,13 +204,7 @@ class contentAdmin extends Component {
                     <div className="row p-4" style={divChart}>
                         <ul className="nav nav-pills col-12 mb-4 ml-3" id="pills-tab" role="tablist">
                             <li className="nav-item">
-                                <a className="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
-                                    <i className="fas fa-fire mr-2"></i>
-                                    Đơn hàng mới
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
+                                <a className="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
                                     <i className="fas fa-trophy mr-2"></i>
                                     Sản phẩm bán chạy
                                 </a>
@@ -283,47 +217,7 @@ class contentAdmin extends Component {
                             </li>
                         </ul>
                         <div className="tab-content col-12" id="pills-tabContent">
-                            <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                <table className="table">
-                                    <thead className="thead-light">
-                                        <tr>
-                                            <th scope="col">Mã đơn hàng</th>
-                                            <th scope="col">Khách hàng</th>
-                                            <th scope="col">Tình trạng</th>
-                                            <th scope="col">Ngày đặt hàng</th>
-                                            <th scope="col">Tổng tiền</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Alexander Lacazette</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>Mark</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div className="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                 <table className="table">
                                     <thead className="thead-light">
                                         <tr>
@@ -334,24 +228,16 @@ class contentAdmin extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Alexander Lacazette</td>
-                                            <td>Otto</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
+                                        {this.state.hot.map((value, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <th scope="row">{value[0]}</th>
+                                                    <td>{value[1]}</td>
+                                                    <td>{value[2]}</td>
+                                                    <td><Link to={`/productDetail/${value[0]}`} className="btn btn-success">Xem chi tiết</Link></td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
@@ -366,24 +252,16 @@ class contentAdmin extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td><btn className="btn btn-success">Xem chi tiết</btn></td>
-                                        </tr>
+                                        {this.state.not.map((value, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <th scope="row">{value[0]}</th>
+                                                    <td>{value[1]}</td>
+                                                    <td>{value[2]}</td>
+                                                    <td><Link to={`/productDetail/${value[0]}`} className="btn btn-success">Xem chi tiết</Link></td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </table>
                             </div>

@@ -15,4 +15,11 @@ public interface HoaDonService {
 
     HoaDon getHoaDonByID(int id);
 
+    int totalSalesOfMonth();
+
+    int totalOrdersOfMonth();
+
+    List<Object[]> saleDaysInMonth();
+
+    List<Object[]> saleMonthsInYear();
 }

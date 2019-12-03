@@ -16,12 +16,6 @@ class slidebarAdmin extends Component {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" href="charts.html">
-                            <i className="fas fa-fw fa-chart-area" />
-                            <span> Khách hàng</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
                         <Link className="nav-link" to="/order">
                             <i className="fas fa-money-bill-alt" />
                             <span>  Đơn hàng</span>

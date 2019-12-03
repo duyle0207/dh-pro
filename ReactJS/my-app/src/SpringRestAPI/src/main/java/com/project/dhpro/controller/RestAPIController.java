@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -598,4 +599,29 @@ public class RestAPIController {
         hoaDon.setTinhTrang("Đã xác nhận");
         return hoaDonService.save(hoaDon);
     }
+
+    @GetMapping(value = "/getStatistic")
+    public ArrayList<Integer> getStatistic(){
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(hoaDonService.totalSalesOfMonth());
+        result.add(hoaDonService.totalOrdersOfMonth());
+        result.add(khachHangService.totalCustomers());
+        return result;
+    }
+
+    @GetMapping(value = "/chartDay")
+    public List<Object[]> chartValue(){
+        return hoaDonService.saleDaysInMonth();
+    }
+
+    @GetMapping(value = "/chartMonth")
+    public List<Object[]> chartMonth(){
+        return hoaDonService.saleMonthsInYear();
+    }
+
+    @GetMapping(value = "/hotAndNot")
+    public List<Object[]> hotAndNot(){
+        return sanPhamService.hotAndNot();
+    }
+
 }

@@ -48,4 +48,14 @@ public class SanPhamServiceImp implements SanPhamService{
     public void deleteSanPham(int id) {
         sanPhamRepository.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> hotAndNot() {
+        List<Object[]> result = sanPhamRepository.hot();
+        for ( Object[] item: sanPhamRepository.not()
+             ) {
+            result.add(item);
+        }
+        return result;
+    }
 }

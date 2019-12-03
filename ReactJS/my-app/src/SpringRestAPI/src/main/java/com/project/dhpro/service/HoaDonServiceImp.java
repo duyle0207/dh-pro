@@ -35,4 +35,26 @@ public class HoaDonServiceImp implements HoaDonService{
     public HoaDon getHoaDonByID(int id) {
         return hoaDonRepository.findById(id).get();
     }
+
+    @Override
+    public int totalSalesOfMonth() {
+        return hoaDonRepository.totalSalesOfMonth();
+    }
+
+    @Override
+    public int totalOrdersOfMonth() {
+        return hoaDonRepository.totalOrdersOfMonth();
+    }
+
+    @Override
+    public List<Object[]> saleDaysInMonth() {
+        return hoaDonRepository.saleDaysInMonth();
+    }
+
+    @Override
+    public List<Object[]> saleMonthsInYear() {
+        return hoaDonRepository.saleMonthsInYear();
+    }
+
+
 }

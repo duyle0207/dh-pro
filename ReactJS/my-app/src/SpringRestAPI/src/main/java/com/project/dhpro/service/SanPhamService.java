@@ -18,4 +18,6 @@ public interface SanPhamService {
     SanPham findSanPhamByTenSP(String tensp);
 
     void deleteSanPham(int id);
+
+    List<Object[]> hotAndNot();
 }

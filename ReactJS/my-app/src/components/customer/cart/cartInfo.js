@@ -82,7 +82,7 @@ class cartInfo extends Component {
 
         // console.log();
 
-        return String(dd + '-' + mm + '-' + yyyy);
+        return String(yyyy + '-' + mm + '-' + dd);
     }
 
     items = [];

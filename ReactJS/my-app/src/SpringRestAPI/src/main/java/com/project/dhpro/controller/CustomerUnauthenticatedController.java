@@ -8,8 +8,8 @@ import com.project.dhpro.ultils.CartUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -447,21 +449,28 @@ public class CustomerUnauthenticatedController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(@Valid @RequestBody Mail mail) {
-
-        // Create a Simple MailMessage.
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setTo(mail.getMail());
-        message.setSubject("Confirm order at DHPro");
-        message.setText(mail.getContent());
-
-        try{
-            // Send Message!
-            this.emailSender.send(message);
-
-            return "success";
-        } catch (Exception e) {
-            return "fail";
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        String item = "ITEM";
+        String content = "<h1>Cảm ơn bạn đã mua hàng của Phạm Xuân Khiêm<h1>";
+        try {
+            message.setHeader("Content-Type", "text/plain; charset=UTF-8");
+            helper = new MimeMessageHelper(message, true);
+            helper.setSubject("DHPro đã nhận đơn hàng");
+            helper.setTo(mail.getMail());
+            helper.setText(content, true);
+            emailSender.send(message);
+            System.out.println(mail.toString());
+            HoaDon hoaDon = hoaDonService.getHoaDonByID(Integer.parseInt(mail.getHoaDon()));
+            List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDonsByHoaDon(hoaDon);
+            for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDons) {
+                item = item + chiTietHoaDon.getSanPham().getTenSP() + "\n";
+            }
+            System.out.println(item);
+            return "OK";
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return  e.toString();
         }
     }
 }

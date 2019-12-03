@@ -12,4 +12,5 @@ public interface KhachHangService {
 
     KhachHang findKHByIDTaiKhoan(TaiKhoan taiKhoan);
 
+    int totalCustomers();
 }

@@ -42,13 +42,15 @@ export class ManageOrder extends Component {
     async onConfirmClick() {
         this.setState({ isSending: true });
         const customer = this.state.productList[0].hoaDon.khachHang;
-        console.log(customer.email);
+        const order = this.state.productList[0].hoaDon;
+        console.log("Order");
         console.log(this.state.productList[0].hoaDon);
         await fetch(`/customerUnauthenticated/sendEmail`, {
             method: 'POST',
             body: JSON.stringify({
                 mail: customer.email,
                 content: 'Đơn hàng của bạn đã được xác nhận',
+                hoaDon: order.id,
             }),
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +61,7 @@ export class ManageOrder extends Component {
             if (res.ok) {
                 const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
                 console.log("Respone OK");
-                this.setState({ sendMailStatus: 'Send mail success!' });
+                this.setState({ sendMailStatus: 'Gửi mail thành công!' });
                 fetch('/confirmOrder', {
                     method: 'PUT',
                     body: this.state.productList[0].hoaDon.id,
@@ -87,7 +89,7 @@ export class ManageOrder extends Component {
 
             } else {
                 console.log("Response fail");
-                this.setState({ sendMailStatus: 'Send mail fail! Something went wrong!' });
+                this.setState({ sendMailStatus: 'Đã có lỗi xảy ra, không thể gửi mail!' });
             }
         }).catch(err => console.log(err));
     }
@@ -176,10 +178,16 @@ export class ManageOrder extends Component {
                     aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <div class="modal-body">
+                            <div class="modal-body py-4">
                                 {this.state.isSending ?
-                                    <h2 >Sending mail...</h2> :
+                                    <div className="row">
+                                        <h2>Đang gửi...</h2>
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only">Loadings...</span>
+                                        </div>
+                                    </div> :
                                     <h2 >{this.state.sendMailStatus}</h2>
+
                                 }
                             </div>
                             <div class="modal-footer">

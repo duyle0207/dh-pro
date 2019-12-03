@@ -31,4 +31,9 @@ public class KhachHangServiceImp implements KhachHangService{
     public KhachHang findKHByIDTaiKhoan(TaiKhoan taiKhoan) {
         return khachHangRepository.findKhachHangByTaiKhoan(taiKhoan);
     }
+
+    @Override
+    public int totalCustomers() {
+        return khachHangRepository.totalCustomers();
+    }
 }
