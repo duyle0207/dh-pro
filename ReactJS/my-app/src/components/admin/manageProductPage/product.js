@@ -11,6 +11,7 @@ class product extends Component {
 
     componentDidMount()
     {
+        
         try {
             this.setState({source: require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imageSrc}`)});
         } catch (error) {

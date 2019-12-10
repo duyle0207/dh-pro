@@ -24,6 +24,7 @@ import ManageOrderPage from './admin/manageOrder/manageOrderPage';
 import PrivateRoute from './router/PrivateRoute';
 import PrivateRouteAdmin from './router/PrivateRouteAdmin';
 import ProtectLogin from './router/ProtectLogin';
+import ProtectLoginAdmin from './router/ProtectLoginAdmin';
 import Paypal from './paypalDemo';
 
 
@@ -70,35 +71,27 @@ class RouteURL extends Component {
                     <Route exact path="/" component={Dashboard} />
                     <Route path="/itemDetail/:id" component={ItemDetailPage} />
                     <Route path="/cart" component={Cart} />
-                    
-                    {/* <Route path="/login/:id" component={LoginPage} />
-                    <Route path="/uploadFile" component={UpLoadFile} />
-                    <Route path="/searchDemo" component={SearchDemo} /> */}
-
                     <Route path="/compareItem/:id" component={CompareItemsPage} />
-                    
-                    <Route path="/validate" component={Validate} />
                     <Route path="/products" component={ProductFilter} />
-                    
                     <Route path="/404" component={Error} />
-
                     <ProtectLogin path="/login" component={LoginPage} />
-
                     <Route path="/register" component={RegisterPage}/>
-
-                    {/* <PrivateRoute path='/protected' isLogin={this.checkAuth()} component={AdminDashboard} /> */}
-
                     <PrivateRoute path='/accountInfo' component={AccountInfoPage} />
 
                     {/* Admin */}
-                    <Route path="/loginAdmin" component={LoginAdminPage} />
+                    <ProtectLoginAdmin path="/loginAdmin" component={LoginAdminPage} />
                     <PrivateRouteAdmin path="/admin" component={AdminDashboard} />
                     <PrivateRouteAdmin path="/manageProduct" component={ManageProductPage} />
                     <PrivateRouteAdmin path="/manageSpecification" component={ManageSpecificationPage} />
                     <PrivateRouteAdmin path="/order" component={ManageOrderPage} />
                     <PrivateRouteAdmin path="/productDetail/:id" component={ProductDetailPage} />
-
                     <Route path="/paypal" component={Paypal} />
+
+                    {/* <Route path="/login/:id" component={LoginPage} />
+                    <Route path="/uploadFile" component={UpLoadFile} />
+                    <Route path="/searchDemo" component={SearchDemo} /> */}
+                    {/* <Route path="/validate" component={Validate} /> */}
+
                 </ScrollToTop>
             </Router>
         );

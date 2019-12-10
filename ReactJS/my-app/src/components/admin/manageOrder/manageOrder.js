@@ -1,5 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import Products from '../../customer/accountInfo/products';
+import { withRouter } from 'react-router';
+import Pagination from "../../Pagination";
+
+const pageLimit = 8;
 
 export class ManageOrder extends Component {
     constructor() {
@@ -8,8 +12,10 @@ export class ManageOrder extends Component {
             orders: [],
             productList: [],
             donGia: '',
-            isSending: false,
-            sendMailStatus: ''
+            isSending: false,   
+            sendMailStatus: '',
+            isConfirm: true,
+            currentOrder: [],
         }
         this.onConfirmClick = this.onConfirmClick.bind(this);
     }
@@ -17,7 +23,7 @@ export class ManageOrder extends Component {
     async componentDidMount() {
         const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
 
-        const response = await fetch(`/hung/hoaDon`, {
+        const response = await fetch(`/hung/hoaDonOrderByDesc`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -27,14 +33,28 @@ export class ManageOrder extends Component {
         });
         const json = await response.json();
         this.setState({ orders: json }, () => console.log(this.state.orders));
+        this.setState({ currentOrder: this.state.orders.slice(0, pageLimit) }, () => console.log(this.state.orders));
     }
 
-    async onViewDetailClick(id) {
+    onPageChanged = data => {
+        const offset = (data.currentPage - 1) * data.pageLimit;
+        const currentOrder = this.state.orders.slice(offset, offset + data.pageLimit);
+        this.setState({
+            currentOrder: currentOrder,
+        });
+    }
+
+    async onViewDetailClick(id, tinhTrang) {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
+            if (tinhTrang !== "Đã xác nhận") {
+                this.setState({ isConfirm: false });
+            }
+
             const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
             this.setState({ productList: productList }, () => {
                 const dg = this.state.productList.reduce((accumulator, currentValue) => {
@@ -48,20 +68,19 @@ export class ManageOrder extends Component {
     async onConfirmClick() {
         const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
         if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
             this.props.history.push('/loginAdmin?message=tokenexpired');
         }
         else {
             this.setState({ isSending: true });
             const customer = this.state.productList[0].hoaDon.khachHang;
-            const order = this.state.productList[0].hoaDon;
-            console.log("Order");
+            console.log(customer.email);
             console.log(this.state.productList[0].hoaDon);
             await fetch(`/customerUnauthenticated/sendEmail`, {
                 method: 'POST',
                 body: JSON.stringify({
                     mail: customer.email,
                     content: 'Đơn hàng của bạn đã được xác nhận',
-                    hoaDon: order.id,
                 }),
                 headers: {
                     'Accept': 'application/json',
@@ -72,7 +91,7 @@ export class ManageOrder extends Component {
                 if (res.ok) {
                     const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
                     console.log("Respone OK");
-                    this.setState({ sendMailStatus: 'Gửi mail thành công!' });
+                    this.setState({ sendMailStatus: 'Send mail success!' });
                     fetch('/confirmOrder', {
                         method: 'PUT',
                         body: this.state.productList[0].hoaDon.id,
@@ -100,7 +119,7 @@ export class ManageOrder extends Component {
 
                 } else {
                     console.log("Response fail");
-                    this.setState({ sendMailStatus: 'Đã có lỗi xảy ra, không thể gửi mail!' });
+                    this.setState({ sendMailStatus: 'Send mail fail! Something went wrong!' });
                 }
             }).catch(err => console.log(err));
         }
@@ -127,7 +146,7 @@ export class ManageOrder extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.orders.map((order) => {
+                        {this.state.currentOrder.map((order) => {
                             return (
                                 <tr key={order.id}>
                                     <th scope="row">{order.id}</th>
@@ -135,12 +154,12 @@ export class ManageOrder extends Component {
                                     <td>{order.diaChi}</td>
                                     <td>{order.soDT}</td>
                                     <td>{order.ngayMuaHang}</td>
-                                    <td>{order.tongTien}</td>
+                                    <td><b>{order.tongTien.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></td>
                                     <td>{order.phuongThucThanhToan.tenPhuongThucThanhToan}</td>
-                                    <td>{order.tinhTrang}</td>
+                                    <td>{order.tinhTrang === "Đã xác nhận" ? <span class="badge badge-success mt-2">Đã xác nhận</span> : <span class="badge badge-danger mt-2">Chưa xác nhận</span>}</td>
                                     <td>
                                         <button className="btn btn-success" data-toggle="modal" data-target="#confirmForm"
-                                            onClick={() => this.onViewDetailClick(order.id)}>Xem chi tiết
+                                            onClick={() => this.onViewDetailClick(order.id, order.tinhTrang)}>Xem chi tiết
                                         </button>
                                     </td>
                                 </tr>
@@ -148,6 +167,12 @@ export class ManageOrder extends Component {
                         })}
                     </tbody>
                 </table>
+                <div className="d-flex justify-content-center">
+                    {
+                        (this.state.currentOrder.length > 0) &&
+                        <Pagination totalRecords={this.state.orders.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                    }
+                </div>
                 <div className="modal fade" id="confirmForm" tabIndex="-1" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
@@ -177,10 +202,15 @@ export class ManageOrder extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" data-dismiss="modal">Đóng</button>
-                                <button type="button" className="btn btn-success" data-toggle="modal" data-target="#sendMail"
-                                    data-dismiss="modal" onClick={this.onConfirmClick}>
-                                    Xác nhận đơn hàng
+                                {!this.state.isConfirm ?
+                                    <button type="button" className="btn btn-success" data-toggle="modal" data-target="#sendMail"
+                                        data-dismiss="modal" onClick={this.onConfirmClick}>
+                                        Xác nhận đơn hàng
                                 </button>
+                                    :
+                                    ""
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -190,16 +220,10 @@ export class ManageOrder extends Component {
                     aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <div class="modal-body py-4">
+                            <div class="modal-body">
                                 {this.state.isSending ?
-                                    <div className="row">
-                                        <h2>Đang gửi...</h2>
-                                        <div class="spinner-border" role="status">
-                                            <span class="sr-only">Loadings...</span>
-                                        </div>
-                                    </div> :
+                                    <h2 >Sending mail...</h2> :
                                     <h2 >{this.state.sendMailStatus}</h2>
-
                                 }
                             </div>
                             <div class="modal-footer">
@@ -213,4 +237,4 @@ export class ManageOrder extends Component {
     }
 }
 
-export default ManageOrder;
+export default withRouter(ManageOrder);

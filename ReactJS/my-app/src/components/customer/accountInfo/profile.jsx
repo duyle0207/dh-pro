@@ -193,7 +193,8 @@ class profile extends Component {
                             <p className="mt-2 mx-2">Email:</p>
                         </div>
                         <div className="col-sm-9">
-                            <input type="email" className="form-control w-75" width="40px" value={this.state.customer.email} name="email" placeholder="Email" onChange={this.onHandleChange} required />
+                            <input type="email" className="form-control w-75" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$" title="Hãy nhập đúng định dạng Email"
+                             width="40px" value={this.state.customer.email} name="email" placeholder="Email" onChange={this.onHandleChange} disabled required />
                         </div>
                     </div>
                     <div className="row my-4">
@@ -201,7 +202,10 @@ class profile extends Component {
                             <p className="mt-2 mx-2">Số điện thoại:</p>
                         </div>
                         <div className="col-sm-9">
-                            <input type="number" className="form-control w-75" width="40px" name="soDT" value={this.state.customer.soDT} placeholder="Số điện thoại" onChange={this.onHandleChange} required />
+                            <input type="text" className="form-control w-75" width="40px" name="soDT"
+                             pattern="(09|01[2|6|8|9])+([0-9]{8})\b" title="Hãy nhập đúng định dạng số điện thoại" 
+                             value={this.state.customer.soDT}
+                             placeholder="Số điện thoại" onChange={this.onHandleChange} required />
                         </div>
                     </div>
                     {/* <div className="row my-4">

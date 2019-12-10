@@ -69,6 +69,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     UserDetails userDetails = (UserDetails) new User(taiKhoan.getUserName(), //
                             taiKhoan.getPassword(), grantList);
+                    System.out.println("User detail");
+                    System.out.println(userDetails);
                     if (userDetails != null) {
                         // Nếu người dùng hợp lệ, set thông tin cho Seturity Context
                         UsernamePasswordAuthenticationToken

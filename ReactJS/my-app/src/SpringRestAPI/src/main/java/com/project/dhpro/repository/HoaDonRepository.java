@@ -23,5 +23,4 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
     @Query(value="select month(ngaymuahang) as thangmua, sum(tongtien), count(*) as sodon from hoadon where year(ngaymuahang) = year(curdate()) group by month(ngaymuahang)",nativeQuery = true)
     List<Object[]> saleMonthsInYear();
     List<HoaDon> findAllByOrderByIdDesc();
-
 }

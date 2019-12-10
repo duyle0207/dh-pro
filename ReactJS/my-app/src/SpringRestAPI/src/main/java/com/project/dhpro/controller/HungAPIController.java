@@ -263,6 +263,8 @@ public class HungAPIController {
     public ResponseEntity uploadMultipleFile(@RequestParam MultipartFile[] file, HttpSession session,@PathVariable("lapName") String lapName) throws IOException {
         ServletContext context = session.getServletContext();
         String path = context.getRealPath(UPLOAD_DIRECTORY);
+        System.out.println("file");
+        System.out.println(file);
 
         SanPham s = sanPhamService.findSanPhamByTenSP(lapName);
 
@@ -273,7 +275,6 @@ public class HungAPIController {
             String filename = a.getOriginalFilename();
             String fileNameRoot = a.getOriginalFilename();
             if (filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".jpeg")) {
-                System.out.println('a');
                 if (!checkFileName(filename, path)) {
                     filename = ChangeFileName(filename, fileNameRoot, path);
                 }

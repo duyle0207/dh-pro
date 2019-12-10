@@ -97,6 +97,7 @@ public class CustomerUnauthenticatedController {
         return ramService.findAll();
     }
 
+
     //CPU
     @Autowired
     CPUService cpuService;
@@ -147,6 +148,7 @@ public class CustomerUnauthenticatedController {
     @PostMapping("/login")
     public LoginResponse authenticateUser(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) {
 //        System.out.println("Login");
+
         // Xác thực từ username và password.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -154,8 +156,8 @@ public class CustomerUnauthenticatedController {
                         password
                 )
         );
-
-        System.out.println(authentication.getPrincipal());
+        System.out.println("AUTHENTICATED");
+        System.out.println(authentication);
 
         // Nếu không xảy ra exception tức là thông tin hợp lệ
         // Set thông tin authentication vào Security Context
@@ -260,6 +262,13 @@ public class CustomerUnauthenticatedController {
 //        loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(tk).getTen());
 
         return loginResponse;
+    }
+
+        @RequestMapping(value = "/loginInfo")
+    public Authentication loginInFo()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return  auth;
     }
 
     @RequestMapping(value="/logout", method = RequestMethod.GET)

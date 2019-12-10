@@ -108,7 +108,7 @@ class contentAdmin extends Component {
         });
         return (
             <div id="content-wrapper">
-                <div className="container-fluid my-4" style={{ backgroundColor: '#' }}>
+                {/* <div className="container-fluid my-4" style={{ backgroundColor: '#' }}>
                     <div className="input-group text-center">
                         <input type="text" className="form-control" style={{ width: '95%' }}
                             placeholder="Search for..."
@@ -122,7 +122,7 @@ class contentAdmin extends Component {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="container-fluid" style={{ backgroundColor: '#' }}>
                     <table className="table">
                         <thead className="thead-dark">

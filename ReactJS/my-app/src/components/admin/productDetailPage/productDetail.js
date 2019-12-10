@@ -180,7 +180,7 @@ class productDetail extends Component {
             if (adInfo.accessToken) {
                 this.setState({ adminInfo: adInfo });
                 //
-                if (this.props.idProduct !== 'new') {
+                if (this.props.idProduct !== 'new' && Number.isInteger(Number.parseInt(this.props.idProduct))) {
                     const link = '/sanPham/' + this.props.idProduct;
                     product = await (await fetch(link, {
                         headers: {
@@ -563,7 +563,7 @@ class productDetail extends Component {
                     }).then(res => {
                         if (res.ok) {
                             console.log(res);
-                            alert("Thêm sản phẩm thành công");
+                            alert("Thành công");
                             this.props.history.push('/manageProduct');
                         }
                     });
@@ -628,11 +628,17 @@ class productDetail extends Component {
                             source4: URL.createObjectURL(event.target.files[i])
                         });
                     }
-                    console.log(event.target.files[i])
+                    console.log("Tên File: ")
                     data.append("file", event.target.files[i]);
+                    
                 }
             }
+            for(var pair of data.entries()) {
+                console.log(pair[0]); 
+                console.log(pair[1]); 
+             }
             this.setState({ multipleFile: data });
+            // console.log(data.get("file"));
         }
     }
 
@@ -749,13 +755,13 @@ class productDetail extends Component {
                             {(this.state.isUpdateSuccess === true) ?
                                 <div className="form-group col-sm-12 my-2">
                                     <div className="alert alert-success text-center" role="alert">
-                                        Update Successfull
+                                        <b>Successfull</b>
                                 </div>
                                 </div> : ''}
                             {(this.state.isUpdateFail === true) ?
                                 <div className="form-group col-sm-12 my-2">
                                     <div className="alert alert-danger text-center" role="alert">
-                                        Update Failed
+                                        <b>Failed</b>
                                 </div>
                                 </div> : ''}
                         </div>

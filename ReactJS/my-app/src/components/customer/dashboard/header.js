@@ -29,6 +29,7 @@ class header extends React.Component {
     this.handleLogOutClick = this.handleLogOutClick.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleOnClickProduct = this.handleOnClickProduct.bind(this);
+    // console.log(new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test('arulgetsolute@gmail.com'));
   }
 
   async onHandleChange(event) {
@@ -52,8 +53,15 @@ class header extends React.Component {
 
   async componentDidMount() {
     // console.log(this.loginModal.current.display);
+    const isAccountLoginged = await (await fetch('/customerUnauthenticated/loginInfo')).json();
+    console.log(isAccountLoginged);
+    if(isAccountLoginged.principal==="anonymousUser")
+    {
+      localStorage.setItem("userInfo", JSON.stringify({}));
+      this.setState({userInfo: JSON.parse(localStorage.getItem("userInfo"))})
+    }
     const totalQuantity = await (await fetch('/customerUnauthenticated/getAllQuantity')).json();
-    console.log();
+    // console.log();
     this.setState({
       quantityCart: totalQuantity
     })

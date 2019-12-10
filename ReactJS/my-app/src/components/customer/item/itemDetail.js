@@ -43,8 +43,7 @@ class itemDetail extends React.Component {
   }
 
   async addToCart() {
-    if(this.state.quantity <= this.state.choosableQuantity)
-    {
+    if (this.state.quantity <= this.state.choosableQuantity) {
       await fetch(`/customerUnauthenticated/updateCart/quantity=${this.state.quantity}`, {
         method: 'POST',
         headers: {
@@ -56,7 +55,7 @@ class itemDetail extends React.Component {
         this.props.history.push("/cart");
       });
     }
-    else{
+    else {
       alert(`Số sản phẩm trong kho chỉ còn ${this.state.choosableQuantity}`);
     }
   }
@@ -68,7 +67,7 @@ class itemDetail extends React.Component {
         quantity: this.state.quantity + 1
       });
     }
-    else{
+    else {
       alert(`Số sản phẩm trong kho chỉ còn ${this.state.choosableQuantity}`);
     }
   }
@@ -171,38 +170,43 @@ class itemDetail extends React.Component {
               </div>
             </div>
             <hr />
-            <div className="row mb-3">
-              <div className="col-sm-3">
-                <p className="h5 mt-2 text-gray">Số lượng: </p>
-              </div>
-              <div className="col-sm-4">
-                <div className="btn-group btn-group-sm" role="group" aria-label="..." style={{ float: 'left' }}>
-                  <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'right', width: '40px' }} onClick={this.SubQuantity} ref="sub">
-                    -
+            {this, this.state.productQuantity === 0 ? <h3><span class="badge badge-warning">Sản phẩm tạm thời hết hàng</span></h3>
+              :
+              <div>
+                <div className="row mb-3">
+                  <div className="col-sm-3">
+                    <p className="h5 mt-2 text-gray">Số lượng: </p>
+                  </div>
+                  <div className="col-sm-4">
+                    <div className="btn-group btn-group-sm" role="group" aria-label="..." style={{ float: 'left' }}>
+                      <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'right', width: '40px' }} onClick={this.SubQuantity} ref="sub">
+                        -
                   </button>
-                  <input className="form-control" id="quantity" type="text" value={this.state.quantity}
-                    onChange={this.CheckQuantity} disabled={true}
-                    style={{ height: '40px', width: '50px' }} ref="quantity" />
-                  <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'left', width: '40px' }} onClick={this.PlusQuantity} ref="plus">
-                    +
+                      <input className="form-control" id="quantity" type="text" value={this.state.quantity}
+                        onChange={this.CheckQuantity} disabled={true}
+                        style={{ height: '40px', width: '50px' }} ref="quantity" />
+                      <button className="btn btn-light shadow-none" type="button" style={{ color: 'black', float: 'left', width: '40px' }} onClick={this.PlusQuantity} ref="plus">
+                        +
                   </button>
+                    </div>
+                  </div>
+                  <div className="col-sm-5">
+                    <p className="h6 mt-2 text-secondary ">{this.state.productQuantity}  Sản phẫm có sẳn </p>
+                  </div>
+                </div>
+                <div className="row" role="group" aria-label="Basic example">
+                  <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase shadow-none" onClick={this.addToCart}>
+                    <i className="fas fa-shopping-cart" />
+                    &nbsp;&nbsp;Thêm vào giỏ hàng
+              </a>
+                </div>
+                <div className="row mt-2" role="group" aria-label="Basic example">
+                  <a href={"/compareItem/" + this.props.product.id} className="btn btn-lg btn-warning text-uppercase shadow-none" style={{ color: 'white' }}>
+                    So sánh chi tiết
+              </a>
                 </div>
               </div>
-              <div className="col-sm-5">
-                <p className="h6 mt-2 text-secondary ">{this.state.productQuantity}  Sản phẫm có sẳn </p>
-              </div>
-            </div>
-            <div className="row" role="group" aria-label="Basic example">
-              <a href="#aaa" className="btn btn-lg btn-outline-info text-uppercase shadow-none" onClick={this.addToCart}>
-                <i className="fas fa-shopping-cart" />
-                &nbsp;&nbsp;Thêm vào giỏ hàng
-              </a>
-            </div>
-            <div className="row mt-2" role="group" aria-label="Basic example">
-              <a href={"/compareItem/" + this.props.product.id} className="btn btn-lg btn-warning text-uppercase shadow-none" style={{ color: 'white' }}>
-                So sánh chi tiết
-              </a>
-            </div>
+            }
           </article>
         </aside>
       </div>

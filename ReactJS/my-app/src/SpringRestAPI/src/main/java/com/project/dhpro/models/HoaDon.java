@@ -34,6 +34,12 @@ public class HoaDon {
     @Column(name = "tinhtrang")
     private String tinhTrang;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "note")
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "phuongthucthanhtoan")
     private PhuongThucThanhToan phuongThucThanhToan;

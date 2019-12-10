@@ -21,7 +21,9 @@ class cartInfo extends Component {
         "ngayMuaHang": "",
         "tongTien": '',
         "phuongThucThanhToan": 1,
-        "ten": ""
+        "ten": "",
+        "email": "",
+        "note": ""
     }
 
     constructor(props) {
@@ -45,7 +47,9 @@ class cartInfo extends Component {
                     id: "",
                     tenPhuongThucThanhToan: ""
                 },
-                ten: ""
+                ten: "",
+                email: "",
+                note: ""
             },
             isCheckoutOnline: false,
             order: {
