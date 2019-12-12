@@ -40,6 +40,22 @@ public class HoaDon {
     @Column(name = "note")
     private String note;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @ManyToOne
     @JoinColumn(name = "phuongthucthanhtoan")
     private PhuongThucThanhToan phuongThucThanhToan;

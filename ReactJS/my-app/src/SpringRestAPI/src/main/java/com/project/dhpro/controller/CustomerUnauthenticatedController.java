@@ -184,8 +184,7 @@ public class CustomerUnauthenticatedController {
         loginResponse.setRefreshToken(refreshToken);
         loginResponse.setId(id);
         System.out.println(authentication.getAuthorities());
-
-
+        loginResponse.setSocialAccount(false);
 
         if(!(taiKhoanService.findById(id).getRole().getTenRole()).equals("Admin")) {
             loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(taiKhoanService.findById(id)).getTen());
@@ -245,6 +244,7 @@ public class CustomerUnauthenticatedController {
                 loginResponse.setNewAccount(false);
                 loginResponse.setId(taiKhoan1.getId());
                 loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(taiKhoan1).getTen());
+                loginResponse.setSocialAccount(true);
 
                 return loginResponse;
             }
@@ -262,6 +262,7 @@ public class CustomerUnauthenticatedController {
         loginResponse.setAccessToken(jwt);
         loginResponse.setNewAccount(true);
         loginResponse.setId(tk.getId());
+        loginResponse.setSocialAccount(true);
 //        loginResponse.setCustomerName(khachHangService.findKHByIDTaiKhoan(tk).getTen());
 
         return loginResponse;
@@ -454,7 +455,10 @@ public class CustomerUnauthenticatedController {
     @PostMapping(value = "/saveHoaDon")
     public ResponseEntity saveHoaDon(@Valid @RequestBody HoaDon hoaDon, HttpServletRequest request)
     {
+        hoaDon.setTinhTrang("Đang xử lý");
         HoaDon hd = hoaDonService.save(hoaDon);
+
+        System.out.println(hd.getEmail());
 
         Cart cart = CartUtils.getCart(request);
 
@@ -563,6 +567,8 @@ public class CustomerUnauthenticatedController {
         Locale localeVN = new Locale("vi", "VN");
         NumberFormat nf = NumberFormat.getInstance(localeVN);
         String item = "";
+
+        System.out.println(mail.getHoaDon());
         HoaDon hoaDon = hoaDonService.getHoaDonByID(Integer.parseInt(mail.getHoaDon()));
         List<ChiTietHoaDon> chiTietHoaDons = chiTietHoaDonService.getChiTietHoaDonsByHoaDon(hoaDon);
         for (ChiTietHoaDon chiTietHoaDon : chiTietHoaDons) {

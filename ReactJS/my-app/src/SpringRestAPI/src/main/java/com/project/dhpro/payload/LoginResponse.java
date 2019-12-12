@@ -30,6 +30,16 @@ public class LoginResponse {
 
     private String customerName;
 
+    private boolean isSocialAccount;
+
+    public boolean isSocialAccount() {
+        return isSocialAccount;
+    }
+
+    public void setSocialAccount(boolean socialAccount) {
+        isSocialAccount = socialAccount;
+    }
+
     public String getCustomerName() {
         return customerName;
     }

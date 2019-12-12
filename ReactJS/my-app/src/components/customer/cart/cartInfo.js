@@ -234,6 +234,7 @@ class cartInfo extends Component {
     }
 
     async saveHoaDon(event) {
+        
         event.preventDefault();
         if (this.checkAuth()) {
             //Check Cart quantity

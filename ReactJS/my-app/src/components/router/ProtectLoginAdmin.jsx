@@ -8,16 +8,15 @@ import { Route, Redirect } from 'react-router-dom';
 function CheckAuthAdmin() {
 
     if (JSON.parse(localStorage.getItem("adminInfo")) === null) {
-        localStorage.setItem("userInfo", JSON.stringify({}));
+        localStorage.setItem("adminInfo", JSON.stringify({}));
     }
+    console.log(JSON.parse(localStorage.getItem("adminInfo")) === null);
     console.log(Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length);
     if (Object.keys(JSON.parse(localStorage.getItem("adminInfo"))).length === 0) {
-        console.log("true")
         return true;
     }
     else {
         // const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
-        console.log("false");
         return false;
     }
 }

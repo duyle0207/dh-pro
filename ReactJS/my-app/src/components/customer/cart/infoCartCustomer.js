@@ -15,7 +15,7 @@ class infoCartCustomer extends Component {
                     <div className="col-sm-6">
                         <div className="form-group">
                             <input type="email" className="form-control" name="email" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"
-                             placeholder="Email" value={this.props.hoaDon.email} onChange={this.props.handleOnChange} title="Hãy nhập đúng định dạng Email" disabled required/>
+                             placeholder="Email" value={this.props.hoaDon.email} onChange={this.props.handleOnChange} title="Hãy nhập đúng định dạng Email" required/>
                         </div>
                     </div>
                     <div className="col-sm-6">
@@ -35,7 +35,7 @@ class infoCartCustomer extends Component {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="form-group">
-                            <textarea className="form-control" name="" placeholder="Ghi chú thêm nếu có" rows={3} defaultValue={""} />
+                            <textarea className="form-control" name="note" placeholder="Ghi chú thêm nếu có" rows={3} onChange={this.props.handleOnChange} defaultValue={""} />
                         </div>
                     </div>
                 </div>

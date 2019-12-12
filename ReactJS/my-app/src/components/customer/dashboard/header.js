@@ -52,13 +52,12 @@ class header extends React.Component {
   }
 
   async componentDidMount() {
-    // console.log(this.loginModal.current.display);
     const isAccountLoginged = await (await fetch('/customerUnauthenticated/loginInfo')).json();
-    console.log(isAccountLoginged);
-    if(isAccountLoginged.principal==="anonymousUser")
-    {
-      localStorage.setItem("userInfo", JSON.stringify({}));
-      this.setState({userInfo: JSON.parse(localStorage.getItem("userInfo"))})
+    if (!JSON.parse(localStorage.getItem("userInfo")).socialAccount) {
+      if (isAccountLoginged.principal === "anonymousUser") {
+        localStorage.setItem("userInfo", JSON.stringify({}));
+        this.setState({ userInfo: JSON.parse(localStorage.getItem("userInfo")) })
+      }
     }
     const totalQuantity = await (await fetch('/customerUnauthenticated/getAllQuantity')).json();
     // console.log();

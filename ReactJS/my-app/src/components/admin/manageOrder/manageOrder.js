@@ -54,7 +54,6 @@ export class ManageOrder extends Component {
             if (tinhTrang !== "Đã xác nhận") {
                 this.setState({ isConfirm: false });
             }
-
             const productList = await (await fetch(`/customerUnauthenticated/getCTHD/${id}`)).json();
             this.setState({ productList: productList }, () => {
                 const dg = this.state.productList.reduce((accumulator, currentValue) => {
@@ -80,6 +79,7 @@ export class ManageOrder extends Component {
                 method: 'POST',
                 body: JSON.stringify({
                     mail: customer.email,
+                    hoaDon: this.state.productList[0].hoaDon.id,
                     content: 'Đơn hàng của bạn đã được xác nhận',
                 }),
                 headers: {

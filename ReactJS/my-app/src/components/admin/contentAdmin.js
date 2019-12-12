@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Card from './cardDashboard';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router';
 
 const divChart = {
     border: '1px solid #dddddd',
@@ -36,61 +37,68 @@ class contentAdmin extends Component {
     }
 
     async componentDidMount() {
-        const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
-        try {
-            const statistic = await fetch('/getStatistic', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + token
-                }
-            });
-            const data = await statistic.json();
-            console.log(data);
-            this.setState({
-                chartType: 'ngay',
-                totalSales: data[0] / 1000000.0,
-                totalOrders: data[1],
-                totalCustomers: data[2],
-            });
-            const saleDaysInMonth = await fetch('/chartDay', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + token
-                }
-            });
-            const saleDaysInMonthValue = await saleDaysInMonth.json();
-            console.log(saleDaysInMonthValue);
-            console.log(daysInMonth(month, year));
-            var ngay = [];
-            for (let i = 0; i < daysInMonth(month, year); i++) {
-                ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
-                saleDaysInMonthValue.forEach(element => {
-                    if (element[0] === i + 1)
-                        ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
+        }
+        else {
+            const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
+            try {
+                const statistic = await fetch('/getStatistic', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': "Bearer " + token
+                    }
                 });
-            }
-            console.log('Ngay', ngay);
-            this.setState({
-                data: ngay,
-            });
-            const hot = await fetch('/hotAndNot', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': "Bearer " + token
+                const data = await statistic.json();
+                console.log(data);
+                this.setState({
+                    chartType: 'ngay',
+                    totalSales: data[0] / 1000000.0,
+                    totalOrders: data[1],
+                    totalCustomers: data[2],
+                });
+                const saleDaysInMonth = await fetch('/chartDay', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': "Bearer " + token
+                    }
+                });
+                const saleDaysInMonthValue = await saleDaysInMonth.json();
+                console.log(saleDaysInMonthValue);
+                console.log(daysInMonth(month, year));
+                var ngay = [];
+                for (let i = 0; i < daysInMonth(month, year); i++) {
+                    ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+                    saleDaysInMonthValue.forEach(element => {
+                        if (element[0] === i + 1)
+                            ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+                    });
                 }
-            });
-            const hotValue = await hot.json();
-            const notValue = hotValue;
-            console.log('Hot', notValue);
-            await this.setState({hot: hotValue.splice(0,3), not: notValue.splice(0, 3) });
-        } catch (e) {
-            console.log('Error', e);
+                console.log('Ngay', ngay);
+                this.setState({
+                    data: ngay,
+                });
+                const hot = await fetch('/hotAndNot', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': "Bearer " + token
+                    }
+                });
+                const hotValue = await hot.json();
+                const notValue = hotValue;
+                console.log('Hot', notValue);
+                await this.setState({ hot: hotValue.splice(0, 3), not: notValue.splice(0, 3) });
+            } catch (e) {
+                console.log('Error', e);
+            }
         }
     }
 
@@ -273,4 +281,4 @@ class contentAdmin extends Component {
     }
 }
 
-export default contentAdmin;
+export default withRouter(contentAdmin);
