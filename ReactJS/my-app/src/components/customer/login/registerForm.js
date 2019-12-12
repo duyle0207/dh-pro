@@ -160,7 +160,7 @@ class RegisterForm extends Component {
                             <label className="col-sm-3 col-form-label">Email</label>
                             <div className="col-sm-9">
                                 <input type="email" className="form-control" name="email" placeholder="Nhập email"
-                                    pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
                                     required title="Hãy nhập đúng định dạng Email"
                                     value={this.state.email} onChange={this.handleChange}
                                 />
