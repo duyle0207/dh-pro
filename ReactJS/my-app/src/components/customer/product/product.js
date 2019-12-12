@@ -20,7 +20,7 @@ var filter = {
 
 var holder = [];
 
-const pageLimit = 4;
+const pageLimit = 8;
 
 const comparePrice = (a, b) => b.gia - a.gia;
 const compareId = (a, b) => b.id - a.id;

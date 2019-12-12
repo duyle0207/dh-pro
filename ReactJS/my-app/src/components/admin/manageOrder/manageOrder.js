@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import Pagination from "../../Pagination";
 
 const pageLimit = 8;
+var offset = 0;
 
 export class ManageOrder extends Component {
     constructor() {
@@ -37,7 +38,7 @@ export class ManageOrder extends Component {
     }
 
     onPageChanged = data => {
-        const offset = (data.currentPage - 1) * data.pageLimit;
+        offset = (data.currentPage - 1) * data.pageLimit;
         const currentOrder = this.state.orders.slice(offset, offset + data.pageLimit);
         this.setState({
             currentOrder: currentOrder,
@@ -91,7 +92,7 @@ export class ManageOrder extends Component {
                 if (res.ok) {
                     const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
                     console.log("Respone OK");
-                    this.setState({ sendMailStatus: 'Send mail success!' });
+                    this.setState({ sendMailStatus: 'Gửi mail thành công!' });
                     fetch('/confirmOrder', {
                         method: 'PUT',
                         body: this.state.productList[0].hoaDon.id,
@@ -104,7 +105,7 @@ export class ManageOrder extends Component {
                         if (res.ok) {
                             const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
 
-                            const response = await fetch(`/hung/hoaDon`, {
+                            const response = await fetch(`/hung/hoaDonOrderByDesc`, {
                                 method: 'GET',
                                 headers: {
                                     'Accept': 'application/json',
@@ -113,13 +114,17 @@ export class ManageOrder extends Component {
                                 }
                             });
                             const json = await response.json();
-                            this.setState({ orders: json }, () => console.log(this.state.orders));
+                            this.setState({ orders: json }, () => {
+                                console.log(this.state.orders);
+                                const currentOrder = this.state.orders.slice(offset, offset + pageLimit);
+                                this.setState({currentOrder: currentOrder});
+                            });
                         }
                     }).catch(err => console.log('Error', err));
 
                 } else {
                     console.log("Response fail");
-                    this.setState({ sendMailStatus: 'Send mail fail! Something went wrong!' });
+                    this.setState({ sendMailStatus: 'Đã có lỗi xảy ra! Không thể gửi mail.' });
                 }
             }).catch(err => console.log(err));
         }
@@ -222,7 +227,7 @@ export class ManageOrder extends Component {
                         <div class="modal-content">
                             <div class="modal-body">
                                 {this.state.isSending ?
-                                    <h2 >Sending mail...</h2> :
+                                    <h2 >Đang gửi mail xác nhận...</h2> :
                                     <h2 >{this.state.sendMailStatus}</h2>
                                 }
                             </div>
