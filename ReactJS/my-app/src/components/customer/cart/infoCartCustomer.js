@@ -14,7 +14,7 @@ class infoCartCustomer extends Component {
                 <div className="row">
                     <div className="col-sm-6">
                         <div className="form-group">
-                            <input type="email" className="form-control" name="email" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"
+                            <input type="email" className="form-control" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}"
                              placeholder="Email" value={this.props.hoaDon.email} onChange={this.props.handleOnChange} title="Hãy nhập đúng định dạng Email" required/>
                         </div>
                     </div>

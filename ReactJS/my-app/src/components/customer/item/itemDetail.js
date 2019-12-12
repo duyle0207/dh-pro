@@ -191,7 +191,7 @@ class itemDetail extends React.Component {
                     </div>
                   </div>
                   <div className="col-sm-5">
-                    <p className="h6 mt-2 text-secondary ">{this.state.productQuantity}  Sản phẫm có sẳn </p>
+                    <p className="h6 mt-2 text-secondary ">{this.state.productQuantity}  Sản phẩm có sẳn </p>
                   </div>
                 </div>
                 <div className="row" role="group" aria-label="Basic example">

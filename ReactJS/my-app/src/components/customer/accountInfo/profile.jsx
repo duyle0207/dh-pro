@@ -159,14 +159,14 @@ class profile extends Component {
                 </nav>
                 {this.state.isUpdateSuccess ?
                     <div className="alert alert-success" role="alert">
-                        <i className="fas fa-check"></i><b>  Chỉnh sữa thành công</b>
+                        <i className="fas fa-check"></i><b>  Chỉnh sửa thành công</b>
                     </div>
                     :
                     ""
                 }
                 {this.state.isUpdateFail ?
                     <div className="alert alert-danger" role="alert">
-                        <i className="fas fa-times"></i><b>  Chỉnh sữa thất bại</b>
+                        <i className="fas fa-times"></i><b>  Chỉnh sửa thất bại</b>
                     </div>
                     :
                     ""
@@ -193,7 +193,7 @@ class profile extends Component {
                             <p className="mt-2 mx-2">Email:</p>
                         </div>
                         <div className="col-sm-9">
-                            <input type="email" className="form-control w-75" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$" title="Hãy nhập đúng định dạng Email"
+                            <input type="email" className="form-control w-75" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" title="Hãy nhập đúng định dạng Email"
                              width="40px" value={this.state.customer.email} name="email" placeholder="Email" onChange={this.onHandleChange} disabled required />
                         </div>
                     </div>
@@ -238,7 +238,7 @@ class profile extends Component {
                         <div>
                             <div className="row my-4">
                                 <div className="col-sm-3">
-                                    <p className="mt-2 mx-2">Mật khẫu cũ:</p>
+                                    <p className="mt-2 mx-2">Mật khẩu cũ:</p>
                                 </div>
                                 <div className="col-sm-9">
                                     <input type="text" className="form-control w-75" width="40px" name="password" placeholder="Mật khẫu cũ" onChange={this.handleChangePassword} value={this.state.oldPassword} required />
