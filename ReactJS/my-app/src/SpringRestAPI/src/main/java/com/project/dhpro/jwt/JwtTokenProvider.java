@@ -13,7 +13,7 @@ public class JwtTokenProvider {
     private final String JWT_REFRESH_SECRET = "SecretForRefreshToken";
 
     //Thời gian có hiệu lực của chuỗi jwt
-    private final long JWT_EXPIRATION = 604800000L;
+    private final long JWT_EXPIRATION = 30000L;
 
 
     private final long JWT_REFRESH_EXPIRATION = 604800000L;

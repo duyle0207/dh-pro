@@ -9,4 +9,6 @@ public interface BinhLuanService {
 
     List<BinhLuan> getBinhLuansBySanPham(int id);
 
+    BinhLuan save(BinhLuan binhLuan);
+
 }

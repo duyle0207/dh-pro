@@ -18,6 +18,11 @@ public class BinhLuanServiceImp implements BinhLuanService{
 
     @Override
     public List<BinhLuan> getBinhLuansBySanPham(int id) {
-        return binhLuanRepository.getBinhLuansByIdSP(id);
+        return binhLuanRepository.getBinhLuansByIdSPAndOrderByIdDesc(String.valueOf(id));
+    }
+
+    @Override
+    public BinhLuan save(BinhLuan binhLuan) {
+        return binhLuanRepository.save(binhLuan);
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../../css/style.css';
-import TimeAgo from 'timeago-react';
+// import TimeAgo from 'timeago-react';
 
 class customerComment extends Component {
 
@@ -34,10 +34,7 @@ class customerComment extends Component {
                             <p>{this.props.content}</p>
                         </div>
                     </div>
-                    <TimeAgo
-                        datetime={this.props.ngayDang}
-                        locale='vi_VN'
-                    />
+                    <p>{this.props.ngayDang}</p>
                 </div>
             </div>
         );

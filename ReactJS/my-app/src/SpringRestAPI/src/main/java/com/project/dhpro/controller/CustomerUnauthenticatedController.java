@@ -268,7 +268,14 @@ public class CustomerUnauthenticatedController {
         return loginResponse;
     }
 
-        @RequestMapping(value = "/loginInfo")
+    @RequestMapping(value = "/getIDKHByIDTK/{id}")
+    int getIDKHByIDTK(@PathVariable("id") int id)
+    {
+        TaiKhoan taiKhoan = taiKhoanService.findById(id);
+        return khachHangService.findKHByIDTaiKhoan(taiKhoan).getId();
+    }
+
+    @RequestMapping(value = "/loginInfo")
     public Authentication loginInFo()
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -624,4 +624,17 @@ public class RestAPIController {
         return sanPhamService.hotAndNot();
     }
 
+    // Binh luan
+    @Autowired
+    BinhLuanService binhLuanService;
+
+    @PostMapping(value = "/insertBinhLuan")
+    ResponseEntity insertBinhLuan(@Valid @RequestBody BinhLuan binhLuan)
+    {
+        System.out.println(binhLuan.getIdSP());
+        System.out.println(binhLuan.getIdkh());
+        binhLuanService.save(binhLuan);
+        return ResponseEntity.ok().build();
+    }
+
 }

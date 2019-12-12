@@ -35,11 +35,11 @@ class item extends React.Component {
 
   render() {
     return (
-      <div className="col-sm-3">
-        <figure className="card card-product">
+      <div className="col-sm-3 hovereffect">
+        <figure className="card card-product" title={this.props.lapName}>
           <Link to={"/itemDetail/" + this.props.id} style={{ textDecoration: "none", color: "black" }}>
             <div className="img-wrap">
-              <img src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt="" />
+              <img className="img-fluid img-responsive mx-3" src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.props.imgSrc}`)} alt="" />
             </div>
             <figcaption className="info-wrap">
               <h4 className="title">{this.props.brand}</h4>
@@ -52,9 +52,9 @@ class item extends React.Component {
               </div>
             </div>
           </Link>
-          <div className="price-wrap">
+          {/* <div className="price-wrap">
             <button className="btn btn-info mx-3 my-3" onClick={this.handleAddToCart}>Mua ngay</button>
-          </div>
+          </div> */}
         </figure>
       </div>
     );
