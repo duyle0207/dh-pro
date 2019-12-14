@@ -21,6 +21,11 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
     @Query(value="select sanpham.id, sanpham.tensp, sum(chitiethoadon.soluong) from chitiethoadon join sanpham on chitiethoadon.idsp = sanpham.id group by sanpham.id order by sum(chitiethoadon.soluong) limit 3",nativeQuery = true)
     List<Object[]> not();
 
+    @Query(value="select sanpham.* from chitiethoadon join sanpham on chitiethoadon.idsp = sanpham.id where sanpham.soluong>0 group by sanpham.id order by sum(chitiethoadon.soluong) desc limit 4",nativeQuery = true)
+    List<SanPham> bestSeller();
+
     SanPham findSanPhamByTenSP(String tensp);
+
+    List<SanPham> findTop15By();
 
 }

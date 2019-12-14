@@ -44,9 +44,14 @@ public class CustomerUnauthenticatedController {
     @Autowired
     HinhSanPhamService hinhSanPhamService;
 
+    @GetMapping(value = "/sanPham12")
+    List<SanPham> ListSanPham12() {
+        return sanPhamService.findTop12SanPham();
+    }
+
     @GetMapping(value = "/sanPham")
     List<SanPham> ListSanPham() {
-        return  sanPhamService.getAll();
+        return sanPhamService.getAll();
     }
 
     @GetMapping(value = "/sanPham/{id}")
@@ -563,6 +568,11 @@ public class CustomerUnauthenticatedController {
 //    {
 //        return binhLuanService.getBinhLuanById(id);
 //    }
+
+    @GetMapping(value = "/bestSeller")
+    public List<SanPham> hotAndNot(){
+        return sanPhamService.bestSeller();
+    }
 
     @Autowired
     public JavaMailSender emailSender;

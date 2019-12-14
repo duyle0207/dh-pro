@@ -237,41 +237,55 @@ class cartInfo extends Component {
         event.preventDefault();
         if (this.checkAuth()) {
             //Check Cart quantity
-            const removedProductFromCart = await (await fetch(`/customerUnauthenticated/checkCartQuantityBeforeCheckOut`)).json();
-            if (removedProductFromCart.length === 0) {
-                const customer = await (await fetch(`/customerUnauthenticated/getCustomerByUsername/${JSON.parse(localStorage.getItem("userInfo")).userName}`)).json();
-                const pttt = await (await fetch(`/customerUnauthenticated/getPhuongThucThanhToan/${this.state.hoaDon.phuongThucThanhToan}`)).json();
-                this.setState({
-                    hoaDon: {
-                        ...this.state.hoaDon,
-                        khachHang: customer,
-                        phuongThucThanhToan: pttt,
-                        tongTien: this.state.amount
-                    }
-                });
-                console.log(this.state.hoaDon);
-                await fetch(`/customerUnauthenticated/saveHoaDon`, {
-                    method: 'POST',
+            const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("userInfo")).accessToken}`)).json();
+            if (!isTokenValid) {
+                await fetch(`/customerUnauthenticated/logout`, {
+                    method: 'GET',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(this.state.hoaDon)
-                }).then((res) => {
-                    this.setState({
-                        notificationContent: 'Đặt hàng thành công',
-                        iconNotification: 'ml-4 fa fa-check-circle',
-                        visible: true
-                    });
-                    // this.props.history.push("/")
+                    }
                 });
+                localStorage.removeItem("userInfo");
+                this.props.history.push('/login?message=tokenexpired');
             }
             else {
-                this.setState({
-                    notificationContent: 'Một vài sản phẩm trong giỏ hàng đã hết hàng. Xin lỗi vì sự bất tiện này!',
-                    iconNotification: 'ml-4 fa fa-remove',
-                    visible: true
-                })
+                const removedProductFromCart = await (await fetch(`/customerUnauthenticated/checkCartQuantityBeforeCheckOut`)).json();
+                if (removedProductFromCart.length === 0) {
+                    const customer = await (await fetch(`/customerUnauthenticated/getCustomerByUsername/${JSON.parse(localStorage.getItem("userInfo")).userName}`)).json();
+                    const pttt = await (await fetch(`/customerUnauthenticated/getPhuongThucThanhToan/${this.state.hoaDon.phuongThucThanhToan}`)).json();
+                    this.setState({
+                        hoaDon: {
+                            ...this.state.hoaDon,
+                            khachHang: customer,
+                            phuongThucThanhToan: pttt,
+                            tongTien: this.state.amount
+                        }
+                    });
+                    console.log(this.state.hoaDon);
+                    await fetch(`/customerUnauthenticated/saveHoaDon`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(this.state.hoaDon)
+                    }).then((res) => {
+                        this.setState({
+                            notificationContent: 'Đặt hàng thành công',
+                            iconNotification: 'ml-4 fa fa-check-circle',
+                            visible: true
+                        });
+                        // this.props.history.push("/")
+                    });
+                }
+                else {
+                    this.setState({
+                        notificationContent: 'Một vài sản phẩm trong giỏ hàng đã hết hàng. Xin lỗi vì sự bất tiện này!',
+                        iconNotification: 'ml-4 fa fa-remove',
+                        visible: true
+                    })
+                }
             }
         }
         else {
@@ -320,28 +334,42 @@ class cartInfo extends Component {
     payment = async (data, actions) => {
         const removedProductFromCart = await (await fetch(`/customerUnauthenticated/checkCartQuantityBeforeCheckOut`)).json();
         if (removedProductFromCart.length === 0) {
-            const payment = {
-                "intent": "sale",
-                "redirect_urls": {
-                    "return_url": "https://www.paypal.com",
-                    "cancel_url": "https://www.paypal.com"
-                },
-                "payer": {
-                    "payment_method": "paypal"
-                },
-                transactions: [
-                    {
-                        "amount": {
-                            "total": this.state.order.total,
-                            "currency": "USD",
-                        },
-                        "description": "The payment transaction description.",
-                        "custom": "EBAY_EMS_90048630024435",
+            const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("userInfo")).accessToken}`)).json();
+            if (!isTokenValid) {
+                await fetch(`/customerUnauthenticated/logout`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
-                ],
-                note_to_payer: 'Contact us for any questions on your order.'
-            };
-            return actions.payment.create({ payment });
+                });
+                localStorage.removeItem("userInfo");
+                this.props.history.push('/login?message=tokenexpired');
+            }
+            else {
+                const payment = {
+                    "intent": "sale",
+                    "redirect_urls": {
+                        "return_url": "https://www.paypal.com",
+                        "cancel_url": "https://www.paypal.com"
+                    },
+                    "payer": {
+                        "payment_method": "paypal"
+                    },
+                    transactions: [
+                        {
+                            "amount": {
+                                "total": this.state.order.total,
+                                "currency": "USD",
+                            },
+                            "description": "The payment transaction description.",
+                            "custom": "EBAY_EMS_90048630024435",
+                        }
+                    ],
+                    note_to_payer: 'Contact us for any questions on your order.'
+                };
+                return actions.payment.create({ payment });
+            }
         }
         else {
             this.setState({

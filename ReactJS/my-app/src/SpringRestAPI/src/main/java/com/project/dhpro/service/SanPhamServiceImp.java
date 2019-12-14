@@ -58,4 +58,14 @@ public class SanPhamServiceImp implements SanPhamService{
         }
         return result;
     }
+
+    @Override
+    public List<SanPham> findTop12SanPham() {
+        return sanPhamRepository.findTop15By();
+    }
+
+    @Override
+    public List<SanPham> bestSeller() {
+        return sanPhamRepository.bestSeller();
+    }
 }

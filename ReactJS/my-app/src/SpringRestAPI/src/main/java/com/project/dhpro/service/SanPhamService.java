@@ -20,4 +20,8 @@ public interface SanPhamService {
     void deleteSanPham(int id);
 
     List<Object[]> hotAndNot();
+
+    List<SanPham> findTop12SanPham();
+
+    List<SanPham> bestSeller();
 }

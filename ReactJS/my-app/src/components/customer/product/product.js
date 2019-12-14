@@ -20,7 +20,7 @@ var filter = {
 
 var holder = [];
 
-const pageLimit = 8;
+const pageLimit = 12;
 
 const comparePrice = (a, b) => b.gia - a.gia;
 const compareId = (a, b) => b.id - a.id;
@@ -89,7 +89,7 @@ class Product extends Component {
                 holder.sort(comparePrice).reverse();
                 break;
             default:
-                this.setState({ products: this.state.products.sort(compareId)}, () => {
+                this.setState({ products: this.state.products.sort(compareId) }, () => {
                     this.setState({ currentProducts: this.state.products.slice(0, pageLimit) })
                 })
                 holder.sort(compareId);
@@ -330,9 +330,9 @@ class Product extends Component {
         return (
             <div>
                 <Header />
-                <div className="container mt-4">
+                <div className="container-fluid">
                     <div className="row">
-                        <div className="col-sm-2">
+                        <div className="col-sm-2 mt-4 offset-1">
                             <Filter onUpdate={(state) => this.onPriceUpdate(state)}>
                                 <FilterItem filterName={'Thương hiệu'} collapseId='thuongHieu'>
                                     <div className="collapse show" id="thuongHieu">
@@ -432,38 +432,46 @@ class Product extends Component {
                                 </FilterItem>
                             </Filter>
                         </div>
-                        <div className="col-sm-10">
-                            <div className="col-sm-2  ml-auto pr-0">
-                                <div className="form-group">
-                                    <select className="form-control form-control-sm" value={this.state.selectValue} onChange={this.handleChange}>
-                                        <option value="moi">Mới nhất</option>
-                                        <option value="giam">Giá giảm dần</option>
-                                        <option value="tang">Giá tăng dần</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="row">
-                                {this.state.products.length < 1 &&
-                                    <div className="alert alert-secondary col-12 text-center" role="alert">
-                                        Không tìm thấy sản phẩm nào phù hợp
+                        <div className="col-sm-8">
+                            <div className="container mt-4">
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="col-sm-2  ml-auto pr-0">
+                                            <div className="form-group">
+                                                <select className="form-control form-control-sm" value={this.state.selectValue} onChange={this.handleChange}>
+                                                    <option value="moi">Mới nhất</option>
+                                                    <option value="giam">Giá giảm dần</option>
+                                                    <option value="tang">Giá tăng dần</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            {this.state.products.length < 1 &&
+                                                <div className="alert alert-secondary col-12 text-center" role="alert">
+                                                    Không tìm thấy sản phẩm nào phù hợp
+                                                </div>
+                                            }
+                                            {this.state.currentProducts.map((item, index) => {
+                                                if (item.soLuong > 0) {
+                                                    return <Item
+                                                        id={item.id}
+                                                        imgSrc={item.hinh}
+                                                        brand={item.thuongHieu.tenThuongHieu}
+                                                        lapName={item.tenSP}
+                                                        price={item.gia}
+                                                        key={index}
+                                                    />
+                                                }
+                                            })}
+                                        </div>
+                                        <div className="d-flex justify-content-center">
+                                            {
+                                                (this.state.products.length > 0) &&
+                                                <Pagination totalRecords={this.state.products.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                                            }
+                                        </div>
                                     </div>
-                                }
-                                {this.state.currentProducts.map((item, index) => {
-                                    return <Item
-                                        id={item.id}
-                                        imgSrc={item.hinh}
-                                        brand={item.thuongHieu.tenThuongHieu}
-                                        lapName={item.tenSP}
-                                        price={item.gia}
-                                        key={index}
-                                    />
-                                })}
-                            </div>
-                            <div className="d-flex justify-content-center">
-                                {
-                                    (this.state.products.length > 0) &&
-                                    <Pagination totalRecords={this.state.products.length} pageLimit={pageLimit} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
