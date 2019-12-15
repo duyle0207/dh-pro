@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import '../../css/sb-admin.css';
-import { withRouter  } from 'react-router';
+import { withRouter } from 'react-router';
 
 class headerAdmin extends Component {
 
 
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
 
         this.state = ({
@@ -16,18 +15,32 @@ class headerAdmin extends Component {
         this.handleLogOutClick = this.handleLogOutClick.bind(this);
     }
 
+    async componentDidMount() {
+        const isAccountLoginged = await (await fetch('/customerUnauthenticated/loginInfo')).json();
+        console.log(isAccountLoginged);
+        if (!JSON.parse(localStorage.getItem("adminInfo")).socialAccount) {
+          if (isAccountLoginged.principal === "anonymousUser") {
+            localStorage.setItem("adminInfo", JSON.stringify({}));
+            this.setState({ adminInfo: JSON.parse(localStorage.getItem("adminInfo")) },()=>{
+                this.props.history.push('/loginAdmin');
+            })
+          }
+        }
+    }
+
     async handleLogOutClick() {
         await fetch(`/customerUnauthenticated/logout`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
         });
         localStorage.setItem("adminInfo", JSON.stringify({}));
         this.setState({ userInfo: JSON.parse(localStorage.getItem("adminInfo")) });
         this.props.history.push('/loginAdmin')
-      }
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -56,7 +69,7 @@ class headerAdmin extends Component {
                                     <p className="h6">{JSON.parse(localStorage.getItem("adminInfo")).userName}</p>
                                 </div>
                             </div>
-                            
+
                         </a>
                         <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                             {/* <a className="dropdown-item" href="#aa">Settings</a>

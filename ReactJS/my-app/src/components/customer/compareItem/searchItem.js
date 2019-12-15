@@ -10,22 +10,20 @@ class searchItem extends Component {
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    async componentDidMount()
-    {
-        const product = await(await fetch(`/customerUnauthenticated/sanPham`)).json();
-        this.setState({productList:product});
+    async componentDidMount() {
+        const product = await (await fetch(`/customerUnauthenticated/sanPham`)).json();
+        this.setState({ productList: product });
     }
 
-    handleOnChange(event)
-    {
+    handleOnChange(event) {
         fetch('/customerUnauthenticated/searchSPAdmin', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: (!event.target.value? "%":event.target.value)
-        }).then(res => res.json()).then(result=>{
+            body: (!event.target.value ? "%" : event.target.value)
+        }).then(res => res.json()).then(result => {
             this.setState({ productList: result });
         });
     }
@@ -48,8 +46,14 @@ class searchItem extends Component {
                             <div className="modal-body" style={{ overflow: 'auto', height: "800px" }}>
                                 <input type="text" className="form-control" id="text" placeholder="Nhập sản phẩm mà bạn muốn so sánh" onChange={this.handleOnChange}></input>
                                 <div className="row">
-                                    {this.state.productList.map((value,index)=>{return <Item i={index} id={value.id} imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} 
-                                    lapName={value.tenSP} handleClick={this.props.handleClick}></Item>})}
+                                    {this.state.productList.map((value, index) => {
+                                        if(value.soLuong>0 && value.id!=this.props.itemID)
+                                        {
+                                            return <Item i={index} id={value.id} imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)}
+                                            lapName={value.tenSP} handleClick={this.props.handleClick}></Item>   
+                                        }
+                                    }
+                                    )}
                                 </div>
                             </div>
                         </div>

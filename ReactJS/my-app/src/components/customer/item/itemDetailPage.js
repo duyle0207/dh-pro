@@ -44,6 +44,9 @@ class ItemDetailPage extends React.Component {
       imgList: imgList,
       listBinhLuan: listBinhLuan
     }, () => {
+      if (this.state.product["error"]) {
+        this.props.history.goBack();
+      }
       document.title = this.state.product.tenSP;
     });
 
@@ -63,15 +66,14 @@ class ItemDetailPage extends React.Component {
     this.setState({ visibleCommentBox: !this.state.visibleCommentBox });
   }
 
-  async loadBinhLuan()
-  {
+  async loadBinhLuan() {
     const listBinhLuan = await (await fetch(`/customerUnauthenticated/getBinhLuanBySPID/${this.props.match.params.id}`)).json();
-    this.setState({listBinhLuan: listBinhLuan,visibleCommentBox:false});
+    this.setState({ listBinhLuan: listBinhLuan, visibleCommentBox: false });
   }
 
   render() {
     // console.log(this.state.productDetail.hinh);
-    if (this.state.product["message"] === "No value present") {
+    if (this.state.product["error"]) {
       return <Redirect to="/" />
     }
     else {
@@ -128,9 +130,30 @@ class ItemDetailPage extends React.Component {
             <div className="card">
               <button className="btn btn-warning" type="button" onClick={this.handleCommentBox}><b>Gửi đánh giá của bạn</b></button>
             </div>
-            <div className="card my-4">
-              {(this.state.visibleCommentBox === true) && <InputComment idSP = {this.state.product.id} loadBinhLuan={this.loadBinhLuan}></InputComment>}
-            </div>
+            {this.state.visibleCommentBox ?
+              < div className="row">
+                <div className="col-sm-6">
+                  <div className="card my-4">
+                    <InputComment idSP={this.state.product.id} loadBinhLuan={this.loadBinhLuan}></InputComment>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="row my-4">
+                    <div className="col-sm-4">
+                      {this.state.product.hinh ?
+                        <img className="img-fluid" src={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.product.hinh}`)}></img> : ''
+                      }
+                    </div>
+                    <div className="col-sm-8">
+                      <p className="display-4">{this.state.product.tenSP}</p>
+                      <p className="lead">Thương hiệu: {this.state.product.thuongHieu.tenThuongHieu}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              :
+              ''
+            }
             <Span content={'Đánh giá của khách hàng về sản phẩm này'}></Span>
             <div className="border-top">
               {this.state.listBinhLuan.map((value) => {
@@ -169,7 +192,7 @@ class ItemDetailPage extends React.Component {
             </div>
           </div>
           <Footer></Footer>
-        </div>
+        </div >
       );
     }
   }

@@ -12,7 +12,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
     List<HoaDon> getHoaDonsByKhachHangOrderByIdDesc(KhachHang khachHang);
 
     @Query(value="select sum(tongtien) as doanhthu from hoadon where month(hoadon.ngaymuahang) = month(curdate())",nativeQuery = true)
-    int totalSalesOfMonth();
+    double totalSalesOfMonth();
 
     @Query(value="select count(*) as luotdathang from hoadon where month(hoadon.ngaymuahang) = month(curdate())",nativeQuery = true)
     int totalOrdersOfMonth();

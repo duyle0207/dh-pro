@@ -15,7 +15,7 @@ public interface HoaDonService {
 
     HoaDon getHoaDonByID(int id);
 
-    int totalSalesOfMonth();
+    double totalSalesOfMonth();
 
     int totalOrdersOfMonth();
 
