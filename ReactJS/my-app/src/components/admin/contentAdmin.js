@@ -104,55 +104,69 @@ class contentAdmin extends Component {
 
     async onNgayClick() {
         const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
-        const saleDaysInMonth = await fetch('/chartDay', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token
-            }
-        });
-        const saleDaysInMonthValue = await saleDaysInMonth.json();
-        console.log(saleDaysInMonthValue);
-        console.log(daysInMonth(month, year));
-        var ngay = [];
-        for (let i = 0; i < daysInMonth(month, year); i++) {
-            ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
-            saleDaysInMonthValue.forEach(element => {
-                if (element[0] === i + 1)
-                    ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
-            });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
         }
-        console.log('Ngay', ngay);
-        this.setState({
-            chartType: 'ngay',
-            data: ngay,
-        })
+        else {
+            const saleDaysInMonth = await fetch('/chartDay', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            });
+            const saleDaysInMonthValue = await saleDaysInMonth.json();
+            console.log(saleDaysInMonthValue);
+            console.log(daysInMonth(month, year));
+            var ngay = [];
+            for (let i = 0; i < daysInMonth(month, year); i++) {
+                ngay[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+                saleDaysInMonthValue.forEach(element => {
+                    if (element[0] === i + 1)
+                        ngay[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+                });
+            }
+            console.log('Ngay', ngay);
+            this.setState({
+                chartType: 'ngay',
+                data: ngay,
+            })
+        }
     }
 
     async onThangClick() {
         const token = JSON.parse((localStorage.getItem("adminInfo"))).accessToken;
-        const response = await fetch('/chartMonth', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': "Bearer " + token
-            }
-        });
-        const data = await response.json();
-        var thang = [];
-        for (let i = 0; i < 12; i++) {
-            thang[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
-            data.forEach(element => {
-                if (element[0] === i + 1)
-                    thang[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
-            });
+        const isTokenValid = await (await fetch(`/customerUnauthenticated/validateJWT/${JSON.parse(localStorage.getItem("adminInfo")).accessToken}`)).json();
+        if (!isTokenValid) {
+            localStorage.removeItem("adminInfo");
+            this.props.history.push('/loginAdmin?message=tokenexpired');
         }
-        this.setState({
-            chartType: 'thang',
-            data: thang,
-        })
+        else {
+            const response = await fetch('/chartMonth', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            });
+            const data = await response.json();
+            var thang = [];
+            for (let i = 0; i < 12; i++) {
+                thang[i] = { name: (i + 1).toString(), doanhThu: 0, donHang: 0 };
+                data.forEach(element => {
+                    if (element[0] === i + 1)
+                        thang[i] = { name: (i + 1).toString(), doanhThu: element[1] / 1000000.0, donHang: element[2] };
+                });
+            }
+            this.setState({
+                chartType: 'thang',
+                data: thang,
+            })
+        }
     }
 
     render() {
