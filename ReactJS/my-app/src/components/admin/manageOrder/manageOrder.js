@@ -143,6 +143,7 @@ export class ManageOrder extends Component {
                             <th scope="col">Tên khách hàng</th>
                             <th scope="col">Địa chỉ</th>
                             <th scope="col">Số điện thoại</th>
+                            <th scope="col">Email</th>
                             <th scope="col">Ngày mua hàng</th>
                             <th scope="col">Tổng tiền</th>
                             <th scope="col">Phương thức thanh toán</th>
@@ -158,6 +159,7 @@ export class ManageOrder extends Component {
                                     <td>{order.tenKH}</td>
                                     <td>{order.diaChi}</td>
                                     <td>{order.soDT}</td>
+                                    <td>{order.email}</td>
                                     <td>{order.ngayMuaHang}</td>
                                     <td><b>{order.tongTien.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></td>
                                     <td>{order.phuongThucThanhToan.tenPhuongThucThanhToan}</td>

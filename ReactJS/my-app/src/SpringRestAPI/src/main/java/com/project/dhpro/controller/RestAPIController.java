@@ -601,11 +601,11 @@ public class RestAPIController {
     }
 
     @GetMapping(value = "/getStatistic")
-    public ArrayList<Integer> getStatistic(){
-        ArrayList<Integer> result = new ArrayList<>();
+    public ArrayList<Double> getStatistic(){
+        ArrayList<Double> result = new ArrayList<>();
         result.add(hoaDonService.totalSalesOfMonth());
-        result.add(hoaDonService.totalOrdersOfMonth());
-        result.add(khachHangService.totalCustomers());
+        result.add(Double.valueOf(hoaDonService.totalOrdersOfMonth()));
+        result.add(Double.valueOf(khachHangService.totalCustomers()));
         return result;
     }
 

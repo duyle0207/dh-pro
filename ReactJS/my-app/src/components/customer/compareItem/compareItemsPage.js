@@ -6,6 +6,8 @@ import Header from '../dashboard/header';
 import Footer from '../dashboard/footer';
 import '../../../css/style.css';
 import SearchItem from './searchItem';
+import { withRouter } from 'react-router';
+
 class compareItemsPage extends Component {
     constructor(props) {
         super(props);
@@ -30,33 +32,37 @@ class compareItemsPage extends Component {
 
     async componentDidMount() {
         console.log(this.props.match.params.id);
-        const product = await(await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
-        this.setState({ product: product });
+        const product = await (await fetch(`/customerUnauthenticated/sanPham/${this.props.match.params.id}`)).json();
+        console.log(product.error)
+        if (product.error) {
+            this.props.history.goBack();
+        }
+        else {
+            this.setState({ product: product });
 
-        this.setState({
-            cpu: product.cpu,
-            oCung: product.oCung,
-            ram: product.ram,
-            cardDoHoa: product.cardDoHoa,
-            manHinh: product.manHinh,
-            pin: product.pin,
-            heDieuHanh: product.heDieuHanh,
-            nhuCauSuDung: product.nhuCauSuDung,
-            thuongHieu: product.thuongHieu,
-            hinh: product.hinh
-        });
-
+            this.setState({
+                cpu: product.cpu,
+                oCung: product.oCung,
+                ram: product.ram,
+                cardDoHoa: product.cardDoHoa,
+                manHinh: product.manHinh,
+                pin: product.pin,
+                heDieuHanh: product.heDieuHanh,
+                nhuCauSuDung: product.nhuCauSuDung,
+                thuongHieu: product.thuongHieu,
+                hinh: product.hinh
+            });
+        }
     }
 
     async handleInsertItemClick(itemId) {
-        const product = await(await fetch(`/customerUnauthenticated/sanPham/${itemId}`)).json();
+        const product = await (await fetch(`/customerUnauthenticated/sanPham/${itemId}`)).json();
         this.setState({ secondItem: product });
         console.log(this.state.secondItem);
         this.setState({ isCompare: !this.state.isCompare });
     }
 
-    handleCloseCompare()
-    {
+    handleCloseCompare() {
         this.setState({ isCompare: !this.state.isCompare });
     }
     render() {
@@ -70,14 +76,14 @@ class compareItemsPage extends Component {
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        {this.state.hinh?
-                                        <ImageItem imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.hinh}`)}
-                                        lapBrand={this.state.heDieuHanh.tenHeDieuHanh}
-                                        lapName={this.state.product.tenSP}></ImageItem>    
-                                        :
-                                        ""
+                                        {this.state.hinh ?
+                                            <ImageItem imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.hinh}`)}
+                                                lapBrand={this.state.heDieuHanh.tenHeDieuHanh}
+                                                lapName={this.state.product.tenSP}></ImageItem>
+                                            :
+                                            ""
                                         }
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,10 +94,10 @@ class compareItemsPage extends Component {
                                         deviceInfo={this.state.cpu.tenCPU}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'RAM'}
-                                        deviceInfo={this.state.ram.loaiRAM + " " + this.state.ram.boNhoRAM + "GB " + this.state.ram.tocDoBus+"Hz"}>
+                                        deviceInfo={this.state.ram.loaiRAM + " " + this.state.ram.boNhoRAM + "GB " + this.state.ram.tocDoBus + "Hz"}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Ổ cứng'}
-                                        deviceInfo={this.state.oCung.tenOCung + " " + this.state.oCung.dungLuong +"GB"}>
+                                        deviceInfo={this.state.oCung.tenOCung + " " + this.state.oCung.dungLuong + "GB"}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Card đồ họa'}
                                         deviceInfo={this.state.cardDoHoa.tenCardDoHoa + " " + this.state.cardDoHoa.boNhoCard}>
@@ -100,21 +106,21 @@ class compareItemsPage extends Component {
                                         deviceInfo={this.state.product.amThanh}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Màn hình'}
-                                        deviceInfo={this.state.manHinh.kichThuoc + " inches " + 
-                                        this.state.manHinh.doPhanGiai + " " +
-                                        this.state.manHinh.congNgheManHinh + " " +
-                                        (this.state.manHinh.manHinhCamUng?"Cảm ứng":"")}>
+                                        deviceInfo={this.state.manHinh.kichThuoc + " inches " +
+                                            this.state.manHinh.doPhanGiai + " " +
+                                            this.state.manHinh.congNgheManHinh + " " +
+                                            (this.state.manHinh.manHinhCamUng ? "Cảm ứng" : "")}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Pin'}
-                                        deviceInfo={this.state.pin.thongTinPin+" "+
-                                        this.state.pin.thoiGianSuDung+"h "+
-                                        this.state.pin.boSac}>
+                                        deviceInfo={this.state.pin.thongTinPin + " " +
+                                            this.state.pin.thoiGianSuDung + "h " +
+                                            this.state.pin.boSac}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Độ phân giải Webcam'}
                                         deviceInfo={this.state.product.doPhanGiaiWC}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Khối lượng'}
-                                        deviceInfo={this.state.product.trongLuong+"kg"}>
+                                        deviceInfo={this.state.product.trongLuong + "kg"}>
                                     </InfoFirstItem>
                                     <InfoFirstItem deviceName={'Kích thước'}
                                         deviceInfo={this.state.product.kichThuoc}>
@@ -137,10 +143,10 @@ class compareItemsPage extends Component {
                                         </th>
                                         {(this.state.isCompare === true) ?
                                             <ImageItem imageSrc={require(`../../../SpringRestAPI/src/main/webapp/images/${this.state.secondItem.hinh}`)}
-                                                lapBrand={'MSI'}
-                                                lapName={'Laptop MSI GL63 8RC(813VN)'}></ImageItem>
+                                                lapBrand={this.state.secondItem.thuongHieu.tenThuongHieu}
+                                                lapName={this.state.secondItem.tenSP}></ImageItem>
                                             :
-                                            <SearchItem handleClick={this.handleInsertItemClick}></SearchItem>
+                                            <SearchItem handleClick={this.handleInsertItemClick} itemID={this.props.match.params.id}></SearchItem>
                                         }
                                     </tr>
                                 </thead>
@@ -150,24 +156,24 @@ class compareItemsPage extends Component {
                                         </InfoSecondItem>
                                         <InfoSecondItem deviceInfo={this.state.secondItem.cpu.tenCPU}>
                                         </InfoSecondItem>
-                                        <InfoSecondItem deviceInfo={this.state.secondItem.ram.loaiRAM + " " + this.state.secondItem.ram.boNhoRAM + "GB " + this.state.secondItem.ram.tocDoBus+"Hz"}>
+                                        <InfoSecondItem deviceInfo={this.state.secondItem.ram.loaiRAM + " " + this.state.secondItem.ram.boNhoRAM + "GB " + this.state.secondItem.ram.tocDoBus + "Hz"}>
                                         </InfoSecondItem>
-                                        <InfoSecondItem deviceInfo={this.state.secondItem.oCung.tenOCung + " " + this.state.secondItem.oCung.dungLuong +"GB"}>
+                                        <InfoSecondItem deviceInfo={this.state.secondItem.oCung.tenOCung + " " + this.state.secondItem.oCung.dungLuong + "GB"}>
                                         </InfoSecondItem>
                                         <InfoSecondItem deviceInfo={this.state.secondItem.cardDoHoa.tenCardDoHoa + " " + this.state.secondItem.cardDoHoa.boNhoCard}>
                                         </InfoSecondItem>
                                         <InfoSecondItem deviceInfo={this.state.secondItem.amThanh}>
                                         </InfoSecondItem>
-                                        <InfoSecondItem deviceInfo={this.state.secondItem.manHinh.kichThuoc + " inches " + 
-                                        this.state.secondItem.manHinh.doPhanGiai + " " +
-                                        this.state.secondItem.manHinh.congNgheManHinh + " " +
-                                        (this.state.secondItem.manHinh.manHinhCamUng?"Cảm ứng":"")}>
+                                        <InfoSecondItem deviceInfo={this.state.secondItem.manHinh.kichThuoc + " inches " +
+                                            this.state.secondItem.manHinh.doPhanGiai + " " +
+                                            this.state.secondItem.manHinh.congNgheManHinh + " " +
+                                            (this.state.secondItem.manHinh.manHinhCamUng ? "Cảm ứng" : "")}>
                                         </InfoSecondItem>
-                                        <InfoSecondItem deviceInfo={this.state.secondItem.pin.thongTinPin+" "+
-                                        this.state.secondItem.pin.thoiGianSuDung+"h "+
-                                        this.state.secondItem.pin.boSac}></InfoSecondItem>
+                                        <InfoSecondItem deviceInfo={this.state.secondItem.pin.thongTinPin + " " +
+                                            this.state.secondItem.pin.thoiGianSuDung + "h " +
+                                            this.state.secondItem.pin.boSac}></InfoSecondItem>
                                         <InfoSecondItem deviceInfo={this.state.secondItem.doPhanGiaiWC}></InfoSecondItem>
-                                        <InfoSecondItem deviceInfo={this.state.secondItem.trongLuong}></InfoSecondItem>
+                                        <InfoSecondItem deviceInfo={this.state.secondItem.trongLuong + "kg"}></InfoSecondItem>
                                         <InfoSecondItem deviceInfo={this.state.secondItem.kichThuoc}></InfoSecondItem>
                                     </tbody>
                                     :
@@ -183,4 +189,4 @@ class compareItemsPage extends Component {
     }
 }
 
-export default compareItemsPage;
+export default withRouter(compareItemsPage);

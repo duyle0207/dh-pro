@@ -51,7 +51,7 @@ class inputComment extends Component {
                 }
             });
             localStorage.removeItem("userInfo");
-            this.props.history.push('/login?message=tokenexpired');
+            this.props.history.push('/login?message=unatuthenticated');
         }
         else {
             const token = JSON.parse((localStorage.getItem("userInfo"))).accessToken;
@@ -94,15 +94,17 @@ class inputComment extends Component {
             <div className="container mt-4">
                 <form onSubmit={this.postComment}>
                     <div className="row">
-                        <div className="col-md-2 col-md-offset-3">
+                        {/* <div className="col-md-2 col-md-offset-3">
                             <img src={'https://img.icons8.com/plasticine/2x/user.png'} className="rounded" alt="Cinque Terre" />
-                        </div>
-
-                        <div className="col-md-10 col-md-offset-3">
+                        </div> */}
+                        <div className="col-md-12 col-md-offset-3">
                             <div className="panel panel-info">
                                 <div className="panel-body">
-                                    <input type="text" value={this.state.binhLuan.tieuDe} onChange={this.handleOnChange} name="tieuDe" className="form-control" placeholder="Tiêu đề đánh giá" />
-                                    <textarea placeholder="Bạn nghĩ gì về sản phẩm này" name="noiDung" value={this.state.binhLuan.noiDung} onChange={this.handleOnChange} className="pb-cmnt-textarea mt-2" defaultValue={""} />
+                                    <p className="h4">1. Tiêu đề của nhận xét:</p>
+                                    <input type="text" value={this.state.binhLuan.tieuDe} onChange={this.handleOnChange} name="tieuDe" className="form-control my-2" placeholder="Tiêu đề đánh giá" required/>
+                                    <p className="h4">2. Viết nhận xét của bạn vào bên dưới:</p>
+                                    <textarea placeholder="Bạn nghĩ gì về sản phẩm này" name="noiDung" value={this.state.binhLuan.noiDung} onChange={this.handleOnChange} className="form-control my-2" 
+                                    defaultValue={""} rows="4" required/>
                                     <button className="btn btn-danger mb-2" type="submit">Gửi</button>
                                 </div>
                             </div>

@@ -37,7 +37,7 @@ public class HoaDonServiceImp implements HoaDonService{
     }
 
     @Override
-    public int totalSalesOfMonth() {
+    public double totalSalesOfMonth() {
         return hoaDonRepository.totalSalesOfMonth();
     }
 

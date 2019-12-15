@@ -53,6 +53,7 @@ class header extends React.Component {
 
   async componentDidMount() {
     const isAccountLoginged = await (await fetch('/customerUnauthenticated/loginInfo')).json();
+    console.log(isAccountLoginged);
     if (!JSON.parse(localStorage.getItem("userInfo")).socialAccount) {
       if (isAccountLoginged.principal === "anonymousUser") {
         localStorage.setItem("userInfo", JSON.stringify({}));
@@ -143,23 +144,25 @@ class header extends React.Component {
               <input type="text" onChange={this.handleOnChange} placeholder="Tìm kiếm" />
               <ul className="results my-2" style={{ display: this.state.isOnBlur }}>
                 {this.state.listSP.map((value) => {
-                  return <a className="navbar-brand" onMouseEnter={this.handleOnClickProduct}
-                    onMouseLeave={this.handleOnBlur} href={"/itemDetail/" + value.id}><li>
-                      <div className="row my-2">
-                        <div className="col-sm-4">
-                          <img width="100" height="100" src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} alt="" />
-                        </div>
-                        <div className="col-sm-8">
-                          <div className="row">
-                            {value.tenSP}
+                  if (value.soLuong > 0) {
+                    return <a className="navbar-brand" onMouseEnter={this.handleOnClickProduct}
+                      onMouseLeave={this.handleOnBlur} href={"/itemDetail/" + value.id}><li>
+                        <div className="row my-2">
+                          <div className="col-sm-4">
+                            <img width="100" height="100" src={require(`../../../SpringRestAPI/src/main/webapp/images/${value.hinh}`)} alt="" />
                           </div>
-                          <div className="row">
-                            <span style={{ color: "red" }}><b>{value.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></span>
+                          <div className="col-sm-8">
+                            <div className="row">
+                              {value.tenSP}
+                            </div>
+                            <div className="row">
+                              <span style={{ color: "red" }}><b>{value.gia.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</b></span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  </a>
+                      </li>
+                    </a>
+                  }
                 }
                 )}
               </ul>

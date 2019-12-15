@@ -20,7 +20,8 @@ class loginForm extends Component {
             name: "",
             email: "",
             picture: "",
-            visible: false
+            visible: false,
+            content: ''
         })
 
         this.onSubmitLogin = this.onSubmitLogin.bind(this);
@@ -34,7 +35,11 @@ class loginForm extends Component {
         const params = queryString.parse(this.props.location.search);
 
         if (params.message === "tokenexpired") {
-            this.setState({ visible: true });
+            this.setState({ visible: true, content:'Phiên đăng nhập của bạn đã hết vui lòng đăng nhập lại để tiếp tục' });
+        }
+        else if(params.message === "unatuthenticated")
+        {
+            this.setState({ visible: true, content:'Đăng nhập để tiếp tục' });
         }
     }
 
@@ -266,7 +271,7 @@ class loginForm extends Component {
                                         <i className="ml-4 fa fa-remove" style={{ color: '#FE2020', 'fontSize': '60px' }}></i>
                                     </div>
                                     <div className="col-sm-9">
-                                        <p className="h5 mx-3 mb-4 text-justify">Phiên đăng nhập của bạn đã hết vui lòng đăng nhập lại để tiếp tục</p>
+                                        <p className="h5 mx-3 mb-4 text-justify">{this.state.content}</p>
                                     </div>
                                 </div>
                             </div>
