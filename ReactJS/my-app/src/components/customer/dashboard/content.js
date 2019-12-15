@@ -3,6 +3,7 @@ import '../../../css/header.css';
 import '../../../css/style.css';
 import HeadContent from "../dashboard/headContent";
 import Item from "../../customer/item/item";
+import { Link, Redirect } from 'react-router-dom';
 
 class content extends React.Component {
 
@@ -58,7 +59,7 @@ class content extends React.Component {
             <div className="row text-center mt-2" style={{textAlign:"center",marginLeft:'505px'}}>
               {/* <button className="btn btn-info btn-sm shadow-none">Xem mổ tả đầy đủ</button> */}
               <button type="button" class="btn btn-outline-info">
-                <a className="text-decoration-none text-dark" href="/products">Xem thêm</a>
+                <Link className="text-decoration-none text-dark" to="/products">Xem thêm</Link>
               </button>
             </div>
           </div>

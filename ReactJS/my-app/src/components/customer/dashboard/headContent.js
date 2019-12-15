@@ -64,8 +64,8 @@ class headContent extends React.Component {
               <div className="row my-2">
                 <div className="col-sm-12">
                   <h4 className="main-title">
-                    Một số gợi ý dưới đây có thể giúp bạn tìm sản phẩm nhanh hơn...
-          </h4>
+                    
+                </h4>
                 </div>
               </div>
               <div className="row my-2">
@@ -154,7 +154,7 @@ class headContent extends React.Component {
                   />
                 </div>
               </div>
-              <div className="row my-4">
+              {/* <div className="row my-4">
                 <div className="col-sm-12">
                   <span className="title">Mức giá:</span>
                   <a href="#abc" className="option">
@@ -199,7 +199,7 @@ class headContent extends React.Component {
                     Gaming cao cấp
                   </a>
                 </div>
-              </div>
+              </div> */}
               <div className="row">
                 <div className="col-sm-12">
                   <hr />
@@ -209,7 +209,7 @@ class headContent extends React.Component {
           </div>{" "}
           {/*end filter*/}
         </div>
-        <div className="module-title my-4">
+        <div className="module-title my-2">
           <div className="container">
             <div className="col-sm-12" style={{ borderLeft: "5px solid #27bece" }}>
               <Link to="/products">Laptop</Link>
