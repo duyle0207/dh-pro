@@ -234,7 +234,7 @@ class heDieuHanh extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4 text-dark my-4">
-                                    <h2>Thao tác: {this.state.heDieuHanh.id === '' ? <span class="badge badge-info">Thêm</span> : <span class="badge badge-warning">Chỉnh sữa</span>}</h2>
+                                    <h2>Thao tác: {this.state.heDieuHanh.id === '' ? <span class="badge badge-info">Thêm</span> : <span class="badge badge-warning">Chỉnh sửa</span>}</h2>
                                     <form onSubmit={this.insert}>
                                         <div className="form-group my-2 mx-2">
                                             <label><b>Tên Hệ Điều Hành: </b></label>
@@ -251,7 +251,7 @@ class heDieuHanh extends Component {
                                             </div> : ""
                                         }
                                         <button type="submit" class="btn btn-primary my-2 mx-2"><b>Lưu</b></button>
-                                        {this.state.heDieuHanh.id === '' ? "" : <button type="button" onClick={this.handeClearBtn} class="btn btn-danger my-2 mx-2"><b>Chuyễn sang thao tác thêm</b></button>}
+                                        {this.state.heDieuHanh.id === '' ? "" : <button type="button" onClick={this.handeClearBtn} class="btn btn-danger my-2 mx-2"><b>Hủy</b></button>}
                                     </form>
                                 </div>
                             </div>

@@ -248,7 +248,7 @@ class cardDoHoa extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4 text-dark my-4">
-                                    <h2>Thao tác: {this.state.CardDoHoa.id === '' ? <span class="badge badge-info">Thêm</span> : <span class="badge badge-warning">Chỉnh sữa</span>}</h2>
+                                    <h2>Thao tác: {this.state.CardDoHoa.id === '' ? <span class="badge badge-info">Thêm</span> : <span class="badge badge-warning">Chỉnh sửa</span>}</h2>
                                     <form onSubmit={this.insertCardDoHoa}>
                                         <div className="form-group my-2 mx-2">
                                             <label><b>Tên card đồ họa: </b></label>
@@ -276,7 +276,7 @@ class cardDoHoa extends Component {
                                             </div> : ""
                                         }
                                         <button type="submit" class="btn btn-primary my-2 mx-2"><b>Lưu</b></button>
-                                        {this.state.CardDoHoa.id === '' ? "" : <button type="button" onClick={this.handeClearBtn} class="btn btn-danger my-2 mx-2"><b>Chuyễn sang thao tác thêm</b></button>}
+                                        {this.state.CardDoHoa.id === '' ? "" : <button type="button" onClick={this.handeClearBtn} class="btn btn-danger my-2 mx-2"><b>Hủy</b></button>}
                                     </form>
                                 </div>
                             </div>
