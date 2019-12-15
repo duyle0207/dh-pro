@@ -24,4 +24,6 @@ public interface SanPhamService {
     List<SanPham> findTop12SanPham();
 
     List<SanPham> bestSeller();
+
+    List<SanPham> ListAvailSanPham();
 }

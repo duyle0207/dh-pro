@@ -574,6 +574,11 @@ public class CustomerUnauthenticatedController {
         return sanPhamService.bestSeller();
     }
 
+    @GetMapping(value = "/getListSanPham")
+    public List<SanPham> getListSanPham(){
+        return sanPhamService.ListAvailSanPham();
+    }
+
     @Autowired
     public JavaMailSender emailSender;
 

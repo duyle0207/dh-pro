@@ -68,4 +68,9 @@ public class SanPhamServiceImp implements SanPhamService{
     public List<SanPham> bestSeller() {
         return sanPhamRepository.bestSeller();
     }
+
+    @Override
+    public List<SanPham> ListAvailSanPham() {
+        return sanPhamRepository.ListAvailSanPham();
+    }
 }

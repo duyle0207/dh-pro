@@ -26,6 +26,9 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
 
     SanPham findSanPhamByTenSP(String tensp);
 
+    @Query(value="SELECT * FROM sanpham where soluong>0",nativeQuery = true)
+    List<SanPham> ListAvailSanPham();
+
     List<SanPham> findTop15By();
 
 }
