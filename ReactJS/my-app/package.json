@@ -23,7 +23,7 @@
     "react-search": "^2.1.1",
     "react-validation": "^3.0.7",
     "recharts": "^1.8.5",
-    "validator": "^11.1.0",
+    "validator": "^13.7.0",
     "yup": "^0.27.0"
   },
   "scripts": {
